@@ -56,10 +56,10 @@ public abstract class Piece implements IObservable {
      * @param p_position Position ou la com.samdube.echec.piece doit etre deplacer
      * @return Vrai si la com.samdube.echec.piece a ete deplacer a la position
      */
-    boolean setPosition(Position p_position) {
-        if (!m_position.equals(p_position) && m_deplacement.getPossibilites().contains(p_position)) {
+    public boolean setPosition(Position p_position) {
+        if (!m_position.equals(p_position) && m_deplacement.getPositionsDisponible().contains(p_position)) {
             m_position = p_position;
-            m_deplacement.calculerPossibilites(m_position);
+            m_deplacement.calculerPositionsDisponibles(m_position);
             Notify();
             return true;
         }

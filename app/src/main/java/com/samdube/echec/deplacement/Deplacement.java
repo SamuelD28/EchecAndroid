@@ -13,7 +13,7 @@ import java.util.Objects;
  * @author Samuel Dubé
  */
 public abstract class Deplacement {
-    private ArrayList<Position> m_possibilites;
+    private ArrayList<Position> m_positionsDisponibles;
 
     /**
      * Constructeur initialisant un nouveau com.samdube.echec.deplacement pour
@@ -22,8 +22,8 @@ public abstract class Deplacement {
      * @param p_pointOrigine Position de la com.samdube.echec.piece sur l'com.samdube.echec.echiquier
      */
     Deplacement(Position p_pointOrigine) {
-        m_possibilites = new ArrayList<>();
-        calculerPossibilites(p_pointOrigine);
+        m_positionsDisponibles = new ArrayList<>();
+        calculerPositionsDisponibles(p_pointOrigine);
     }
 
     /**
@@ -45,19 +45,33 @@ public abstract class Deplacement {
      *
      * @return Liste de positions disponibles
      */
-    public ArrayList<Position> getPossibilites() {
-        return m_possibilites;
+    public ArrayList<Position> getPositionsDisponible() {
+        return m_positionsDisponibles;
     }
 
     /**
      * Methode pour retirer des possibiles de position disponible
      * pour deplacements
      *
-     * @param p_positions Possibilites a retirer
      */
-    public void retirerPossibilites(Position... p_positions) {
-        for (Position position : p_positions) {
-            m_possibilites.remove(position);
+    public void retirerPositionsDisponible(Position p_pointOrigine, Position[] p_pointsContact) {
+        ArrayList<Position> positionsInvalides = new ArrayList<>();
+
+        for (Position pointContact : p_pointsContact) {
+            int differenceOrigineX = Math.abs(p_pointOrigine.getX() - pointContact.getX());
+            int differenceOrigineY = Math.abs(p_pointOrigine.getY() - pointContact.getY());
+
+            for(Position position : m_positionsDisponibles){
+                int differenceX = Math.abs(p_pointOrigine.getX() - position.getX());
+                int differenceY = Math.abs(p_pointOrigine.getY() - position.getY());
+                if(differenceX >= differenceOrigineX && differenceY >= differenceOrigineY){
+                    positionsInvalides.add(position);
+                }
+            }
+        }
+
+        for(Position positionInvalide : positionsInvalides){
+            m_positionsDisponibles.remove(positionInvalide);
         }
     }
 
@@ -77,10 +91,10 @@ public abstract class Deplacement {
      *
      * @param p_positions Possibilite a ajouter
      */
-    public void ajouterPossibilites(Position... p_positions) {
+    public void ajouterPositionsDisponible(Position... p_positions) {
         for (Position position : p_positions) {
-            if (!m_possibilites.contains(position)) {
-                m_possibilites.add(position);
+            if (!m_positionsDisponibles.contains(position)) {
+                m_positionsDisponibles.add(position);
             }
         }
     }
@@ -91,7 +105,7 @@ public abstract class Deplacement {
      *
      * @param p_pointOrigine Position le point d'origine des possibilités
      */
-    public void calculerPossibilites(Position p_pointOrigine) {
+    public void calculerPositionsDisponibles(Position p_pointOrigine) {
         ArrayList<Position> possibilites = new ArrayList<>();
 
         for (int sequence = 1; sequence <= getPasMaximum(); sequence++) {
@@ -106,7 +120,7 @@ public abstract class Deplacement {
             }
         }
 
-        m_possibilites = possibilites;
+        m_positionsDisponibles = possibilites;
     }
 
     @Override

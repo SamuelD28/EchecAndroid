@@ -41,7 +41,7 @@ public abstract class TestDeplacement extends TestCase {
      * Test de déplacement d'un cavalier
      */
     public void testCalculerPossibilites() {
-        Position[] possibilitesActuels = getDeplacement().getPossibilites().toArray(new Position[0]);
+        Position[] possibilitesActuels = getDeplacement().getPositionsDisponible().toArray(new Position[0]);
         Position[] possibilitesAttendues = getPossibilitesAttendues();
 
         Arrays.sort(possibilitesAttendues);
@@ -91,15 +91,15 @@ public abstract class TestDeplacement extends TestCase {
     public void testAjouterPossibilite() {
         Deplacement deplacement = getDeplacement();
 
-        deplacement.ajouterPossibilites(
+        deplacement.ajouterPositionsDisponible(
                 new Position(6, 7),
                 new Position(5, 7),
                 new Position(6, 0)
         );
 
-        assertTrue(deplacement.getPossibilites().contains(new Position(6, 7)));
-        assertTrue(deplacement.getPossibilites().contains(new Position(5, 7)));
-        assertTrue(deplacement.getPossibilites().contains(new Position(6, 0)));
+        assertTrue(deplacement.getPositionsDisponible().contains(new Position(6, 7)));
+        assertTrue(deplacement.getPositionsDisponible().contains(new Position(5, 7)));
+        assertTrue(deplacement.getPositionsDisponible().contains(new Position(6, 0)));
     }
 
     /**
@@ -109,25 +109,25 @@ public abstract class TestDeplacement extends TestCase {
         //On commence par ajouter les possiblites avant de les retirer
         Deplacement deplacement = getDeplacement();
 
-        deplacement.ajouterPossibilites(
+        deplacement.ajouterPositionsDisponible(
                 new Position(5, 7),
                 new Position(6, 0),
                 new Position(5, 0)
         );
 
-        assertTrue(deplacement.getPossibilites().contains(new Position(5, 7)));
-        assertTrue(deplacement.getPossibilites().contains(new Position(6, 0)));
-        assertTrue(deplacement.getPossibilites().contains(new Position(5, 0)));
+        assertTrue(deplacement.getPositionsDisponible().contains(new Position(5, 7)));
+        assertTrue(deplacement.getPositionsDisponible().contains(new Position(6, 0)));
+        assertTrue(deplacement.getPositionsDisponible().contains(new Position(5, 0)));
 
-        //On retire les possibilites ajouter
-        deplacement.retirerPossibilites(
-                new Position(5, 7),
-                new Position(6, 0),
-                new Position(5, 0)
-        );
+//        //On retire les possibilites ajouter
+//        deplacement.retirerPositionsDisponible(
+//                new Position(5, 7),
+//                new Position(6, 0),
+//                new Position(5, 0)
+//        );
 
-        assertFalse(deplacement.getPossibilites().contains(new Position(5, 7)));
-        assertFalse(deplacement.getPossibilites().contains(new Position(6, 0)));
-        assertFalse(deplacement.getPossibilites().contains(new Position(5, 0)));
+        assertFalse(deplacement.getPositionsDisponible().contains(new Position(5, 7)));
+        assertFalse(deplacement.getPositionsDisponible().contains(new Position(6, 0)));
+        assertFalse(deplacement.getPositionsDisponible().contains(new Position(5, 0)));
     }
 }

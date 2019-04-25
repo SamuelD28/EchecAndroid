@@ -1,11 +1,8 @@
 package com.samdube.echec;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Layout;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -15,8 +12,8 @@ import com.samdube.echec.echiquier.Echiquier;
 import com.samdube.echec.echiquier.Position;
 import com.samdube.echec.piece.Piece;
 
-import static com.samdube.echec.echiquier.Echiquier.*;
-import static com.samdube.echec.piece.Piece.CouleurPiece.*;
+import static com.samdube.echec.echiquier.Echiquier.TAILLE_ECHIQUIER;
+import static com.samdube.echec.piece.Piece.CouleurPiece.BLANC;
 
 public class MainActivity
         extends AppCompatActivity
@@ -25,12 +22,12 @@ public class MainActivity
     private TableLayout m_chessboardTableLayout;
     private TextView m_debugingTextView;
     private Echiquier m_echiquier = new Echiquier();
+    private Piece m_pieceSelectionner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         m_debugingTextView = findViewById(R.id.debuging_text);
         m_chessboardTableLayout = findViewById(R.id.main_board_id);
     }
@@ -46,6 +43,7 @@ public class MainActivity
         TableRow.LayoutParams layout = new TableRow.LayoutParams(p_largeur, p_hauteur);
         b.setLayoutParams(layout);
         b.setTag(p_position);
+        b.setId(Integer.valueOf(String.valueOf(p_position.getX() + "" + p_position.getY())));
         b.setBackground(getDrawable(R.drawable.case_border));
         b.setOnClickListener(this);
         return b;
@@ -97,14 +95,52 @@ public class MainActivity
         }
     }
 
+
     @Override
     public void onClick(View v) {
-        ImageButton b = (ImageButton) v;
+        ImageButton b = (ImageButton)v;
         Position position = (Position)b.getTag();
-        Piece pieceSelectionner = m_echiquier.getPiece(position);
 
-        if(pieceSelectionner != null){
+        if(m_pieceSelectionner != null && m_pieceSelectionner.getDeplacement().getPositionsDisponible().contains(position)){
+            Position positionPiece = m_pieceSelectionner.getPosition();
+            int buttonId = Integer.valueOf(String.valueOf(positionPiece.getX() + "" + positionPiece.getY()));
+            ImageButton button = m_chessboardTableLayout.findViewById(buttonId);
+            button.setImageDrawable(null);
+            m_pieceSelectionner.setPosition(position);
+            assignerImageBouton(m_pieceSelectionner, b);
+            effacerDeplacementPossible();
+            m_pieceSelectionner= null;
+        }else{
+            m_pieceSelectionner = m_echiquier.getPiece(position);
+        }
 
+        if(m_pieceSelectionner != null){
+            afficherDeplacementPosssible();
+        }else{
+            effacerDeplacementPossible();
+        }
+    }
+
+    private void afficherDeplacementPosssible() {
+        for(Position positionDisponible : m_pieceSelectionner.getDeplacement().getPositionsDisponible()){
+            int buttonId = Integer.valueOf(String.valueOf(positionDisponible.getX() + "" + positionDisponible.getY()));
+            ImageButton button = m_chessboardTableLayout.findViewById(buttonId);
+            button.setBackgroundColor(getColor(R.color.colorAccent));
+        }
+    }
+
+    private void effacerDeplacementPossible() {
+        for(int i = 0; i < m_chessboardTableLayout.getChildCount(); i++) {
+            View view = m_chessboardTableLayout.getChildAt(i);
+            if (m_chessboardTableLayout.getChildAt(i) instanceof TableRow) {
+                TableRow row = (TableRow) view;
+                for(int ii = 0; ii < row.getChildCount(); ii++){
+                    if(row.getChildAt(ii) instanceof ImageButton){
+                        ImageButton button = (ImageButton)row.getChildAt(ii);
+                        button.setBackground(getDrawable(R.drawable.case_border));
+                    }
+                }
+            }
         }
     }
 

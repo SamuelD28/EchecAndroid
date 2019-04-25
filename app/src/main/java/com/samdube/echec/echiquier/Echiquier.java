@@ -145,7 +145,7 @@ public class Echiquier {
             }
 
             Position[] deplacementsPossibles = pieceTrouve.getDeplacement()
-                    .getPossibilites()
+                    .getPositionsDisponible()
                     .toArray(new Position[0]);
 
             Collision[] collisions = calculerCollisions(deplacementsPossibles,
@@ -159,8 +159,10 @@ public class Echiquier {
                 pointsContact.add(collision.getPointContact());
             }
 
-            Position[] trimmer = trimmer(pieceTrouve.getPosition(), pointsContact.toArray(new Position[0]), deplacementsPossibles);
-            pieceTrouve.getDeplacement().ajouterPossibilites(trimmer);
+            pieceTrouve.getDeplacement().retirerPositionsDisponible(
+                    pieceTrouve.getPosition(),
+                    pointsContact.toArray(new Position[0])
+            );
         }
 
         return pieceTrouve;

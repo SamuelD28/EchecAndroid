@@ -179,25 +179,6 @@ public class Position implements Comparable<Position> {
         }
     }
 
-    public static Position[] trimmer(Position p_pointOrigine, Position[] p_pointsDeCalcul, Position[] p_positions) {
-        ArrayList<Position> positionsTrimmer = new ArrayList<>(Arrays.asList(p_positions));
-
-        for (Position pointDeCalcul : p_pointsDeCalcul) {
-            int differenceOrigineX = Math.abs(p_pointOrigine.getX() - pointDeCalcul.getX());
-            int differenceOrigineY = Math.abs(p_pointOrigine.getY() - pointDeCalcul.getY());
-
-            for(Position position : p_positions){
-                int differenceX = Math.abs(p_pointOrigine.getX() - position.getX());
-                int differenceY = Math.abs(p_pointOrigine.getY() - position.getY());
-                if(differenceX >= differenceOrigineX && differenceY >= differenceOrigineY){
-                    positionsTrimmer.remove(position);
-                }
-            }
-        }
-
-        return positionsTrimmer.toArray(new Position[0]);
-    }
-
     /**
      * Methode qui permet d"obtenir la
      * position x de l'instance courante.
