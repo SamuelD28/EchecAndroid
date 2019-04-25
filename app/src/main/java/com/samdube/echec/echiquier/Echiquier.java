@@ -89,7 +89,13 @@ class Echiquier {
      * @return Le nombre de pièce dans l'échiquier d'une certaine couleur
      */
     int getNombrePieces(CouleurPiece p_couleur) {
-        return (int) m_pieces.stream().filter(p -> p.getCouleur() == p_couleur).count();
+        int nombrePiece = 0;
+        for(Piece piece : m_pieces){
+            if(piece.getCouleur() == p_couleur){
+                nombrePiece++;
+            }
+        }
+        return nombrePiece;
     }
 
     /**
@@ -100,9 +106,13 @@ class Echiquier {
      * @return le nombre d'occurence de la pièce dans le jeu
      */
     int getNombrePieces(CouleurPiece p_couleur, Class<? extends Piece> p_typePiece) {
-        return (int) m_pieces.stream()
-                .filter(p -> p.getCouleur() == p_couleur && p.getClass() == p_typePiece)
-                .count();
+        int nombrePiece = 0;
+        for(Piece piece : m_pieces){
+            if(piece.getCouleur() == p_couleur && piece.getClass() == p_typePiece){
+                nombrePiece++;
+            }
+        }
+        return nombrePiece;
     }
 
     /**
@@ -113,10 +123,14 @@ class Echiquier {
      * @return Le pion à la position donnée
      */
     Piece getPiece(Position p_position) {
-        return m_pieces.stream()
-                .filter(p -> p.getPosition().equals(p_position))
-                .findFirst()
-                .orElse(null);
+        Piece pieceTrouve = null;
+        for(Piece piece : m_pieces){
+            if(piece.getPosition().equals(p_position)){
+                pieceTrouve = piece;
+                break;
+            }
+        }
+        return pieceTrouve;
     }
 
     /**
