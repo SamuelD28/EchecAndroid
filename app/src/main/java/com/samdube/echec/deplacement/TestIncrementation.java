@@ -10,7 +10,7 @@ public class TestIncrementation extends TestCase {
     /**
      * Teste la création d'une incrémentation valide.
      */
-    public void testCreerValide() {
+    public void testCreer() {
         Incrementation incrementation = new Incrementation(1, 0);
 
         assertEquals(1, incrementation.getIncrementationX());
@@ -25,14 +25,6 @@ public class TestIncrementation extends TestCase {
 
         assertEquals(-8, incrementation.getIncrementationX());
         assertEquals(-8, incrementation.getIncrementationY());
-    }
-
-    /**
-     * Teste la création d"une incrémentation non-valide.
-     */
-    public void testCreerInvalide() {
-        Incrementation.setIncrementationXLimite(8);
-        Incrementation.setIncrementationYLimite(8);
 
         try {
             new Incrementation(9, 9);
@@ -40,40 +32,6 @@ public class TestIncrementation extends TestCase {
         } catch (IllegalArgumentException e) {
             // Test reussi
         }
-
-        try {
-            new Incrementation(-9, -9);
-            fail();
-        } catch (IllegalArgumentException e) {
-            // Test reussi
-        }
-
-        try {
-            new Incrementation(0, 0);
-            fail();
-        } catch (IllegalArgumentException e) {
-            // Test reussi
-        }
-    }
-
-    /**
-     * Teste la modification des limites d'une incrémentation
-     */
-    public void testIncrementationLimite() {
-        assertEquals(8, Incrementation.getIncrementationXLimite());
-        assertEquals(8, Incrementation.getIncrementationYLimite());
-
-        Incrementation.setIncrementationXLimite(16);
-        Incrementation.setIncrementationYLimite(16);
-
-        assertEquals(16, Incrementation.getIncrementationXLimite());
-        assertEquals(16, Incrementation.getIncrementationYLimite());
-
-        Incrementation.setIncrementationXLimite(-12);
-        Incrementation.setIncrementationYLimite(986);
-
-        Incrementation.setIncrementationXLimite(-12);
-        Incrementation.setIncrementationYLimite(986);
     }
 
     /**

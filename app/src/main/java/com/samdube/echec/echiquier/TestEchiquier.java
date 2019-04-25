@@ -1,15 +1,10 @@
 package com.samdube.echec.echiquier;
 
 import junit.framework.TestCase;
+import com.samdube.echec.piece.*;
 
-import com.samdube.echec.piece.Cavalier;
-import com.samdube.echec.piece.Fou;
-import com.samdube.echec.piece.Pion;
-import com.samdube.echec.piece.Reine;
-import com.samdube.echec.piece.Roi;
-import com.samdube.echec.piece.Tour;
-
-import static com.samdube.echec.piece.Piece.CouleurPiece.*;
+import static com.samdube.echec.piece.Piece.CouleurPiece.BLANC;
+import static com.samdube.echec.piece.Piece.CouleurPiece.NOIR;
 
 /**
  * Tests de la classe Echiquier
@@ -34,7 +29,6 @@ public class TestEchiquier extends TestCase {
      */
     public void testCreer() {
         assertEquals(64, m_echiquier.getEchiquier().length);
-        assertEquals(8, m_echiquier.getTaille());
     }
 
     /**
@@ -58,13 +52,8 @@ public class TestEchiquier extends TestCase {
      * dans l'échiquier.
      */
     public void testGetPiece() {
+        Piece piece = m_echiquier.getPiece(new Position(0,1));
+        assertTrue(piece instanceof Pion);
+        assertEquals(BLANC, piece.getCouleur());
     }
-
-    /**
-     * Permet de tester si l'emplacement d'une pièce est bonne après
-     * l'avoir mis à une place désirée.
-     */
-    public void testPlacerPiece() {
-    }
-
 }

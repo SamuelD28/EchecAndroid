@@ -1,9 +1,8 @@
 package com.samdube.echec.piece;
 
-import com.samdube.echec.deplacement.Deplacement;
 import com.samdube.echec.echiquier.Position;
 import junit.framework.TestCase;
-import com.samdube.echec.piece.Piece.CouleurPiece;
+import com.samdube.echec.utils.IObserver;
 
 /**
  * Teste la classe pièce et ses méthodes
@@ -11,28 +10,128 @@ import com.samdube.echec.piece.Piece.CouleurPiece;
  * @author Samuel Dubé
  */
 public abstract class TestPiece extends TestCase {
+    /**
+     * Getter pour obtenir la com.samdube.echec.piece qui
+     * serait attendue.
+     *
+     * @return Piece attendue
+     */
+    protected abstract Piece getPieceAttendue();
 
-    public abstract int getForceAttendu();
+    /**
+     * Getter pour obtenir la com.samdube.echec.piece actuellement
+     * creer
+     *
+     * @return Piece actuel creer
+     */
+    protected abstract Piece getPieceActuel();
 
-    public abstract char getRepresentationAttendu();
+    /**
+     * Getter pour obtenir une com.samdube.echec.piece differente
+     * de celle creer
+     *
+     * @return Piece differente
+     */
+    protected abstract Piece getPieceDifferente();
 
-    public abstract Deplacement getDeplacementAttendu();
+    /**
+     * Getter pour obtenir une suite de com.samdube.echec.deplacement
+     * possible que la com.samdube.echec.piece doit effectuer
+     *
+     * @return Suite de deplacements possibles
+     */
+    protected abstract Position[] getDeplacementsPossible();
 
-    public abstract Position getPositionAttendu();
-
-    public abstract CouleurPiece getCouleurAttendu();
-
-    public abstract Piece getPiece();
+    /**
+     * Getter pour obtenir une liste de com.samdube.echec.deplacement impossible
+     * que la com.samdube.echec.piece ne peut effectuer
+     *
+     * @return Suite de com.samdube.echec.deplacement impossible
+     */
+    protected abstract Position[] getDeplacementsImpossible();
 
     /**
      * Teste la creation d"une nouvelle com.samdube.echec.piece et
      * verifie ses proprietes
      */
-    public void testCreer(){
-        assertEquals(getRepresentationAttendu(), getPiece().getRepresentation());
-        assertEquals(getForceAttendu(), getPiece().getForce());
-        assertEquals(getPositionAttendu(), getPiece().getPosition());
-        assertEquals(getCouleurAttendu(), getPiece().getCouleur());
-        assertEquals(getDeplacementAttendu().getClass(), getPiece().getDeplacement().getClass());
+    public void testCreer() {
+        assertEquals(getPieceAttendue().getRepresentation(), getPieceActuel().getRepresentation());
+        assertEquals(getPieceAttendue().getForce(), getPieceActuel().getForce());
+        assertEquals(getPieceAttendue().getPosition(), getPieceActuel().getPosition());
+        assertEquals(getPieceAttendue().getCouleur(), getPieceActuel().getCouleur());
+        assertEquals(getPieceAttendue().getDeplacement().getClass(), getPieceActuel().getDeplacement().getClass());
+    }
+
+    /**
+     * Teste le com.samdube.echec.deplacement de com.samdube.echec.piece par la methode
+     * set position.
+     */
+    public void testSetPosition() {
+        Piece piece = getPieceActuel();
+
+        for (Position deplacementPossible : getDeplacementsPossible()) {
+            assertTrue(piece.setPosition(deplacementPossible));
+        }
+
+        piece = getPieceActuel();
+        for (Position deplacementImpossible : getDeplacementsImpossible()) {
+            assertFalse(piece.setPosition(deplacementImpossible));
+        }
+    }
+
+    /**
+     * Teste que les pieces sont observables
+     */
+    public void testObservable() {
+        Piece piece = getPieceActuel();
+        IObserver observateurA = () -> {
+            // mise a jour
+        };
+        IObserver observateurB = () -> {
+            // mise a jour
+        };
+
+        piece.Subscribe(observateurA);
+        piece.Subscribe(observateurB);
+
+        piece.Notify();
+
+        piece.Unsubscribe(observateurA);
+        piece.Unsubscribe(observateurB);
+    }
+
+    /**
+     * Teste la méthode equals sur une com.samdube.echec.piece
+     */
+    public void testEquals() {
+        Piece pieceA = getPieceActuel();
+        Piece pieceB = getPieceActuel();
+        Piece pieceC = getPieceDifferente();
+
+        assertTrue(pieceA.equals(pieceB));
+        assertTrue(pieceB.equals(pieceA));
+
+        assertTrue(pieceA.equals(pieceA));
+        assertTrue(pieceB.equals(pieceB));
+
+        assertFalse(pieceA.equals(pieceC));
+        assertFalse(pieceB.equals(pieceC));
+        assertFalse(pieceA.equals(null));
+        assertFalse(pieceA.equals("ads"));
+    }
+
+    /**
+     * Teste la génération de hashcode
+     */
+    public void testHashCode() {
+        Piece pieceA = getPieceActuel();
+        Piece pieceB = getPieceActuel();
+        Piece pieceC = getPieceDifferente();
+
+        assertEquals(pieceA.hashCode(), pieceB.hashCode());
+        assertEquals(pieceB.hashCode(), pieceA.hashCode());
+
+        assertFalse(pieceA.hashCode() == pieceC.hashCode());
+        assertFalse(pieceB.hashCode() == pieceC.hashCode());
     }
 }

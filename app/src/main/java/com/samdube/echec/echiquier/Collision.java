@@ -8,10 +8,10 @@ import java.util.Objects;
  *
  * @author Samuel Colassin
  */
-public class Collision implements Comparable<Collision> {
-    private Position m_pointOrigine;
+class Collision implements Comparable<Collision> {
+    private final Position m_pointOrigine;
 
-    private Position m_pointContact;
+    private final Position m_pointContact;
 
     /**
      * Constructeur de collision
@@ -19,7 +19,7 @@ public class Collision implements Comparable<Collision> {
      * @param p_pointOrigine La position de départ de la pièce en déplacement
      * @param p_pointContact La position qui cause une collision avec le pièce en mouvement
      */
-    public Collision(Position p_pointOrigine, Position p_pointContact) {
+    Collision(Position p_pointOrigine, Position p_pointContact) {
         m_pointOrigine = p_pointOrigine;
         m_pointContact = p_pointContact;
     }
@@ -34,8 +34,8 @@ public class Collision implements Comparable<Collision> {
      *                             soit son nombre de direction différente
      * @return La liste des collision à conserver selon les déplacements possible de la pièce
      */
-    public static Collision[] calculerCollisionsAConserver(Position[] p_positions, Position[] p_possibleCollisions,
-                                                           Position p_origine, int p_collisionsMax) {
+    static Collision[] calculerCollisionsAConserver(Position[] p_positions, Position[] p_possibleCollisions,
+                                                    Position p_origine, int p_collisionsMax) {
         ArrayList<Collision> collisions = new ArrayList<>();
         ArrayList<Position> positions = new ArrayList<>();
 
@@ -60,6 +60,14 @@ public class Collision implements Comparable<Collision> {
         return collisions.toArray(new Collision[0]);
     }
 
+    /**
+     * Permet de déterminer si une collision est plus grande ou plus petite
+     * qu'une autre
+     *
+     * @param o La collision à comparer
+     * @return Entier plus petit que 0 si plus petit, 0 si égal et en entier plus grand que 0
+     * si plus grand
+     */
     @Override
     public int compareTo(Collision o) {
         int result = Double.compare(m_pointContact.getX(), o.m_pointContact.getX());
@@ -69,6 +77,14 @@ public class Collision implements Comparable<Collision> {
         return result;
     }
 
+    /**
+     * Methode permettant de comparer deux objects
+     * de type collision pour savoir si les deux Collisions
+     * sont equivalente
+     *
+     * @param o Position a comparer la courante instance
+     * @return Vrai si les deux Collision sont equivalentes sinon faux.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -78,6 +94,13 @@ public class Collision implements Comparable<Collision> {
                 Objects.equals(m_pointContact, collision.m_pointContact);
     }
 
+    /**
+     * Methode generant le hash code pour l'instance.
+     * Utiliser pour permettant la comparaison entre
+     * deux objects de type Collision
+     *
+     * @return Le hash code generer pour l'instance
+     */
     @Override
     public int hashCode() {
         return Objects.hash(m_pointOrigine, m_pointContact);

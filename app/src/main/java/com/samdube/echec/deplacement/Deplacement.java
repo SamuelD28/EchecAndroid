@@ -1,7 +1,6 @@
 package com.samdube.echec.deplacement;
 
 import com.samdube.echec.echiquier.Position;
-import com.samdube.echec.piece.IObserver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,11 +12,17 @@ import java.util.Objects;
  *
  * @author Samuel Dubé
  */
-public abstract class Deplacement implements IObserver {
+public abstract class Deplacement {
+    private ArrayList<Position> m_possibilites;
 
-    private ArrayList<Position> m_positionsDisponibles = new ArrayList<>();
-
-    public Deplacement(Position p_pointOrigine) {
+    /**
+     * Constructeur initialisant un nouveau com.samdube.echec.deplacement pour
+     * une com.samdube.echec.piece.
+     *
+     * @param p_pointOrigine Position de la com.samdube.echec.piece sur l'com.samdube.echec.echiquier
+     */
+    Deplacement(Position p_pointOrigine) {
+        m_possibilites = new ArrayList<>();
         calculerPossibilites(p_pointOrigine);
     }
 
@@ -26,22 +31,22 @@ public abstract class Deplacement implements IObserver {
      *
      * @return La liste d'incrémentations
      */
-    public abstract Incrementation[] getIncrementations();
+    protected abstract Incrementation[] getIncrementations();
 
     /**
      * Getter pour obtenir le nombre de pas maximum du déplacement
      *
      * @return Nombre de pas maximum
      */
-    public abstract int getPasMaximum();
+    protected abstract int getPasMaximum();
 
     /**
      * Getter pour obtenir les positions disponibles pour deplacements
      *
      * @return Liste de positions disponibles
      */
-    public Position[] getPositionsDisponibles() {
-        return m_positionsDisponibles.toArray(new Position[0]);
+    public ArrayList<Position> getPossibilites() {
+        return m_possibilites;
     }
 
     /**
@@ -50,9 +55,9 @@ public abstract class Deplacement implements IObserver {
      *
      * @param p_positions Possibilites a retirer
      */
-    public void retirerPositions(Position... p_positions) {
+    void retirerPossibilites(Position... p_positions) {
         for (Position position : p_positions) {
-            m_positionsDisponibles.remove(position);
+            m_possibilites.remove(position);
         }
     }
 
@@ -62,10 +67,10 @@ public abstract class Deplacement implements IObserver {
      *
      * @param p_positions Possibilite a ajouter
      */
-    public void ajouterPositions(Position... p_positions) {
+    void ajouterPossibilites(Position... p_positions) {
         for (Position position : p_positions) {
-            if(!m_positionsDisponibles.contains(position)){
-                m_positionsDisponibles.add(position);
+            if (!m_possibilites.contains(position)) {
+                m_possibilites.add(position);
             }
         }
     }
@@ -75,9 +80,8 @@ public abstract class Deplacement implements IObserver {
      * pour chaques pas.
      *
      * @param p_pointOrigine Position le point d'origine des possibilités
-     * @return Liste de positions où un déplacement est possible
      */
-    private void calculerPossibilites(Position p_pointOrigine) {
+    public void calculerPossibilites(Position p_pointOrigine) {
         ArrayList<Position> possibilites = new ArrayList<>();
 
         for (int sequence = 1; sequence <= getPasMaximum(); sequence++) {
@@ -92,21 +96,7 @@ public abstract class Deplacement implements IObserver {
             }
         }
 
-        m_positionsDisponibles = possibilites;
-    }
-
-    @Override
-    public void update() {
-        calculerPossibilites(null);
-    }
-
-    //TODO: Temporaire, trouver une meilleure implementations
-    @Override
-    public void update(Object p_nouvelleValeur) {
-        if(p_nouvelleValeur instanceof Position){
-            Position pointOrigine = (Position)p_nouvelleValeur;
-            calculerPossibilites(pointOrigine);
-        }
+        m_possibilites = possibilites;
     }
 
     @Override

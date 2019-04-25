@@ -20,6 +20,7 @@ public class TestPosition extends TestCase {
     public void testCreer() {
         Position position1 = new Position("A1");
         Position position2 = new Position(7, 3);
+        Position position3 = new Position(7, 3);
 
         assertEquals(0, position1.getX());
         assertEquals(0, position1.getY());
@@ -27,13 +28,25 @@ public class TestPosition extends TestCase {
         assertEquals(7, position2.getX());
         assertEquals(3, position2.getY());
 
-        // On verifie que la creation d'une position erronnee lance belle et bien une exception de type position invalide
+        assertEquals(position1, position1);
+        assertEquals(position2.hashCode(), position3.hashCode());
+        assertFalse(position1.hashCode() == position2.hashCode());
+        assertFalse(position1.equals("test"));
+
+        // On verifie que la creation d'une position erronnee lance belle et
+        // bien une exception de type position invalide
         try {
             new Position("AAAAA");
+            fail();
+        } catch (Position.PositionInvalideException e) {
+            // Test réussi
+        }
+
+        try {
             new Position(19, 22);
             fail();
         } catch (Position.PositionInvalideException e) {
-            assertEquals(Position.PositionInvalideException.ERR_POSITION_INVALIDE, e.getMessage());
+            // Test réussi
         }
     }
 
@@ -54,7 +67,7 @@ public class TestPosition extends TestCase {
         assertFalse(position1.assigner("ZZZZ"));
         assertFalse(position1.assigner(20, 20));
 
-        // la position devrait toujours etre 1,1
+        // La position devrait toujours etre 1,1
         assertEquals(1, position1.getX());
         assertEquals(1, position1.getY());
 
@@ -86,15 +99,19 @@ public class TestPosition extends TestCase {
         assertTrue(position1 != position2);
     }
 
+    /**
+     * Méthode qui test l'obtention d'une position la plus proche
+     * à partir d'un point d'origine selon une liste d'autre positions
+     */
     public void testPositionLaPlusProche() {
-        Position plusProche = new Position(2,2);
-        Position origine = new Position(3,3);
+        Position plusProche = new Position(2, 2);
+        Position origine = new Position(3, 3);
 
         ArrayList<Position> positions = new ArrayList<>();
-        positions.add(new Position(2,2));
-        positions.add(new Position(5,5));
-        positions.add(new Position(5,1));
-        positions.add(new Position(1,1));
+        positions.add(new Position(2, 2));
+        positions.add(new Position(5, 5));
+        positions.add(new Position(5, 1));
+        positions.add(new Position(1, 1));
 
         Position plusProcheCalcule = Position.ObtenirPositionLaPlusProche(origine, positions);
         assertEquals(plusProche, plusProcheCalcule);

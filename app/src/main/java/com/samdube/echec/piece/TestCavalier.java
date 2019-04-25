@@ -1,39 +1,52 @@
 package com.samdube.echec.piece;
 
-import com.samdube.echec.deplacement.Deplacement;
 import com.samdube.echec.deplacement.DeplacementCavalier;
 import com.samdube.echec.echiquier.Position;
 
-import static com.samdube.echec.piece.Piece.CouleurPiece.*;
-
+/**
+ * Teste la creation d'une com.samdube.echec.piece cavalier
+ *
+ * @author Samuel Dube
+ */
 public class TestCavalier extends TestPiece {
     @Override
-    public int getForceAttendu() {
-        return 2;
+    public Piece getPieceAttendue() {
+        return new Piece(
+                new Position(0, 0),
+                new DeplacementCavalier(new Position(0, 0)),
+                'c',
+                2
+        ) {
+        };
     }
 
     @Override
-    public char getRepresentationAttendu() {
-        return 'c';
+    public Piece getPieceActuel() {
+        return new Cavalier(new Position(0, 0));
     }
 
     @Override
-    public Deplacement getDeplacementAttendu() {
-        return new DeplacementCavalier(getPiece().getPosition());
+    public Piece getPieceDifferente() {
+        return new Roi(new Position(1, 1));
     }
 
     @Override
-    public Position getPositionAttendu() {
-        return new Position(0,0);
+    public Position[] getDeplacementsPossible() {
+        return new Position[]{
+                new Position(1, 2),
+                new Position(2, 4),
+                new Position(4, 3),
+                new Position(5, 5)
+        };
     }
 
     @Override
-    public Piece.CouleurPiece getCouleurAttendu() {
-        return BLANC;
-    }
-
-    @Override
-    public Piece getPiece() {
-        return new Cavalier(new Position(0,0));
+    public Position[] getDeplacementsImpossible() {
+        return new Position[]{
+                new Position(0, 0),
+                new Position(2, 2),
+                new Position(3, 1),
+                new Position(7, 7)
+        };
     }
 }

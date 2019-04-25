@@ -1,40 +1,52 @@
 package com.samdube.echec.piece;
 
-import com.samdube.echec.deplacement.Deplacement;
 import com.samdube.echec.deplacement.DeplacementRoi;
 import com.samdube.echec.echiquier.Position;
-import com.samdube.echec.piece.Piece.CouleurPiece;
 
-import static com.samdube.echec.piece.Piece.CouleurPiece.*;
-
+/**
+ * Teste la creation dune com.samdube.echec.piece de type roi
+ *
+ * @author Samuel Dube
+ */
 public class TestRoi extends TestPiece {
     @Override
-    public int getForceAttendu() {
-        return 1;
+    public Piece getPieceAttendue() {
+        return new Piece(
+                new Position(7, 7),
+                new DeplacementRoi(new Position(7, 7)),
+                'r',
+                1
+        ) {
+        };
     }
 
     @Override
-    public char getRepresentationAttendu() {
-        return 'r';
+    public Piece getPieceActuel() {
+        return new Roi(new Position(7, 7));
     }
 
     @Override
-    public Deplacement getDeplacementAttendu() {
-        return new DeplacementRoi(getPiece().getPosition());
+    public Piece getPieceDifferente() {
+        return new Pion(new Position(1, 1));
     }
 
     @Override
-    public Position getPositionAttendu() {
-        return new Position(7,7);
+    public Position[] getDeplacementsPossible() {
+        return new Position[]{
+                new Position(6, 7),
+                new Position(5, 7),
+                new Position(5, 6),
+                new Position(4, 5)
+        };
     }
 
     @Override
-    public CouleurPiece getCouleurAttendu() {
-        return NOIR;
-    }
-
-    @Override
-    public Piece getPiece() {
-        return new Roi(new Position(7,7));
+    public Position[] getDeplacementsImpossible() {
+        return new Position[]{
+                new Position(0, 2),
+                new Position(2, 2),
+                new Position(1, 2),
+                new Position(7, 7)
+        };
     }
 }

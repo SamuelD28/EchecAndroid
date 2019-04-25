@@ -3,6 +3,11 @@ package com.samdube.echec.piece;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+/**
+ * Classe qui regroupe tout les tests du package com.samdube.echec.piece
+ *
+ * @author Samuel Dube
+ */
 public class TestComplet extends TestCase {
     /**
      *

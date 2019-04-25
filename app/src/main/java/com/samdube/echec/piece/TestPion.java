@@ -1,37 +1,51 @@
 package com.samdube.echec.piece;
 
-import com.samdube.echec.deplacement.Deplacement;
 import com.samdube.echec.deplacement.DeplacementPion;
 import com.samdube.echec.echiquier.Position;
 
+/**
+ * Teste la creation dune com.samdube.echec.piece de type pion
+ *
+ * @author Samuel Dube
+ */
 public class TestPion extends TestPiece {
     @Override
-    public int getForceAttendu() {
-        return 1;
+    public Piece getPieceAttendue() {
+        return new Piece(
+                new Position(0, 0),
+                new DeplacementPion(new Position(0, 0)),
+                'p',
+                1) {
+        };
     }
 
     @Override
-    public char getRepresentationAttendu() {
-        return 'p';
+    public Piece getPieceActuel() {
+        return new Pion(new Position(0, 0));
     }
 
     @Override
-    public Deplacement getDeplacementAttendu() {
-        return new DeplacementPion(getPiece().getPosition());
+    public Piece getPieceDifferente() {
+        return new Roi(new Position(1, 1));
     }
 
     @Override
-    public Position getPositionAttendu() {
-        return new Position(0,0);
+    public Position[] getDeplacementsPossible() {
+        return new Position[]{
+                new Position(0, 1),
+                new Position(0, 2),
+                new Position(0, 3),
+                new Position(0, 4)
+        };
     }
 
     @Override
-    public Piece.CouleurPiece getCouleurAttendu() {
-        return Piece.CouleurPiece.BLANC;
-    }
-
-    @Override
-    public Piece getPiece() {
-        return new Pion(new Position(0,0));
+    public Position[] getDeplacementsImpossible() {
+        return new Position[]{
+                new Position(0, 0),
+                new Position(0, 2),
+                new Position(1, 0),
+                new Position(1, 1)
+        };
     }
 }

@@ -7,15 +7,20 @@ import com.samdube.echec.echiquier.Position;
  *
  * @author Samuel Colassin
  */
-public class DeplacementPion extends Deplacement{
+public class DeplacementPion extends Deplacement {
+    /**
+     * Constructeur initiant un com.samdube.echec.deplacement pour un pion
+     *
+     * @param p_pointOrigine Position du pion sur l'com.samdube.echec.echiquier
+     */
     public DeplacementPion(Position p_pointOrigine) {
         super(p_pointOrigine);
     }
 
     @Override
     public Incrementation[] getIncrementations() {
-        return new Incrementation[] {
-                new Incrementation(0,1)
+        return new Incrementation[]{
+                new Incrementation(0, 1)
         };
     }
 

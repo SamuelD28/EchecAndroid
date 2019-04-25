@@ -1,25 +1,62 @@
 package com.samdube.echec.deplacement;
 
+import com.samdube.echec.echiquier.Position;
 import junit.framework.TestCase;
 
-import com.samdube.echec.echiquier.Position;
 import java.util.Arrays;
 
 /**
- * Classe qui test les déplacements possibles des pièces d'un échiquier
+ * Classe de test pour le com.samdube.echec.deplacement du cavalier
  *
+ * @author Samuel Dube
  * @author Samuel Colassin
  */
-public class TestDeplacement extends TestCase {
+public abstract class TestDeplacement extends TestCase {
+
+    /**
+     * Methode pour obtenir le type de com.samdube.echec.deplacement
+     * generer par le test enfant
+     *
+     * @return Le Deplacement generer
+     */
+    protected abstract Deplacement getDeplacement();
+
+    /**
+     * Methode pour obtenir un com.samdube.echec.deplacement different de celui
+     * implemente dans la classe enfant afin de tester la methode equals
+     *
+     * @return Le com.samdube.echec.deplacement different
+     */
+    protected abstract Deplacement getDeplacementDifferent();
+
+    /**
+     * Methode pour obtenir les possibilites attendues
+     * pour le com.samdube.echec.deplacement generer
+     *
+     * @return Les possibilites attendues
+     */
+    protected abstract Position[] getPossibilitesAttendues();
+
+    /**
+     * Test de déplacement d'un cavalier
+     */
+    public void testCalculerPossibilites() {
+        Position[] possibilitesActuels = getDeplacement().getPossibilites().toArray(new Position[0]);
+        Position[] possibilitesAttendues = getPossibilitesAttendues();
+
+        Arrays.sort(possibilitesAttendues);
+        Arrays.sort(possibilitesActuels);
+
+        assertTrue(Arrays.equals(possibilitesAttendues, possibilitesActuels));
+    }
 
     /**
      * Teste la méthode equals sur un déplacements
      */
     public void testEquals() {
-        Position depart = new Position(0, 0);
-        Deplacement deplacementA = new DeplacementReine(depart);
-        Deplacement deplacementB = new DeplacementReine(depart);
-        Deplacement deplacementC = new DeplacementCavalier(depart);
+        Deplacement deplacementA = getDeplacement();
+        Deplacement deplacementB = getDeplacement();
+        Deplacement deplacementC = getDeplacementDifferent();
 
         assertTrue(deplacementA.equals(deplacementB));
         assertTrue(deplacementB.equals(deplacementA));
@@ -37,10 +74,9 @@ public class TestDeplacement extends TestCase {
      * Teste la génération de hashcode
      */
     public void testHashCode() {
-        Position depart = new Position(0, 0);
-        Deplacement deplacementA = new DeplacementReine(depart);
-        Deplacement deplacementB = new DeplacementReine(depart);
-        Deplacement deplacementC = new DeplacementCavalier(depart);
+        Deplacement deplacementA = getDeplacement();
+        Deplacement deplacementB = getDeplacement();
+        Deplacement deplacementC = getDeplacementDifferent();
 
         assertEquals(deplacementA.hashCode(), deplacementB.hashCode());
         assertEquals(deplacementB.hashCode(), deplacementA.hashCode());
@@ -49,162 +85,49 @@ public class TestDeplacement extends TestCase {
         assertFalse(deplacementB.hashCode() == deplacementC.hashCode());
     }
 
-    public void testAjouterPositions() {
-        Deplacement deplacementA = new DeplacementRoi(new Position(0, 0));
+    /**
+     * Teste l'ajout de possiblites dans le com.samdube.echec.deplacement
+     */
+    public void testAjouterPossibilite() {
+        Deplacement deplacement = getDeplacement();
+
+        deplacement.ajouterPossibilites(
+                new Position(6, 7),
+                new Position(5, 7),
+                new Position(6, 0)
+        );
+
+        assertTrue(deplacement.getPossibilites().contains(new Position(6, 7)));
+        assertTrue(deplacement.getPossibilites().contains(new Position(5, 7)));
+        assertTrue(deplacement.getPossibilites().contains(new Position(6, 0)));
     }
 
     /**
-     * Test de déplacement d'un roi
+     * Teste le retrait de possibblites dans le com.samdube.echec.deplacement
      */
-    public void testDeplacementRoi() {
-        Deplacement deplacement = new DeplacementRoi(new Position(4, 4));
+    public void testRetirerPossibilites() {
+        //On commence par ajouter les possiblites avant de les retirer
+        Deplacement deplacement = getDeplacement();
 
-        Position[] possibiliteAttendues = new Position[]{
-                new Position(4, 5),
-                new Position(3, 5),
-                new Position(3, 4),
-                new Position(3, 3),
-                new Position(4, 3),
-                new Position(5, 3),
-                new Position(5, 4),
-                new Position(5, 5)
-        };
-
-        Arrays.sort(possibiliteAttendues);
-        Arrays.sort(deplacement.getPositionsDisponibles());
-
-        assertTrue(Arrays.equals(possibiliteAttendues, deplacement.getPositionsDisponibles()));
-    }
-
-    /**
-     * Test de déplacement d'une reine
-     */
-    public void testDeplacementReine() {
-        Deplacement deplacement = new DeplacementReine(new Position(0, 0));
-
-        Position[] possibiliteAttendues = new Position[]{
-                new Position(0, 1),
-                new Position(0, 2),
-                new Position(0, 3),
-                new Position(0, 4),
-                new Position(0, 5),
-                new Position(0, 6),
-                new Position(0, 7),
-                new Position(1, 0),
-                new Position(2, 0),
-                new Position(3, 0),
-                new Position(4, 0),
-                new Position(5, 0),
+        deplacement.ajouterPossibilites(
+                new Position(5, 7),
                 new Position(6, 0),
-                new Position(7, 0),
-                new Position(1, 1),
-                new Position(2, 2),
-                new Position(3, 3),
-                new Position(4, 4),
-                new Position(5, 5),
-                new Position(6, 6),
-                new Position(7, 7),
-        };
+                new Position(5, 0)
+        );
 
-        Arrays.sort(possibiliteAttendues);
-        Arrays.sort(deplacement.getPositionsDisponibles());
+        assertTrue(deplacement.getPossibilites().contains(new Position(5, 7)));
+        assertTrue(deplacement.getPossibilites().contains(new Position(6, 0)));
+        assertTrue(deplacement.getPossibilites().contains(new Position(5, 0)));
 
-        assertTrue(Arrays.equals(possibiliteAttendues, deplacement.getPositionsDisponibles()));
-    }
+        //On retire les possibilites ajouter
+        deplacement.retirerPossibilites(
+                new Position(5, 7),
+                new Position(6, 0),
+                new Position(5, 0)
+        );
 
-    /**
-     * Test de déplacement d'un fou
-     */
-    public void testDeplacementFou() {
-        Deplacement deplacement = new DeplacementFou(new Position(4, 4));
-
-        Position[] possibiliteAttendues = new Position[]{
-                new Position(3, 5),
-                new Position(2, 6),
-                new Position(1, 7),
-                new Position(5, 5),
-                new Position(6, 6),
-                new Position(7, 7),
-                new Position(5, 3),
-                new Position(6, 2),
-                new Position(7, 1),
-                new Position(3, 3),
-                new Position(2, 2),
-                new Position(1, 1),
-                new Position(0, 0)
-        };
-        Arrays.sort(possibiliteAttendues);
-        Arrays.sort(deplacement.getPositionsDisponibles());
-
-        assertTrue(Arrays.equals(possibiliteAttendues, deplacement.getPositionsDisponibles()));
-    }
-
-    /**
-     * Test de déplacement d'un cavalier
-     */
-    public void testDeplacementCavalier() {
-        Deplacement deplacement = new DeplacementCavalier(new Position(4, 4));
-
-        Position[] possibiliteAttendues = new Position[]{
-                new Position(5, 6),
-                new Position(3, 6),
-                new Position(2, 5),
-                new Position(2, 3),
-                new Position(3, 2),
-                new Position(5, 2),
-                new Position(6, 5),
-                new Position(6, 3),
-
-        };
-
-        Arrays.sort(possibiliteAttendues);
-        Arrays.sort(deplacement.getPositionsDisponibles());
-
-        assertTrue(Arrays.equals(possibiliteAttendues, deplacement.getPositionsDisponibles()));
-    }
-
-    /**
-     * Test de déplacement d'une tour
-     */
-    public void testDeplacementTour() {
-        Deplacement deplacement = new DeplacementTour(new Position(4, 4));
-
-        Position[] possibiliteAttendues = new Position[]{
-                new Position(4, 7),
-                new Position(4, 6),
-                new Position(4, 5),
-                new Position(4, 3),
-                new Position(4, 2),
-                new Position(4, 1),
-                new Position(4, 0),
-                new Position(0, 4),
-                new Position(1, 4),
-                new Position(2, 4),
-                new Position(3, 4),
-                new Position(5, 4),
-                new Position(6, 4),
-                new Position(7, 4),
-        };
-
-        Arrays.sort(possibiliteAttendues);
-        Arrays.sort(deplacement.getPositionsDisponibles());
-
-        assertTrue(Arrays.equals(possibiliteAttendues, deplacement.getPositionsDisponibles()));
-    }
-
-    /**
-     * Test de déplacement d'un pion
-     */
-    public void testDeplacementPion() {
-        Deplacement deplacement = new DeplacementPion(new Position(4, 4));
-
-        Position[] possibiliteAttendues = new Position[]{
-                new Position(4, 5)
-        };
-
-        Arrays.sort(possibiliteAttendues);
-        Arrays.sort(deplacement.getPositionsDisponibles());
-
-        assertTrue(Arrays.equals(possibiliteAttendues, deplacement.getPositionsDisponibles()));
+        assertFalse(deplacement.getPossibilites().contains(new Position(5, 7)));
+        assertFalse(deplacement.getPossibilites().contains(new Position(6, 0)));
+        assertFalse(deplacement.getPossibilites().contains(new Position(5, 0)));
     }
 }

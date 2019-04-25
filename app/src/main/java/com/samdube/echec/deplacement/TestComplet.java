@@ -8,6 +8,7 @@ import junit.framework.TestSuite;
  * pour les executer les uns à la suite des autres.
  *
  * @author Samuel Dubé
+ * @author Samuel Colassin
  */
 public class TestComplet extends TestCase {
     /**
@@ -17,7 +18,12 @@ public class TestComplet extends TestCase {
      */
     public static TestSuite suite() {
         TestSuite suite = new TestSuite();
-        suite.addTestSuite(TestDeplacement.class);
+        suite.addTestSuite(TestDeplacementTour.class);
+        suite.addTestSuite(TestDeplacementRoi.class);
+        suite.addTestSuite(TestDeplacementReine.class);
+        suite.addTestSuite(TestDeplacementPion.class);
+        suite.addTestSuite(TestDeplacementFou.class);
+        suite.addTestSuite(TestDeplacementCavalier.class);
         suite.addTestSuite(TestIncrementation.class);
         return suite;
     }

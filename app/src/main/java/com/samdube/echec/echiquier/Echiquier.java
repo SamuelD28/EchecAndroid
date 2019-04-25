@@ -2,6 +2,7 @@ package com.samdube.echec.echiquier;
 
 import com.samdube.echec.piece.*;
 import com.samdube.echec.piece.Piece.CouleurPiece;
+
 import java.util.ArrayList;
 
 /**
@@ -10,14 +11,16 @@ import java.util.ArrayList;
  * @author Samuel Colassin
  * @author Samuel Dube
  */
-public class Echiquier {
+class Echiquier {
     final static int TAILLE_ECHIQUIER = 8;
 
     private final Position[] m_echiquier = new Position[TAILLE_ECHIQUIER * TAILLE_ECHIQUIER];
 
     private final ArrayList<Piece> m_pieces = new ArrayList<>();
 
-
+    /**
+     * Constructeur qui initialise l'échiquier
+     */
     Echiquier() {
         initialiser();
     }
@@ -27,17 +30,18 @@ public class Echiquier {
      * representer ave des X.
      */
     private void initialiser() {
-
-        //m_pieces.stream().filter(p -> p.getPosition()).toArray(new Position[0]);
-
         for (int y = 0; y < TAILLE_ECHIQUIER; y++) {
             for (int x = 0; x < TAILLE_ECHIQUIER; x++) {
                 m_echiquier[x + y] = new Position(x, y);
-                switch(y){
-                    case 1 :
-                    case 6 : m_pieces.add(new Pion(new Position(x,y))); break;
-                    case 0 :
-                    case 7: m_pieces.add(obtenirPiecePositionDepart(x,y)); break;
+                switch (y) {
+                    case 1:
+                    case 6:
+                        m_pieces.add(new Pion(new Position(x, y)));
+                        break;
+                    case 0:
+                    case 7:
+                        m_pieces.add(obtenirPiecePositionDepart(x, y));
+                        break;
                 }
             }
         }
@@ -64,29 +68,41 @@ public class Echiquier {
                 return new Fou(new Position(x, y));
             case 3:
                 return new Reine(new Position(x, y));
-            case 4:
-                return new Roi(new Position(x, y));
             default:
-                throw new IllegalArgumentException();
+                return new Roi(new Position(x, y));
         }
     }
 
-    public int getNombrePieces(){
+    /**
+     * Obtient le nombre de pièce dans l'échiquier
+     *
+     * @return Le nombre de pièce dans l'échiquier
+     */
+    int getNombrePieces() {
         return m_pieces.size();
     }
 
-    public int getNombrePieces(CouleurPiece p_couleur) {
-        return 0;
+    /**
+     * Obtient le nombre de pièce dans l'échiquier d'une certaine couleur
+     *
+     * @param p_couleur La couleur dont on veut le nombre de pièce
+     * @return Le nombre de pièce dans l'échiquier d'une certaine couleur
+     */
+    int getNombrePieces(CouleurPiece p_couleur) {
+        return (int) m_pieces.stream().filter(p -> p.getCouleur() == p_couleur).count();
     }
 
     /**
      * Permet d'avoir le nombre d'occurence d'une pièce dans l'échiquier courant
      *
-     * @param p_couleur la couleur de la pièce désirée
+     * @param p_couleur   la couleur de la pièce désirée
+     * @param p_typePiece TODO
      * @return le nombre d'occurence de la pièce dans le jeu
      */
-    public int getNombrePieces(CouleurPiece p_couleur, Class<? extends Piece> p_typePiece) {
-        return 2;
+    int getNombrePieces(CouleurPiece p_couleur, Class<? extends Piece> p_typePiece) {
+        return (int) m_pieces.stream()
+                .filter(p -> p.getCouleur() == p_couleur && p.getClass() == p_typePiece)
+                .count();
     }
 
     /**
@@ -96,18 +112,19 @@ public class Echiquier {
      * @param p_position La position du pion désiré
      * @return Le pion à la position donnée
      */
-    public Piece getPiece(Position p_position) {
+    Piece getPiece(Position p_position) {
         return m_pieces.stream()
                 .filter(p -> p.getPosition().equals(p_position))
                 .findFirst()
                 .orElse(null);
     }
 
+    /**
+     * Obtient toute les positions de l'échiquier
+     *
+     * @return Les position dans l'échiquier
+     */
     public Position[] getEchiquier() {
         return m_echiquier;
-    }
-
-    public int getTaille() {
-        return TAILLE_ECHIQUIER;
     }
 }

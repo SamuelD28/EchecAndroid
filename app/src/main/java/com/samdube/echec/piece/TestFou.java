@@ -1,39 +1,52 @@
 package com.samdube.echec.piece;
 
-import com.samdube.echec.deplacement.Deplacement;
 import com.samdube.echec.deplacement.DeplacementFou;
 import com.samdube.echec.echiquier.Position;
 
-import static com.samdube.echec.piece.Piece.CouleurPiece.BLANC;
-
+/**
+ * Teste la creation d'une com.samdube.echec.piece fou
+ *
+ * @author Samuel Dube
+ */
 public class TestFou extends TestPiece {
     @Override
-    public int getForceAttendu() {
-        return 2;
+    public Piece getPieceAttendue() {
+        return new Piece(
+                new Position(0, 0),
+                new DeplacementFou(new Position(0, 0)),
+                'f',
+                2
+        ) {
+        };
     }
 
     @Override
-    public char getRepresentationAttendu() {
-        return 'f';
+    public Piece getPieceActuel() {
+        return new Fou(new Position(0, 0));
     }
 
     @Override
-    public Deplacement getDeplacementAttendu() {
-        return new DeplacementFou(getPiece().getPosition());
+    public Piece getPieceDifferente() {
+        return new Roi(new Position(1, 1));
     }
 
     @Override
-    public Position getPositionAttendu() {
-        return new Position(0,0);
+    public Position[] getDeplacementsPossible() {
+        return new Position[]{
+                new Position(1, 1),
+                new Position(4, 4),
+                new Position(1, 7),
+                new Position(7, 1)
+        };
     }
 
     @Override
-    public Piece.CouleurPiece getCouleurAttendu() {
-        return BLANC;
-    }
-
-    @Override
-    public Piece getPiece() {
-        return new Fou(new Position(0,0));
+    public Position[] getDeplacementsImpossible() {
+        return new Position[]{
+                new Position(1, 0),
+                new Position(0, 1),
+                new Position(2, 3),
+                new Position(0, 0)
+        };
     }
 }

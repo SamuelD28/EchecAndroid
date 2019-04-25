@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-
 /**
  * Classe permettant de gérer la position d'une pièce
  * sur l'échiquier.
@@ -23,6 +22,30 @@ public class Position implements Comparable<Position> {
     private int m_Y;
 
     /**
+     * Permet d'obtenir la position la plus proche parmi une liste de position
+     * selon un point d'origine
+     *
+     * @param p_origine   La position d'origine
+     * @param p_positions La liste de position parmi lequel trouver la plus proche
+     * @return La position la plus proche du point d'origine
+     */
+    static Position ObtenirPositionLaPlusProche(Position p_origine, List<Position> p_positions) {
+        int differencePlusProche = 10000;
+        Position plusProche = null;
+        for (Position position : p_positions) {
+            int differenceX = Math.abs(p_origine.getX() - position.getX());
+            int differenceY = Math.abs(p_origine.getY() - position.getY());
+            int difference = differenceX + differenceY;
+
+            if (difference < differencePlusProche) {
+                differencePlusProche = difference;
+                plusProche = position;
+            }
+        }
+        return plusProche;
+    }
+
+    /**
      * Classe contenant une excpetion qui est lancer
      * lorsque la position passee au constructeur est
      * invalide.
@@ -30,9 +53,12 @@ public class Position implements Comparable<Position> {
      * @author Samuel Dube
      * @author Samuel Colassin
      */
-    public class PositionInvalideException extends RuntimeException {
+    class PositionInvalideException extends RuntimeException {
+        /**
+         * Message d'erreur pour une position invalide
+         */
+        static final String ERR_POSITION_INVALIDE = "La position specifier est invalide";
 
-        public static final String ERR_POSITION_INVALIDE = "La position specifier est invalide";
         /**
          * Constructeur de base pour une exception
          * de type position invalide.
@@ -40,8 +66,8 @@ public class Position implements Comparable<Position> {
         PositionInvalideException() {
             super(ERR_POSITION_INVALIDE);
         }
-
     }
+
     /**
      * Constructeur permettant d'initialiser une
      * nouvelle position sur l'com.samdube.echec.echiquier avec une coordonnee
@@ -55,8 +81,9 @@ public class Position implements Comparable<Position> {
         if (estDansLesLimites(positionXY)) {
             m_X = positionXY[0];
             m_Y = positionXY[1];
-        } else
+        } else {
             throw new PositionInvalideException();
+        }
     }
 
     /**
@@ -70,8 +97,9 @@ public class Position implements Comparable<Position> {
         if (estDansLesLimites(p_positionXY)) {
             m_X = p_positionXY[0];
             m_Y = p_positionXY[1];
-        } else
+        } else {
             throw new PositionInvalideException();
+        }
     }
 
     /**
@@ -86,11 +114,13 @@ public class Position implements Comparable<Position> {
         if (p_positionTextuelle.length() == 2) {
 
             int positionX = ECHELLE_POSITIONX.indexOf(Character.toUpperCase(p_positionTextuelle.charAt(0)));
-            int positionY = Character.getNumericValue(p_positionTextuelle.charAt(1)) - 1; //On retire 1 parce l'com.samdube.echec.echiquier est de 0 a 7
+            // On retire 1 parce l'com.samdube.echec.echiquier est de 0 a 7
+            int positionY = Character.getNumericValue(p_positionTextuelle.charAt(1)) - 1;
 
             return new int[]{positionX, positionY};
-        } else
+        } else {
             return null;
+        }
     }
 
     /**
@@ -101,8 +131,9 @@ public class Position implements Comparable<Position> {
      * @return Vrai si la position est conforme sinon faux.
      */
     public static boolean estDansLesLimites(int... p_positionXY) {
-        if (p_positionXY == null || p_positionXY.length < 2)
+        if (p_positionXY == null || p_positionXY.length < 2) {
             return false;
+        }
 
         return (p_positionXY[0] >= 0 && p_positionXY[0] < Echiquier.TAILLE_ECHIQUIER)
                 &&
@@ -117,15 +148,16 @@ public class Position implements Comparable<Position> {
      * @param p_positionTextuelle Position textuelle a assigner l'instance
      * @return Vrai si l'assignation a reussi sinon retourne faux.
      */
-    public boolean assigner(String p_positionTextuelle) {
+    boolean assigner(String p_positionTextuelle) {
         int[] positionXY = parseTextuelleVersPositionXY(p_positionTextuelle);
 
         if (estDansLesLimites(positionXY)) {
             m_X = positionXY[0];
             m_Y = positionXY[1];
             return true;
-        } else
+        } else {
             return false;
+        }
     }
 
     /**
@@ -136,15 +168,15 @@ public class Position implements Comparable<Position> {
      * @param p_positionXY Position coordonnee a assigner l'instance. [0] = x, [1] = y
      * @return Vrai si l'assignation a reussi sinon retourne faux.
      */
-    public boolean assigner(int... p_positionXY) {
+    boolean assigner(int... p_positionXY) {
         if (estDansLesLimites(p_positionXY)) {
             m_X = p_positionXY[0];
             m_Y = p_positionXY[1];
             return true;
-        } else
+        } else {
             return false;
+        }
     }
-
 
     /**
      * Methode qui permet d"obtenir la
@@ -179,7 +211,7 @@ public class Position implements Comparable<Position> {
     }
 
     /**
-     * Methdoe permettant de comparer deux objects
+     * Methode permettant de comparer deux objects
      * de type position pour savoir si les deux Position
      * sont equivalente
      *
@@ -188,17 +220,27 @@ public class Position implements Comparable<Position> {
      */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
+        }
 
-        if (!(obj instanceof Position))
+        if (!(obj instanceof Position)) {
             return false;
+        }
 
         Position position = (Position) obj;
         return this.m_X == position.getX() &&
                 this.m_Y == position.getY();
     }
 
+    /**
+     * Permet de déterminer si une position est plus grande ou plus petite
+     * qu'une autre
+     *
+     * @param o La position à comparer
+     * @return Entier plus petit que 0 si plus petit, 0 si égal et en entier plus grand que 0
+     * si plus grand
+     */
     @Override
     public int compareTo(Position o) {
         int result = Double.compare(getX(), o.getX());
@@ -206,21 +248,5 @@ public class Position implements Comparable<Position> {
             result = Double.compare(getY(), o.getY());
         }
         return result;
-    }
-
-    public static Position ObtenirPositionLaPlusProche(Position p_origine, List<Position> p_positions) {
-        int differencePlusProche = 10000;
-        Position plusProche = null;
-        for (Position position: p_positions) {
-            int differenceX = Math.abs(p_origine.getX() - position.getX());
-            int differenceY = Math.abs(p_origine.getY() - position.getY());
-            int difference = differenceX + differenceY;
-
-            if(difference < differencePlusProche){
-                differencePlusProche = difference;
-                plusProche = position;
-            }
-        }
-        return plusProche;
     }
 }

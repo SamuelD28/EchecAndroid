@@ -9,7 +9,7 @@ import java.util.Arrays;
  *
  * @author Samuel Colassin
  */
-public class TestCollision extends TestCase{
+public class TestCollision extends TestCase {
     /**
      * Test la création d'un échiquier
      */
@@ -23,6 +23,9 @@ public class TestCollision extends TestCase{
 
         assertEquals(c1, c2);
         assertFalse(c1.equals(c3));
+
+        assertEquals(c1.hashCode(), c2.hashCode());
+        assertFalse(c1.hashCode() == c3.hashCode());
     }
 
     /**
@@ -72,7 +75,8 @@ public class TestCollision extends TestCase{
                 new Position(1, 3)
         };
 
-        Collision[] collisions = Collision.calculerCollisionsAConserver(positionsPossible, possibleCollisions, origine, 6);
+        Collision[] collisions = Collision.calculerCollisionsAConserver(
+                positionsPossible, possibleCollisions, origine, 6);
 
         // On sort parce qu'on veut seulement savoir si les éléménts de chaque liste se retrouve dans l'autre
         Arrays.sort(collisions);
