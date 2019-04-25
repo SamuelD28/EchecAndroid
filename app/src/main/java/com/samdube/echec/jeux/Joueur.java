@@ -6,10 +6,6 @@ package com.samdube.echec.jeux;
  * @author Samuel Colassin
  */
 class Joueur {
-    private static Joueur m_joueurBlanc;
-
-    private static Joueur m_joueurNoir;
-
     private final CouleurJoueur m_couleur;
 
     private String m_nom;
@@ -21,30 +17,6 @@ class Joueur {
      */
     private Joueur(CouleurJoueur p_couleur) {
         m_couleur = p_couleur;
-    }
-
-    /**
-     * Permet d'avoit uniquement une seule instance de joueur blanc
-     *
-     * @return L'unique joueur blanc
-     */
-    static Joueur ObtenirJoueurBlanc() {
-        if (m_joueurBlanc == null) {
-            m_joueurBlanc = new Joueur(CouleurJoueur.BLANC);
-        }
-        return m_joueurBlanc;
-    }
-
-    /**
-     * Permet d'avoit uniquement une seule instance de joueur noir
-     *
-     * @return L'unique joueur noir
-     */
-    static Joueur ObtenirJoueurNoir() {
-        if (m_joueurNoir == null) {
-            m_joueurNoir = new Joueur(CouleurJoueur.NOIR);
-        }
-        return m_joueurNoir;
     }
 
     /**

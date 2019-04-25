@@ -11,28 +11,29 @@ import java.util.ArrayList;
  * @author Samuel Colassin
  * @author Samuel Dube
  */
-class Echiquier {
-    final static int TAILLE_ECHIQUIER = 8;
+public class Echiquier {
+    public final static int TAILLE_ECHIQUIER = 8;
 
-    private final Position[] m_echiquier = new Position[TAILLE_ECHIQUIER * TAILLE_ECHIQUIER];
+    private final Position[] m_cases = new Position[TAILLE_ECHIQUIER * TAILLE_ECHIQUIER];
 
     private final ArrayList<Piece> m_pieces = new ArrayList<>();
 
     /**
      * Constructeur qui initialise l'échiquier
      */
-    Echiquier() {
+    public Echiquier() {
         initialiser();
     }
 
     /**
-     * Methode qui initialise l'com.samdube.echec.echiquier avec des m_echiquier vides
+     * Methode qui initialise l'com.samdube.echec.echiquier avec des m_cases vides
      * representer ave des X.
      */
     private void initialiser() {
+        int i =0;
         for (int y = 0; y < TAILLE_ECHIQUIER; y++) {
             for (int x = 0; x < TAILLE_ECHIQUIER; x++) {
-                m_echiquier[x + y] = new Position(x, y);
+                m_cases[i] = new Position(x, y);
                 switch (y) {
                     case 1:
                     case 6:
@@ -43,6 +44,7 @@ class Echiquier {
                         m_pieces.add(obtenirPiecePositionDepart(x, y));
                         break;
                 }
+                i++;
             }
         }
     }
@@ -122,7 +124,7 @@ class Echiquier {
      * @param p_position La position du pion désiré
      * @return Le pion à la position donnée
      */
-    Piece getPiece(Position p_position) {
+    public Piece getPiece(Position p_position) {
         Piece pieceTrouve = null;
         for(Piece piece : m_pieces){
             if(piece.getPosition().equals(p_position)){
@@ -138,7 +140,7 @@ class Echiquier {
      *
      * @return Les position dans l'échiquier
      */
-    public Position[] getEchiquier() {
-        return m_echiquier;
+    public Position[] getCases() {
+        return m_cases;
     }
 }

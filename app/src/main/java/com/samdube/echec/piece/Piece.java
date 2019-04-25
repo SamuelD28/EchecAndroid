@@ -72,7 +72,7 @@ public abstract class Piece implements IObservable {
      *
      * @return Representation textuelle
      */
-    char getRepresentation() {
+    public char getRepresentation() {
         return m_representation;
     }
 
@@ -90,7 +90,7 @@ public abstract class Piece implements IObservable {
      *
      * @return Force de la com.samdube.echec.piece
      */
-    int getForce() {
+    public int getForce() {
         return m_force;
     }
 

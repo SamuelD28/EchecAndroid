@@ -28,7 +28,7 @@ public class TestEchiquier extends TestCase {
      * nombre de pièces correspond également.
      */
     public void testCreer() {
-        assertEquals(64, m_echiquier.getEchiquier().length);
+        assertEquals(64, m_echiquier.getCases().length);
     }
 
     /**
@@ -53,7 +53,21 @@ public class TestEchiquier extends TestCase {
      */
     public void testGetPiece() {
         Piece piece = m_echiquier.getPiece(new Position(0,1));
+
         assertTrue(piece instanceof Pion);
         assertEquals(BLANC, piece.getCouleur());
+        assertEquals('p', piece.getRepresentation());
+        assertEquals(1, piece.getForce());
+
+        piece = m_echiquier.getPiece(new Position(7,7));
+
+        assertTrue(piece instanceof Tour);
+        assertEquals(NOIR, piece.getCouleur());
+        assertEquals('t', piece.getRepresentation());
+        assertEquals(2, piece.getForce());
+
+        piece = m_echiquier.getPiece(new Position(0,3));
+
+        assertNull(piece);
     }
 }
