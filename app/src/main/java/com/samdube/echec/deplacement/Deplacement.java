@@ -55,10 +55,20 @@ public abstract class Deplacement {
      *
      * @param p_positions Possibilites a retirer
      */
-    void retirerPossibilites(Position... p_positions) {
+    public void retirerPossibilites(Position... p_positions) {
         for (Position position : p_positions) {
             m_possibilites.remove(position);
         }
+    }
+
+    /**
+     * Methode qui retourne le nombre d'incrementation contenu dans
+     * la liste incrementation
+     *
+     * @return Nombre d'incrementation contenue
+     */
+    public int getNombreIncrementations(){
+        return getIncrementations().length;
     }
 
     /**
@@ -67,7 +77,7 @@ public abstract class Deplacement {
      *
      * @param p_positions Possibilite a ajouter
      */
-    void ajouterPossibilites(Position... p_positions) {
+    public void ajouterPossibilites(Position... p_positions) {
         for (Position position : p_positions) {
             if (!m_possibilites.contains(position)) {
                 m_possibilites.add(position);

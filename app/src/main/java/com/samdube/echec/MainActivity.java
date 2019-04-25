@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.samdube.echec.echiquier.Echiquier;
 import com.samdube.echec.echiquier.Position;
@@ -21,12 +22,17 @@ public class MainActivity
         extends AppCompatActivity
         implements View.OnClickListener {
 
+    private TableLayout m_chessboardTableLayout;
+    private TextView m_debugingTextView;
     private Echiquier m_echiquier = new Echiquier();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        m_debugingTextView = findViewById(R.id.debuging_text);
+        m_chessboardTableLayout = findViewById(R.id.main_board_id);
     }
 
     private TableRow genererTableRow() {
@@ -40,7 +46,6 @@ public class MainActivity
         TableRow.LayoutParams layout = new TableRow.LayoutParams(p_largeur, p_hauteur);
         b.setLayoutParams(layout);
         b.setTag(p_position);
-        b.setId(Integer.valueOf(String.valueOf(p_position.getX() + p_position.getY())));
         b.setBackground(getDrawable(R.drawable.case_border));
         b.setOnClickListener(this);
         return b;
@@ -94,19 +99,23 @@ public class MainActivity
 
     @Override
     public void onClick(View v) {
-        Button b = (Button) v;
+        ImageButton b = (ImageButton) v;
+        Position position = (Position)b.getTag();
+        Piece pieceSelectionner = m_echiquier.getPiece(position);
+
+        if(pieceSelectionner != null){
+
+        }
     }
 
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-
-        TableLayout chessboard = findViewById(R.id.main_board_id);
         TableRow tr = genererTableRow();
 
-        int hauteurCase = chessboard.getHeight() / TAILLE_ECHIQUIER;
-        int largeurCase = chessboard.getWidth() / TAILLE_ECHIQUIER;
+        int hauteurCase = m_chessboardTableLayout.getHeight() / TAILLE_ECHIQUIER;
+        int largeurCase = m_chessboardTableLayout.getWidth() / TAILLE_ECHIQUIER;
         int rangeDepart = 0;
 
         for (int i = 0; i < m_echiquier.getCases().length; i++) {
@@ -119,7 +128,7 @@ public class MainActivity
             }
 
             if (position.getY() > rangeDepart) {
-                chessboard.addView(tr, 0);
+                m_chessboardTableLayout.addView(tr, 0);
                 tr = genererTableRow();
                 rangeDepart = position.getY();
             }
@@ -127,7 +136,7 @@ public class MainActivity
             tr.addView(b);
 
             if (i == m_echiquier.getCases().length - 1) {
-                chessboard.addView(tr, 0);
+                m_chessboardTableLayout.addView(tr, 0);
             }
         }
     }

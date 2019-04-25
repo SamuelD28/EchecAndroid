@@ -34,7 +34,7 @@ class Collision implements Comparable<Collision> {
      *                             soit son nombre de direction différente
      * @return La liste des collision à conserver selon les déplacements possible de la pièce
      */
-    static Collision[] calculerCollisionsAConserver(Position[] p_positions, Position[] p_possibleCollisions,
+    static Collision[] calculerCollisions(Position[] p_positions, Position[] p_possibleCollisions,
                                                     Position p_origine, int p_collisionsMax) {
         ArrayList<Collision> collisions = new ArrayList<>();
         ArrayList<Position> positions = new ArrayList<>();
@@ -58,6 +58,10 @@ class Collision implements Comparable<Collision> {
         }
 
         return collisions.toArray(new Collision[0]);
+    }
+
+    public Position getPointContact() {
+        return m_pointContact;
     }
 
     /**

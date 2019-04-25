@@ -75,7 +75,7 @@ public class TestCollision extends TestCase {
                 new Position(1, 3)
         };
 
-        Collision[] collisions = Collision.calculerCollisionsAConserver(
+        Collision[] collisions = Collision.calculerCollisions(
                 positionsPossible, possibleCollisions, origine, 6);
 
         // On sort parce qu'on veut seulement savoir si les éléménts de chaque liste se retrouve dans l'autre

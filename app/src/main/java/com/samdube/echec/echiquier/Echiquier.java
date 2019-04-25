@@ -4,6 +4,10 @@ import com.samdube.echec.piece.*;
 import com.samdube.echec.piece.Piece.CouleurPiece;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import static com.samdube.echec.echiquier.Collision.*;
+import static com.samdube.echec.echiquier.Position.*;
 
 /**
  * Echiquier de base permettant l'ajout de pion
@@ -30,15 +34,15 @@ public class Echiquier {
      * representer ave des X.
      */
     private void initialiser() {
-        int i =0;
+        int i = 0;
         for (int y = 0; y < TAILLE_ECHIQUIER; y++) {
             for (int x = 0; x < TAILLE_ECHIQUIER; x++) {
                 m_cases[i] = new Position(x, y);
                 switch (y) {
-                    case 1:
-                    case 6:
-                        m_pieces.add(new Pion(new Position(x, y)));
-                        break;
+//                    case 1:
+//                    case 6:
+//                        m_pieces.add(new Pion(new Position(x, y)));
+//                        break;
                     case 0:
                     case 7:
                         m_pieces.add(obtenirPiecePositionDepart(x, y));
@@ -92,8 +96,8 @@ public class Echiquier {
      */
     int getNombrePieces(CouleurPiece p_couleur) {
         int nombrePiece = 0;
-        for(Piece piece : m_pieces){
-            if(piece.getCouleur() == p_couleur){
+        for (Piece piece : m_pieces) {
+            if (piece.getCouleur() == p_couleur) {
                 nombrePiece++;
             }
         }
@@ -109,8 +113,8 @@ public class Echiquier {
      */
     int getNombrePieces(CouleurPiece p_couleur, Class<? extends Piece> p_typePiece) {
         int nombrePiece = 0;
-        for(Piece piece : m_pieces){
-            if(piece.getCouleur() == p_couleur && piece.getClass() == p_typePiece){
+        for (Piece piece : m_pieces) {
+            if (piece.getCouleur() == p_couleur && piece.getClass() == p_typePiece) {
                 nombrePiece++;
             }
         }
@@ -126,12 +130,39 @@ public class Echiquier {
      */
     public Piece getPiece(Position p_position) {
         Piece pieceTrouve = null;
-        for(Piece piece : m_pieces){
-            if(piece.getPosition().equals(p_position)){
+        for (Piece piece : m_pieces) {
+            if (piece.getPosition().equals(p_position)) {
                 pieceTrouve = piece;
                 break;
             }
         }
+
+        if (pieceTrouve != null) {
+
+            ArrayList<Position> positionsPieces = new ArrayList<>();
+            for (Piece piece : m_pieces) {
+                positionsPieces.add(piece.getPosition());
+            }
+
+            Position[] deplacementsPossibles = pieceTrouve.getDeplacement()
+                    .getPossibilites()
+                    .toArray(new Position[0]);
+
+            Collision[] collisions = calculerCollisions(deplacementsPossibles,
+                    positionsPieces.toArray(new Position[0]),
+                    pieceTrouve.getPosition(),
+                    pieceTrouve.getDeplacement().getNombreIncrementations()
+                    );
+
+            ArrayList<Position> pointsContact = new ArrayList<>();
+            for(Collision collision : collisions){
+                pointsContact.add(collision.getPointContact());
+            }
+
+            Position[] trimmer = trimmer(pieceTrouve.getPosition(), pointsContact.toArray(new Position[0]), deplacementsPossibles);
+            pieceTrouve.getDeplacement().ajouterPossibilites(trimmer);
+        }
+
         return pieceTrouve;
     }
 
