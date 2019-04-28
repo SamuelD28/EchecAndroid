@@ -70,12 +70,12 @@ public abstract class TestPiece extends TestCase {
         Piece piece = getPieceActuel();
 
         for (Position deplacementPossible : getDeplacementsPossible()) {
-            assertTrue(piece.setPosition(deplacementPossible));
+            assertTrue(piece.deplacer(deplacementPossible));
         }
 
         piece = getPieceActuel();
         for (Position deplacementImpossible : getDeplacementsImpossible()) {
-            assertFalse(piece.setPosition(deplacementImpossible));
+            assertFalse(piece.deplacer(deplacementImpossible));
         }
     }
 

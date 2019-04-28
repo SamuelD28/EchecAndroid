@@ -13,7 +13,7 @@ public class TestFou extends TestPiece {
     public Piece getPieceAttendue() {
         return new Piece(
                 new Position(0, 0),
-                new DeplacementFou(new Position(0, 0)),
+                new DeplacementFou(),
                 'f',
                 2
         ) {

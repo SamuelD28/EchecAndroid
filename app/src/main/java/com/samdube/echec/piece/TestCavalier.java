@@ -13,7 +13,7 @@ public class TestCavalier extends TestPiece {
     public Piece getPieceAttendue() {
         return new Piece(
                 new Position(0, 0),
-                new DeplacementCavalier(new Position(0, 0)),
+                new DeplacementCavalier(),
                 'c',
                 2
         ) {

@@ -6,6 +6,7 @@ import com.samdube.echec.utils.IObservable;
 import com.samdube.echec.utils.IObserver;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -56,15 +57,30 @@ public abstract class Piece implements IObservable {
      * @param p_position Position ou la com.samdube.echec.piece doit etre deplacer
      * @return Vrai si la com.samdube.echec.piece a ete deplacer a la position
      */
-    public boolean setPosition(Position p_position) {
-        if (!m_position.equals(p_position) && m_deplacement.getPositionsDisponible().contains(p_position)) {
+    public boolean deplacer(Position p_position) {
+        if (peutDeplacer(p_position)) {
             m_position = p_position;
-            m_deplacement.calculerPositionsDisponibles(m_position);
             Notify();
             return true;
+        }else{
+            return false;
         }
+    }
 
-        return false;
+    public boolean peutDeplacer(Position p_position){
+        return !m_position.equals(p_position) && Arrays.asList(m_deplacement.getDisponibles()).contains(p_position);
+    }
+
+    public void calculerDeplacementPossibles(Position[] p_positionIndisponibles){
+        m_deplacement.calculerDeplacementPossibles(m_position, p_positionIndisponibles);
+    }
+
+    public Position[] getDeplacementsPossibles(){
+        return m_deplacement.getDisponibles();
+    }
+
+    public Deplacement getDeplacement(){
+        return m_deplacement;
     }
 
     /**
@@ -74,15 +90,6 @@ public abstract class Piece implements IObservable {
      */
     public char getRepresentation() {
         return m_representation;
-    }
-
-    /**
-     * Getter pour obtenir le com.samdube.echec.deplacement associer a la com.samdube.echec.piece
-     *
-     * @return Deplacement associer a la com.samdube.echec.piece
-     */
-    public Deplacement getDeplacement() {
-        return m_deplacement;
     }
 
     /**
@@ -148,11 +155,11 @@ public abstract class Piece implements IObservable {
         if (this == o) return true;
         if (!(o instanceof Piece)) return false;
         Piece piece = (Piece) o;
-        return piece.getPosition().equals(getPosition()) &&
-                piece.getCouleur() == getCouleur() &&
-                piece.getDeplacement().equals(getDeplacement()) &&
-                piece.getForce() == getForce() &&
-                piece.getRepresentation() == getRepresentation();
+        return piece.m_position.equals(m_position) &&
+                piece.m_couleur == m_couleur &&
+                piece.m_deplacement.equals(m_deplacement) &&
+                piece.m_force == m_force &&
+                piece.m_representation == m_representation;
     }
 
     @Override

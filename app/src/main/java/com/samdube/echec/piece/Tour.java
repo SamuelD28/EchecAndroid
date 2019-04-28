@@ -15,6 +15,6 @@ public class Tour extends Piece {
      * @param p_position Position de la tour sur l'com.samdube.echec.echiquier
      */
     public Tour(Position p_position) {
-        super(p_position, new DeplacementTour(p_position), 't', 2);
+        super(p_position, new DeplacementTour(), 't', 2);
     }
 }

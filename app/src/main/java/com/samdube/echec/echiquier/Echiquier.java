@@ -1,13 +1,15 @@
 package com.samdube.echec.echiquier;
 
-import com.samdube.echec.piece.*;
+import com.samdube.echec.piece.Cavalier;
+import com.samdube.echec.piece.Fou;
+import com.samdube.echec.piece.Piece;
 import com.samdube.echec.piece.Piece.CouleurPiece;
+import com.samdube.echec.piece.Pion;
+import com.samdube.echec.piece.Reine;
+import com.samdube.echec.piece.Roi;
+import com.samdube.echec.piece.Tour;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-
-import static com.samdube.echec.echiquier.Collision.*;
-import static com.samdube.echec.echiquier.Position.*;
 
 /**
  * Echiquier de base permettant l'ajout de pion
@@ -22,34 +24,35 @@ public class Echiquier {
 
     private final ArrayList<Piece> m_pieces = new ArrayList<>();
 
+    private final ArrayList<Position> m_positionOccupes = new ArrayList<>();
+
     /**
      * Constructeur qui initialise l'échiquier
      */
     public Echiquier() {
-        initialiser();
+        initialiserPiece();
     }
 
     /**
      * Methode qui initialise l'com.samdube.echec.echiquier avec des m_cases vides
      * representer ave des X.
      */
-    private void initialiser() {
+    private void initialiserPiece() {
         int i = 0;
         for (int y = 0; y < TAILLE_ECHIQUIER; y++) {
             for (int x = 0; x < TAILLE_ECHIQUIER; x++) {
-                m_cases[i] = new Position(x, y);
-                switch (y) {
-//                    case 1:
-//                    case 6:
-//                        m_pieces.add(new Pion(new Position(x, y)));
-//                        break;
-                    case 0:
-                    case 7:
-                        m_pieces.add(obtenirPiecePositionDepart(x, y));
-                        break;
+                Position position = new Position(x,y);
+                Piece piece = obtenirPiecePositionDepart(position);
+                m_cases[i] = position;
+                if(piece != null){
+                    m_pieces.add(piece);
+                    m_positionOccupes.add(piece.getPosition());
                 }
                 i++;
             }
+        }
+        for(Piece piece : m_pieces){
+            piece.calculerDeplacementPossibles(m_positionOccupes.toArray(new Position[0]));
         }
     }
 
@@ -57,26 +60,30 @@ public class Echiquier {
      * Permet d'obtenir la pièce à mettre sur l'échiquier
      * selon la position dans celui-ci.
      *
-     * @param x L'axe des x dans l'échiquier
-     * @param y L'axe des y dans l'échiquier
      * @return Le type de pièce à mettre dans l'échiquier
      */
-    private Piece obtenirPiecePositionDepart(int x, int y) {
-        switch (x) {
-            case 0:
-            case 7:
+    private Piece obtenirPiecePositionDepart(Position p_position) {
+        Piece piece = null;
+
+        int x = p_position.getX();
+        int y = p_position.getY();
+
+        if (y == 1 || y == 6) {
+        } else if (y == 0 || y == 7){
+            if (x == 0 || x == 7) {
                 return new Tour(new Position(x, y));
-            case 1:
-            case 6:
+            } else if (x == 1 || x == 6) {
                 return new Cavalier(new Position(x, y));
-            case 2:
-            case 5:
+            } else if (x == 2 || x == 5) {
                 return new Fou(new Position(x, y));
-            case 3:
+            } else if (x == 3) {
                 return new Reine(new Position(x, y));
-            default:
+            } else {
                 return new Roi(new Position(x, y));
+            }
         }
+
+        return piece;
     }
 
     /**
@@ -136,36 +143,19 @@ public class Echiquier {
                 break;
             }
         }
-
-        if (pieceTrouve != null) {
-
-            ArrayList<Position> positionsPieces = new ArrayList<>();
-            for (Piece piece : m_pieces) {
-                positionsPieces.add(piece.getPosition());
-            }
-
-            Position[] deplacementsPossibles = pieceTrouve.getDeplacement()
-                    .getPositionsDisponible()
-                    .toArray(new Position[0]);
-
-            Collision[] collisions = calculerCollisions(deplacementsPossibles,
-                    positionsPieces.toArray(new Position[0]),
-                    pieceTrouve.getPosition(),
-                    pieceTrouve.getDeplacement().getNombreIncrementations()
-                    );
-
-            ArrayList<Position> pointsContact = new ArrayList<>();
-            for(Collision collision : collisions){
-                pointsContact.add(collision.getPointContact());
-            }
-
-            pieceTrouve.getDeplacement().retirerPositionsDisponible(
-                    pieceTrouve.getPosition(),
-                    pointsContact.toArray(new Position[0])
-            );
-        }
-
         return pieceTrouve;
+    }
+
+    public boolean deplacePiece(Piece p_piece, Position p_position){
+        if(p_piece.peutDeplacer(p_position)){
+            m_positionOccupes.remove(p_piece.getPosition());
+            p_piece.deplacer(p_position);
+            p_piece.calculerDeplacementPossibles(m_positionOccupes.toArray(new Position[0]));
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     /**

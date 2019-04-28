@@ -49,7 +49,7 @@ public class MainActivity
         return b;
     }
 
-    public void assignerImageBouton(Piece p_piece, ImageButton p_bouton){
+    public void assignerImageBouton(Piece p_piece, ImageButton p_bouton) {
         if (p_piece.getCouleur() == BLANC) {
             switch (p_piece.getRepresentation()) {
                 case 'c':
@@ -71,7 +71,7 @@ public class MainActivity
                     p_bouton.setImageDrawable(getDrawable(R.drawable.ic_pion_blanc));
                     break;
             }
-        }else{
+        } else {
             switch (p_piece.getRepresentation()) {
                 case 'c':
                     p_bouton.setImageDrawable(getDrawable(R.drawable.ic_cavalier_noir));
@@ -98,31 +98,34 @@ public class MainActivity
 
     @Override
     public void onClick(View v) {
-        ImageButton b = (ImageButton)v;
-        Position position = (Position)b.getTag();
+        ImageButton b = (ImageButton) v;
+        Position position = (Position) b.getTag();
 
-        if(m_pieceSelectionner != null && m_pieceSelectionner.getDeplacement().getPositionsDisponible().contains(position)){
-            Position positionPiece = m_pieceSelectionner.getPosition();
-            int buttonId = Integer.valueOf(String.valueOf(positionPiece.getX() + "" + positionPiece.getY()));
-            ImageButton button = m_chessboardTableLayout.findViewById(buttonId);
-            button.setImageDrawable(null);
-            m_pieceSelectionner.setPosition(position);
-            assignerImageBouton(m_pieceSelectionner, b);
-            effacerDeplacementPossible();
-            m_pieceSelectionner= null;
-        }else{
+        if(m_echiquier.getPiece(position) != null && m_pieceSelectionner == null){
             m_pieceSelectionner = m_echiquier.getPiece(position);
-        }
-
-        if(m_pieceSelectionner != null){
             afficherDeplacementPosssible();
-        }else{
-            effacerDeplacementPossible();
+        }
+        else if(m_echiquier.getPiece(position) == null && m_pieceSelectionner != null){
+
+            Position positionPiece = m_pieceSelectionner.getPosition();
+            if(m_echiquier.deplacePiece(m_pieceSelectionner, position)){
+                int buttonId = Integer.valueOf(String.valueOf(positionPiece.getX() + "" + positionPiece.getY()));
+                ImageButton button = m_chessboardTableLayout.findViewById(buttonId);
+                button.setImageDrawable(null);
+
+                assignerImageBouton(m_pieceSelectionner, b);
+                effacerDeplacementPossible();
+                m_pieceSelectionner = null;
+            }
+            else{
+                effacerDeplacementPossible();
+                m_pieceSelectionner = null;
+            }
         }
     }
 
     private void afficherDeplacementPosssible() {
-        for(Position positionDisponible : m_pieceSelectionner.getDeplacement().getPositionsDisponible()){
+        for (Position positionDisponible : m_pieceSelectionner.getDeplacementsPossibles()) {
             int buttonId = Integer.valueOf(String.valueOf(positionDisponible.getX() + "" + positionDisponible.getY()));
             ImageButton button = m_chessboardTableLayout.findViewById(buttonId);
             button.setBackgroundColor(getColor(R.color.colorAccent));
@@ -130,13 +133,13 @@ public class MainActivity
     }
 
     private void effacerDeplacementPossible() {
-        for(int i = 0; i < m_chessboardTableLayout.getChildCount(); i++) {
+        for (int i = 0; i < m_chessboardTableLayout.getChildCount(); i++) {
             View view = m_chessboardTableLayout.getChildAt(i);
             if (m_chessboardTableLayout.getChildAt(i) instanceof TableRow) {
                 TableRow row = (TableRow) view;
-                for(int ii = 0; ii < row.getChildCount(); ii++){
-                    if(row.getChildAt(ii) instanceof ImageButton){
-                        ImageButton button = (ImageButton)row.getChildAt(ii);
+                for (int ii = 0; ii < row.getChildCount(); ii++) {
+                    if (row.getChildAt(ii) instanceof ImageButton) {
+                        ImageButton button = (ImageButton) row.getChildAt(ii);
                         button.setBackground(getDrawable(R.drawable.case_border));
                     }
                 }

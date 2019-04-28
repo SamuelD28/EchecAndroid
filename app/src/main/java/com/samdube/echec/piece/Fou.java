@@ -15,6 +15,6 @@ public class Fou extends Piece{
      * @param p_position Position du fou sur l'com.samdube.echec.echiquier
      */
     public Fou(Position p_position) {
-        super(p_position, new DeplacementFou(p_position), 'f', 2);
+        super(p_position, new DeplacementFou(), 'f', 2);
     }
 }

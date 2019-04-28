@@ -24,7 +24,7 @@ public class TestComplet extends TestCase {
         suite.addTestSuite(TestDeplacementPion.class);
         suite.addTestSuite(TestDeplacementFou.class);
         suite.addTestSuite(TestDeplacementCavalier.class);
-        suite.addTestSuite(TestIncrementation.class);
+        suite.addTestSuite(TestPas.class);
         return suite;
     }
 }

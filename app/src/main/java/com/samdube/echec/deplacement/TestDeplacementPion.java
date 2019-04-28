@@ -11,12 +11,12 @@ import com.samdube.echec.echiquier.Position;
 public class TestDeplacementPion extends TestDeplacement {
     @Override
     public Deplacement getDeplacement() {
-        return new DeplacementPion(new Position(4, 4));
+        return new DeplacementPion();
     }
 
     @Override
     protected Deplacement getDeplacementDifferent() {
-        return new DeplacementTour(new Position(4, 4));
+        return new DeplacementTour();
     }
 
     @Override

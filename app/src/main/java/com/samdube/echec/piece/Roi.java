@@ -15,6 +15,6 @@ public class Roi extends Piece {
      * @param p_position Position du roi sur l'com.samdube.echec.echiquier
      */
     public Roi(Position p_position) {
-        super(p_position, new DeplacementRoi(p_position), 'r', 1);
+        super(p_position, new DeplacementRoi(), 'r', 1);
     }
 }

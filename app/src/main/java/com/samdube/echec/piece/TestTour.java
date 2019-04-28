@@ -13,7 +13,7 @@ public class TestTour extends TestPiece {
     public Piece getPieceAttendue() {
         return new Piece(
                 new Position(0, 0),
-                new DeplacementTour(new Position(0, 0)),
+                new DeplacementTour(),
                 't',
                 2
         ) {

@@ -13,7 +13,7 @@ public class TestRoi extends TestPiece {
     public Piece getPieceAttendue() {
         return new Piece(
                 new Position(7, 7),
-                new DeplacementRoi(new Position(7, 7)),
+                new DeplacementRoi(),
                 'r',
                 1
         ) {

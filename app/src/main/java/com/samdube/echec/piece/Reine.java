@@ -15,6 +15,6 @@ public class Reine extends Piece {
      * @param p_position Position de la reine sur l'com.samdube.echec.echiquier
      */
     public Reine(Position p_position) {
-        super(p_position, new DeplacementReine(p_position), 'q', 3);
+        super(p_position, new DeplacementReine(), 'q', 3);
     }
 }

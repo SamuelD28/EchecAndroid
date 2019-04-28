@@ -3,6 +3,7 @@ package com.samdube.echec.deplacement;
 import com.samdube.echec.echiquier.Position;
 import junit.framework.TestCase;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 
 /**
@@ -41,7 +42,7 @@ public abstract class TestDeplacement extends TestCase {
      * Test de déplacement d'un cavalier
      */
     public void testCalculerPossibilites() {
-        Position[] possibilitesActuels = getDeplacement().getPositionsDisponible().toArray(new Position[0]);
+        Position[] possibilitesActuels = getDeplacement().getDisponibles();
         Position[] possibilitesAttendues = getPossibilitesAttendues();
 
         Arrays.sort(possibilitesAttendues);
@@ -88,36 +89,38 @@ public abstract class TestDeplacement extends TestCase {
     /**
      * Teste l'ajout de possiblites dans le com.samdube.echec.deplacement
      */
-    public void testAjouterPossibilite() {
+    public void testAjouterDeplacement() {
         Deplacement deplacement = getDeplacement();
+        Position[] deplacementsDisponible = getDeplacement().getDisponibles();
 
-        deplacement.ajouterPositionsDisponible(
+        deplacement.ajouterDeplacementPossibles(
                 new Position(6, 7),
                 new Position(5, 7),
                 new Position(6, 0)
         );
 
-        assertTrue(deplacement.getPositionsDisponible().contains(new Position(6, 7)));
-        assertTrue(deplacement.getPositionsDisponible().contains(new Position(5, 7)));
-        assertTrue(deplacement.getPositionsDisponible().contains(new Position(6, 0)));
+        assertTrue(Arrays.asList(deplacementsDisponible).contains(new Position(6, 7)));
+        assertTrue(Arrays.asList(deplacementsDisponible).contains(new Position(5, 7)));
+        assertTrue(Arrays.asList(deplacementsDisponible).contains(new Position(6, 0)));
     }
 
     /**
      * Teste le retrait de possibblites dans le com.samdube.echec.deplacement
      */
-    public void testRetirerPossibilites() {
+    public void testRetirerDeplacement() {
         //On commence par ajouter les possiblites avant de les retirer
         Deplacement deplacement = getDeplacement();
+        Position[] deplacementsDisponible = getDeplacement().getDisponibles();
 
-        deplacement.ajouterPositionsDisponible(
+        deplacement.ajouterDeplacementPossibles(
                 new Position(5, 7),
                 new Position(6, 0),
                 new Position(5, 0)
         );
 
-        assertTrue(deplacement.getPositionsDisponible().contains(new Position(5, 7)));
-        assertTrue(deplacement.getPositionsDisponible().contains(new Position(6, 0)));
-        assertTrue(deplacement.getPositionsDisponible().contains(new Position(5, 0)));
+        assertTrue(Arrays.asList(deplacementsDisponible).contains(new Position(6, 7)));
+        assertTrue(Arrays.asList(deplacementsDisponible).contains(new Position(5, 7)));
+        assertTrue(Arrays.asList(deplacementsDisponible).contains(new Position(6, 0)));
 
 //        //On retire les possibilites ajouter
 //        deplacement.retirerPositionsDisponible(
@@ -126,8 +129,8 @@ public abstract class TestDeplacement extends TestCase {
 //                new Position(5, 0)
 //        );
 
-        assertFalse(deplacement.getPositionsDisponible().contains(new Position(5, 7)));
-        assertFalse(deplacement.getPositionsDisponible().contains(new Position(6, 0)));
-        assertFalse(deplacement.getPositionsDisponible().contains(new Position(5, 0)));
+        assertFalse(Arrays.asList(deplacementsDisponible).contains(new Position(6, 7)));
+        assertFalse(Arrays.asList(deplacementsDisponible).contains(new Position(5, 7)));
+        assertFalse(Arrays.asList(deplacementsDisponible).contains(new Position(6, 0)));
     }
 }
