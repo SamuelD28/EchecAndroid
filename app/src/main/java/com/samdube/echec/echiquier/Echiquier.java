@@ -8,9 +8,10 @@ import com.samdube.echec.piece.Pion;
 import com.samdube.echec.piece.Reine;
 import com.samdube.echec.piece.Roi;
 import com.samdube.echec.piece.Tour;
-
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import static com.samdube.echec.piece.Piece.CouleurPiece.*;
 
 /**
  * Echiquier de base permettant l'ajout de pion
@@ -25,7 +26,9 @@ public class Echiquier {
 
     private final ArrayList<Piece> m_pieces = new ArrayList<>();
 
-    private Position[] m_positionOccupes = new Position[32];
+    private ArrayList<Position> m_positionsPiecesBlanches = new ArrayList<>();
+
+    private ArrayList<Position> m_positionsPiecesNoir = new ArrayList<>();
 
     /**
      * Constructeur qui initialise l'échiquier
@@ -33,34 +36,7 @@ public class Echiquier {
     public Echiquier() {
         initialiser();
         calculerCollisionsPieces();
-        assignerPositionsOccupes();
-    }
-
-    private void assignerPositionsOccupes() {
-        for (int i = 0; i < m_pieces.size(); i++) {
-            m_positionOccupes[i] = m_pieces.get(i).getPosition();
-        }
-    }
-
-    private void miseAJourPositionsOccupes(Position p_vieille, Position p_nouvelle){
-        int index = -1;
-        for(int i = 0; i < m_positionOccupes.length - 1; i++){
-            if(m_positionOccupes[i].equals(p_vieille)){
-                index = i;
-            }
-        }
-
-        if(index > -1){
-            m_positionOccupes[index] = p_nouvelle;
-        }
-    }
-
-    private void retirerPositionsOccupes(Position p_position){
-        for(int i = 0; i< m_positionOccupes.length  -1 ; i++){
-            if(m_positionOccupes[i].equals(p_position)){
-                Arrays.asList(m_positionOccupes).remove(p_position);
-            }
-        }
+        actualiserPositionsPieces();
     }
 
     /**
@@ -82,9 +58,45 @@ public class Echiquier {
         }
     }
 
+    private void actualiserPositionsPieces(Piece p_piece, Position p_position){
+        if(p_piece.getCouleur() == BLANC){
+            m_positionsPiecesBlanches.remove(p_piece.getPosition());
+            m_positionsPiecesBlanches.add(p_position);
+        }
+        else
+        {
+            m_positionsPiecesNoir.remove(p_piece.getPosition());
+            m_positionsPiecesNoir.add(p_position);
+        }
+    }
+
+    private void actualiserPositionsPieces(){
+        for(Piece piece : m_pieces){
+            if(piece.getCouleur() == BLANC){
+                m_positionsPiecesBlanches.add(piece.getPosition());
+            }
+            else{
+                m_positionsPiecesNoir.add(piece.getPosition());
+            }
+        }
+    }
+
+    private Position[] getPositionsPieces(CouleurPiece p_couleur){
+        if(p_couleur == BLANC){
+            return m_positionsPiecesBlanches.toArray(new Position[0]);
+        }else{
+            return m_positionsPiecesNoir.toArray(new Position[0]);
+        }
+    }
+
     private void calculerCollisionsPieces() {
+        Position[] positionsPiecesBlanches = getPositionsPieces(BLANC);
+        Position[] positionsPiecesNoires = getPositionsPieces(NOIR);
+
         for (Piece piece : m_pieces) {
-            piece.calculerDeplacementPossibles(m_positionOccupes);
+            if(piece.getCouleur() == BLANC){
+                piece.calculerDeplacementPossibles(positionsPiecesBlanches, positionsPiecesNoires);
+            }
         }
     }
 
@@ -148,7 +160,6 @@ public class Echiquier {
      * Permet d'avoir le nombre d'occurence d'une pièce dans l'échiquier courant
      *
      * @param p_couleur   la couleur de la pièce désirée
-     * @param p_typePiece TODO
      * @return le nombre d'occurence de la pièce dans le jeu
      */
     int getNombrePieces(CouleurPiece p_couleur, Class<? extends Piece> p_typePiece) {
@@ -173,7 +184,7 @@ public class Echiquier {
         for (Piece piece : m_pieces) {
             if (piece.getPosition().equals(p_position)) {
                 pieceTrouve = piece;
-                pieceTrouve.calculerDeplacementPossibles(m_positionOccupes);
+                pieceTrouve.calculerDeplacementPossibles(getPositionsPieces(BLANC), getPositionsPieces(NOIR));
                 break;
             }
         }
@@ -182,9 +193,21 @@ public class Echiquier {
 
     public boolean deplacerPiece(Piece p_piece, Position p_nouvelle) {
         if (p_piece.peutDeplacer(p_nouvelle)) {
-            Position anciencePosition = p_piece.getPosition();
+
+            Piece piecePourPrise = getPiece(p_nouvelle);
+
+            if(piecePourPrise != null){
+                m_pieces.remove(piecePourPrise);
+                if(piecePourPrise.getCouleur() == BLANC){
+                    m_positionsPiecesBlanches.remove(piecePourPrise.getPosition());
+                }else{
+                    m_positionsPiecesNoir.remove(piecePourPrise.getPosition());
+                }
+            }
+
+            actualiserPositionsPieces(p_piece, p_nouvelle);
             p_piece.deplacer(p_nouvelle);
-            miseAJourPositionsOccupes(anciencePosition, p_nouvelle);
+
             return true;
         } else {
             return false;

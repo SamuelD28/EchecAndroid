@@ -62,7 +62,7 @@ public abstract class Deplacement {
      *
      * @param p_pointOrigine Position le point d'origine des possibilités
      */
-    public void calculerDeplacementPossibles(Position p_pointOrigine, Position[] p_positionsIndisponibles) {
+    public void calculerDeplacementPossibles(Position p_pointOrigine, Position[] p_positionsInclusives, Position[] p_positionsExclusives) {
         ArrayList<Position> possibilites = new ArrayList<>();
 
         for (Pas pas : m_pas) {
@@ -74,9 +74,14 @@ public abstract class Deplacement {
                 if (Position.estDansLesLimites(coordonneX, coordonneY)) {
                     Position position = new Position(coordonneX, coordonneY);
 
-                    if (Arrays.asList(p_positionsIndisponibles).contains(position)) {
+                    if (Arrays.asList(p_positionsInclusives).contains(position)) {
+                        possibilites.add(new Position(coordonneX, coordonneY));
                         break;
-                    } else {
+                    }
+                    else if(Arrays.asList(p_positionsExclusives).contains(position)){
+                        break;
+                    }
+                    else {
                         possibilites.add(new Position(coordonneX, coordonneY));
                     }
                 }

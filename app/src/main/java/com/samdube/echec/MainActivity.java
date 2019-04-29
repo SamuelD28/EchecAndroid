@@ -101,11 +101,13 @@ public class MainActivity
         ImageButton b = (ImageButton) v;
         Position position = (Position) b.getTag();
 
-        if(m_echiquier.getPiece(position) != null && m_pieceSelectionner == null){
+        if(m_pieceSelectionner == null){
             m_pieceSelectionner = m_echiquier.getPiece(position);
-            afficherDeplacementPosssible();
+            if(m_pieceSelectionner != null){
+                afficherDeplacementPosssible();
+            }
         }
-        else if(m_echiquier.getPiece(position) == null && m_pieceSelectionner != null){
+        else{
 
             Position positionPiece = m_pieceSelectionner.getPosition();
             if(m_echiquier.deplacerPiece(m_pieceSelectionner, position)){

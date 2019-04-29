@@ -70,8 +70,12 @@ public abstract class Piece implements IObservable {
         return !m_position.equals(p_position) && Arrays.asList(m_deplacement.getDisponibles()).contains(p_position);
     }
 
-    public void calculerDeplacementPossibles(Position[] p_positionIndisponibles){
-        m_deplacement.calculerDeplacementPossibles(m_position, p_positionIndisponibles);
+    public void calculerDeplacementPossibles(Position[] p_positionsPiecesBlanches, Position[] p_positionsPiecesNoires){
+        if(m_couleur == CouleurPiece.BLANC){
+            m_deplacement.calculerDeplacementPossibles(m_position, p_positionsPiecesNoires, p_positionsPiecesBlanches);
+        }else{
+            m_deplacement.calculerDeplacementPossibles(m_position, p_positionsPiecesBlanches, p_positionsPiecesNoires);
+        }
     }
 
     public Position[] getDeplacementsPossibles(){
