@@ -1,6 +1,7 @@
 package com.samdube.echec.deplacement;
 
 import com.samdube.echec.echiquier.Position;
+import com.samdube.echec.piece.Piece;
 
 /**
  * Classe de test pour le com.samdube.echec.deplacement du pion
@@ -11,7 +12,7 @@ import com.samdube.echec.echiquier.Position;
 public class TestDeplacementPion extends TestDeplacement {
     @Override
     public Deplacement getDeplacement() {
-        return new DeplacementPion();
+        return new DeplacementPion(Piece.CouleurPiece.BLANC);
     }
 
     @Override

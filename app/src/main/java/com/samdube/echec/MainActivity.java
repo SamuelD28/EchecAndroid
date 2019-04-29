@@ -108,7 +108,7 @@ public class MainActivity
         else if(m_echiquier.getPiece(position) == null && m_pieceSelectionner != null){
 
             Position positionPiece = m_pieceSelectionner.getPosition();
-            if(m_echiquier.deplacePiece(m_pieceSelectionner, position)){
+            if(m_echiquier.deplacerPiece(m_pieceSelectionner, position)){
                 int buttonId = Integer.valueOf(String.valueOf(positionPiece.getX() + "" + positionPiece.getY()));
                 ImageButton button = m_chessboardTableLayout.findViewById(buttonId);
                 button.setImageDrawable(null);

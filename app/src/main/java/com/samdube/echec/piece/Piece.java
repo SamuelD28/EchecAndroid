@@ -38,17 +38,16 @@ public abstract class Piece implements IObservable {
      * @param p_force          Force de la com.samdube.echec.piece
      */
     Piece(Position p_position, Deplacement p_deplacement, char p_representation, int p_force) {
-        if (p_position.getY() > 3) {
-            m_couleur = CouleurPiece.NOIR;
-        } else {
-            m_couleur = CouleurPiece.BLANC;
-        }
-
+        m_couleur = getCouleurAvecPositionDepart(p_position);
         m_observateurs = new ArrayList<>();
         m_representation = p_representation;
         m_force = p_force;
         m_position = p_position;
         m_deplacement = p_deplacement;
+    }
+
+    public static CouleurPiece getCouleurAvecPositionDepart(Position p_position){
+        return (p_position.getY() > 3)? CouleurPiece.NOIR : CouleurPiece.BLANC;
     }
 
     /**

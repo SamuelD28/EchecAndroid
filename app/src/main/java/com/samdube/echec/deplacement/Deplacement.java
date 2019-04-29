@@ -15,7 +15,7 @@ import java.util.Objects;
 public abstract class Deplacement {
     private Position[] m_deplacementDisponibles;
 
-    private Pas[] m_pas;
+    protected Pas[] m_pas;
 
     private int m_pasMaximum;
 
@@ -24,6 +24,7 @@ public abstract class Deplacement {
      * une piece
      */
     Deplacement(Pas[] p_pas, int p_pasMaximum) {
+        m_deplacementDisponibles = new Position[0];
         m_pas = p_pas;
         m_pasMaximum = p_pasMaximum;
     }

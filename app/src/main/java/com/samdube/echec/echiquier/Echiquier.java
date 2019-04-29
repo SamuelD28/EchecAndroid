@@ -10,6 +10,7 @@ import com.samdube.echec.piece.Roi;
 import com.samdube.echec.piece.Tour;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Echiquier de base permettant l'ajout de pion
@@ -24,35 +25,66 @@ public class Echiquier {
 
     private final ArrayList<Piece> m_pieces = new ArrayList<>();
 
-    private final ArrayList<Position> m_positionOccupes = new ArrayList<>();
+    private Position[] m_positionOccupes = new Position[32];
 
     /**
      * Constructeur qui initialise l'échiquier
      */
     public Echiquier() {
-        initialiserPiece();
+        initialiser();
+        calculerCollisionsPieces();
+        assignerPositionsOccupes();
+    }
+
+    private void assignerPositionsOccupes() {
+        for (int i = 0; i < m_pieces.size(); i++) {
+            m_positionOccupes[i] = m_pieces.get(i).getPosition();
+        }
+    }
+
+    private void miseAJourPositionsOccupes(Position p_vieille, Position p_nouvelle){
+        int index = -1;
+        for(int i = 0; i < m_positionOccupes.length - 1; i++){
+            if(m_positionOccupes[i].equals(p_vieille)){
+                index = i;
+            }
+        }
+
+        if(index > -1){
+            m_positionOccupes[index] = p_nouvelle;
+        }
+    }
+
+    private void retirerPositionsOccupes(Position p_position){
+        for(int i = 0; i< m_positionOccupes.length  -1 ; i++){
+            if(m_positionOccupes[i].equals(p_position)){
+                Arrays.asList(m_positionOccupes).remove(p_position);
+            }
+        }
     }
 
     /**
      * Methode qui initialise l'com.samdube.echec.echiquier avec des m_cases vides
      * representer ave des X.
      */
-    private void initialiserPiece() {
+    private void initialiser() {
         int i = 0;
         for (int y = 0; y < TAILLE_ECHIQUIER; y++) {
             for (int x = 0; x < TAILLE_ECHIQUIER; x++) {
-                Position position = new Position(x,y);
+                Position position = new Position(x, y);
                 Piece piece = obtenirPiecePositionDepart(position);
                 m_cases[i] = position;
-                if(piece != null){
+                if (piece != null) {
                     m_pieces.add(piece);
-                    m_positionOccupes.add(piece.getPosition());
                 }
                 i++;
             }
         }
-        for(Piece piece : m_pieces){
-            piece.calculerDeplacementPossibles(m_positionOccupes.toArray(new Position[0]));
+    }
+
+    private void calculerCollisionsPieces() {
+        for (Piece piece : m_pieces) {
+            piece.calculerDeplacementPossibles(m_positionOccupes);
         }
     }
 
@@ -69,7 +101,8 @@ public class Echiquier {
         int y = p_position.getY();
 
         if (y == 1 || y == 6) {
-        } else if (y == 0 || y == 7){
+            return new Pion(new Position(x,y));
+        } else if (y == 0 || y == 7) {
             if (x == 0 || x == 7) {
                 return new Tour(new Position(x, y));
             } else if (x == 1 || x == 6) {
@@ -140,20 +173,20 @@ public class Echiquier {
         for (Piece piece : m_pieces) {
             if (piece.getPosition().equals(p_position)) {
                 pieceTrouve = piece;
+                pieceTrouve.calculerDeplacementPossibles(m_positionOccupes);
                 break;
             }
         }
         return pieceTrouve;
     }
 
-    public boolean deplacePiece(Piece p_piece, Position p_position){
-        if(p_piece.peutDeplacer(p_position)){
-            m_positionOccupes.remove(p_piece.getPosition());
-            p_piece.deplacer(p_position);
-            p_piece.calculerDeplacementPossibles(m_positionOccupes.toArray(new Position[0]));
+    public boolean deplacerPiece(Piece p_piece, Position p_nouvelle) {
+        if (p_piece.peutDeplacer(p_nouvelle)) {
+            Position anciencePosition = p_piece.getPosition();
+            p_piece.deplacer(p_nouvelle);
+            miseAJourPositionsOccupes(anciencePosition, p_nouvelle);
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }

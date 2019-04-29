@@ -15,6 +15,6 @@ public class Pion extends Piece {
      * @param p_position Position du pion sur l'com.samdube.echec.echiquier
      */
     public Pion(Position p_position) {
-        super(p_position, new DeplacementPion(), 'p', 1);
+        super(p_position, new DeplacementPion(getCouleurAvecPositionDepart(p_position)), 'p', 1);
     }
 }
