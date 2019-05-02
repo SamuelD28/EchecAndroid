@@ -8,7 +8,6 @@ package com.samdube.echec.deplacement;
 public class DeplacementTour extends Deplacement {
     /**
      * Constructeur initiant un com.samdube.echec.deplacement pour la tour
-     *
      */
     public DeplacementTour() {
         super(new Pas[]{

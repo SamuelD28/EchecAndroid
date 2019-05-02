@@ -15,13 +15,16 @@ import java.util.Objects;
 public abstract class Deplacement {
     private Position[] m_deplacementDisponibles;
 
-    protected Pas[] m_pas;
+    private final Pas[] m_pas;
 
-    private int m_pasMaximum;
+    private final int m_pasMaximum;
 
     /**
      * Constructeur initialisant un nouveau com.samdube.echec.deplacement pour
      * une piece
+     *
+     * @param p_pas        Pas possible pour un déplacement
+     * @param p_pasMaximum Nombre de pas maximum possible
      */
     Deplacement(Pas[] p_pas, int p_pasMaximum) {
         m_deplacementDisponibles = new Position[0];
@@ -38,6 +41,12 @@ public abstract class Deplacement {
         return m_deplacementDisponibles;
     }
 
+    /**
+     * Getter pour obtenir le nombre de pas possible
+     * pour un deplacement
+     *
+     * @return Nombre de pas possible
+     */
     public int getNombrePas() {
         return m_pas.length;
     }
@@ -48,7 +57,7 @@ public abstract class Deplacement {
      *
      * @param p_positions Possibilite a ajouter
      */
-    public void ajouterDeplacementPossibles(Position... p_positions) {
+    void ajouterDeplacementPossibles(Position... p_positions) {
         for (Position position : p_positions) {
             if (!Arrays.asList(m_deplacementDisponibles).contains(position)) {
                 Arrays.asList(m_deplacementDisponibles).add(position);
@@ -60,9 +69,11 @@ public abstract class Deplacement {
      * Méthode qui calcule toutes les possibilités de déplacements
      * pour chaques pas.
      *
-     * @param p_pointOrigine Position le point d'origine des possibilités
+     * @param p_pointOrigine         Position d'origine utilisé pour calculer les déplacements possibles
+     * @param p_collisionsInclusives Collision qui seras inclue comme un déplacement possible
+     * @param p_collisionsExclusives Collision qui seras exclus comme un déplacement possible
      */
-    public void calculerDeplacementPossibles(Position p_pointOrigine, Position[] p_positionsInclusives, Position[] p_positionsExclusives) {
+    public void calculerDeplacementPossibles(Position p_pointOrigine, Position[] p_collisionsInclusives, Position[] p_collisionsExclusives) {
         ArrayList<Position> possibilites = new ArrayList<>();
 
         for (Pas pas : m_pas) {
@@ -74,14 +85,12 @@ public abstract class Deplacement {
                 if (Position.estDansLesLimites(coordonneX, coordonneY)) {
                     Position position = new Position(coordonneX, coordonneY);
 
-                    if (Arrays.asList(p_positionsInclusives).contains(position)) {
+                    if (Arrays.asList(p_collisionsInclusives).contains(position)) {
                         possibilites.add(new Position(coordonneX, coordonneY));
                         break;
-                    }
-                    else if(Arrays.asList(p_positionsExclusives).contains(position)){
+                    } else if (Arrays.asList(p_collisionsExclusives).contains(position)) {
                         break;
-                    }
-                    else {
+                    } else {
                         possibilites.add(new Position(coordonneX, coordonneY));
                     }
                 }

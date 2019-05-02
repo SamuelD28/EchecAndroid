@@ -24,7 +24,7 @@ public class Pas {
         if (Math.abs(p_incrementationX) > 8 ||
                 Math.abs(p_incrementationY) > 8 ||
                 p_incrementationX == 0 && p_incrementationY == 0
-        ) {
+                ) {
             throw new IllegalArgumentException();
         }
 

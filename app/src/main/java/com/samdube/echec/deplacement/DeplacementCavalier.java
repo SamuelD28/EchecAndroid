@@ -8,7 +8,6 @@ package com.samdube.echec.deplacement;
 public class DeplacementCavalier extends Deplacement {
     /**
      * Constructeur initiant un com.samdube.echec.deplacement pour un cavalier
-     *
      */
     public DeplacementCavalier() {
         super(new Pas[]{

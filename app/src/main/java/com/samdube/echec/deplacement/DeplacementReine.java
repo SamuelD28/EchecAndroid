@@ -8,7 +8,6 @@ package com.samdube.echec.deplacement;
 public class DeplacementReine extends Deplacement {
     /**
      * Constructeur initiant un com.samdube.echec.deplacement pour la reine
-     *
      */
     public DeplacementReine() {
         super(new Pas[]{
