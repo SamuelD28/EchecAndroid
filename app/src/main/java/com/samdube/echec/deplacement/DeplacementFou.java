@@ -1,7 +1,5 @@
 package com.samdube.echec.deplacement;
 
-import com.samdube.echec.echiquier.Position;
-
 /**
  * Classe de déplacement possible par un fou
  *

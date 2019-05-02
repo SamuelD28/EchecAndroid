@@ -10,7 +10,7 @@ import junit.framework.TestSuite;
  * @author Samuel Dubé
  * @author Samuel Colassin
  */
-public class TestComplet extends TestCase {
+public class TestCompletDeplacement extends TestCase {
     /**
      * Regroupe tout les tests du package déplacement
      *

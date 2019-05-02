@@ -1,5 +1,7 @@
 package com.samdube.echec.echiquier;
 
+import com.samdube.echec.legacy.TestCollision;
+
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
@@ -9,7 +11,7 @@ import junit.framework.TestSuite;
  * @author Samuel Dubé
  * @author Samuel Colassin
  */
-public class TestComplet extends TestCase {
+public class TestCompletEchiquier extends TestCase {
     /**
      *
      * @return la suite avec les tests à effectuer

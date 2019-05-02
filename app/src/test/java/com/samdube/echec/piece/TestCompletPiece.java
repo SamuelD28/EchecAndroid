@@ -8,7 +8,7 @@ import junit.framework.TestSuite;
  *
  * @author Samuel Dube
  */
-public class TestComplet extends TestCase {
+public class TestCompletPiece extends TestCase {
     /**
      *
      * @return la suite avec les tests à effectuer

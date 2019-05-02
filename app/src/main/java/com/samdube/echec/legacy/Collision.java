@@ -1,5 +1,6 @@
-package com.samdube.echec.echiquier;
+package com.samdube.echec.legacy;
 
+import com.samdube.echec.echiquier.Position;
 import java.util.ArrayList;
 import java.util.Objects;
 

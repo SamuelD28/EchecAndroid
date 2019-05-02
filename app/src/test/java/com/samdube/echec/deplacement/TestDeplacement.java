@@ -1,5 +1,6 @@
 package com.samdube.echec.deplacement;
 
+import com.samdube.echec.deplacement.Deplacement;
 import com.samdube.echec.echiquier.Position;
 import junit.framework.TestCase;
 
