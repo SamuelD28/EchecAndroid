@@ -9,7 +9,6 @@ import com.samdube.echec.piece.Reine;
 import com.samdube.echec.piece.Roi;
 import com.samdube.echec.piece.Tour;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static com.samdube.echec.piece.Piece.CouleurPiece.*;
 
@@ -20,6 +19,9 @@ import static com.samdube.echec.piece.Piece.CouleurPiece.*;
  * @author Samuel Dube
  */
 public class Echiquier {
+    /**
+     * Constante contenant la taille largeur/longeur de l'échiquier
+     */
     public final static int TAILLE_ECHIQUIER = 8;
 
     private final Position[] m_cases = new Position[TAILLE_ECHIQUIER * TAILLE_ECHIQUIER];
