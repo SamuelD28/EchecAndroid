@@ -70,4 +70,32 @@ public class TestEchiquier extends TestCase {
 
         assertNull(piece);
     }
+
+    /**
+     * Permet de tester l'actualisation des positions des pièces dans l'échiquier
+     */
+//    public void testActualiserPositionsPieces() {
+//        Echiquier echiquier = new Echiquier();
+//
+//        //echiquier.
+//    }
+
+
+    public void testDeplacerPiece() {
+        // Test case d'arrivé vide
+        Echiquier echiquier = new Echiquier();
+//        Piece pion = echiquier.getPiece(new Position(0,1));
+//        Position positionPion = new Position(0, 2);
+//        echiquier.deplacerPiece(pion, positionPion);
+//        assertEquals(pion, echiquier.getPiece(positionPion));
+
+        // Test avec pièce à la position d'arriver
+        Piece cavalier = echiquier.getPiece(new Position(1, 0));
+        echiquier.deplacerPiece(cavalier, new Position(2, 2));
+        echiquier.deplacerPiece(cavalier, new Position(1, 4));
+        Position positionCavalier = new Position(2, 6);
+        echiquier.deplacerPiece(cavalier, new Position(2, 6));
+
+        assertEquals(cavalier, echiquier.getPiece(positionCavalier));
+    }
 }

@@ -206,8 +206,9 @@ public class Echiquier {
                     m_positionsPiecesNoir.remove(piecePourPrise.getPosition());
                 }
             }
-
-            actualiserPositionsPieces(p_piece, p_nouvelle);
+            actualiserPositionsPieces();
+            // TODO rechek methode
+            //actualiserPositionsPieces(p_piece, p_nouvelle);
             p_piece.deplacer(p_nouvelle);
 
             return true;

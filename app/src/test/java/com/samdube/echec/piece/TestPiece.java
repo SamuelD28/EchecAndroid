@@ -1,13 +1,16 @@
 package com.samdube.echec.piece;
 
 import com.samdube.echec.echiquier.Position;
+
 import junit.framework.TestCase;
+
 import com.samdube.echec.utils.IObserver;
 
 /**
  * Teste la classe pièce et ses méthodes
  *
  * @author Samuel Dubé
+ * @author Samuel Colassin
  */
 public abstract class TestPiece extends TestCase {
     /**
@@ -68,8 +71,8 @@ public abstract class TestPiece extends TestCase {
      */
     public void testSetPosition() {
         Piece piece = getPieceActuel();
-
         for (Position deplacementPossible : getDeplacementsPossible()) {
+            piece.calculerDeplacementPossibles(new Position[0], new Position[0]);
             assertTrue(piece.deplacer(deplacementPossible));
         }
 
@@ -77,6 +80,20 @@ public abstract class TestPiece extends TestCase {
         for (Position deplacementImpossible : getDeplacementsImpossible()) {
             assertFalse(piece.deplacer(deplacementImpossible));
         }
+    }
+
+    /**
+     * Test le getter de déplacement disponible
+     */
+    public void testGetDeplacementPossible() {
+        // TODO Peut-être pas la meilleur facon de vérfier
+
+        Piece pion = new Pion(new Position(0, 1));
+        pion.calculerDeplacementPossibles(new Position[0], new Position[0]);
+        assertEquals(1, pion.getDeplacementsPossibles().length);
+        Piece reine = new Reine(new Position(0, 7));
+        reine.calculerDeplacementPossibles(new Position[0], new Position[0]);
+        assertEquals(21, reine.getDeplacementsPossibles().length);
     }
 
     /**

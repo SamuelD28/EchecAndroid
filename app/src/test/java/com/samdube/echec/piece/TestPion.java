@@ -13,7 +13,7 @@ public class TestPion extends TestPiece {
     public Piece getPieceAttendue() {
         return new Piece(
                 new Position(0, 0),
-                new DeplacementPion(Piece.getCouleurAvecPositionDepart(new Position(0,0))),
+                new DeplacementPion(Piece.getCouleurAvecPositionDepart(new Position(0, 0))),
                 'p',
                 1) {
         };
