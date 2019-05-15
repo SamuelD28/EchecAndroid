@@ -91,7 +91,7 @@ public class Echiquier {
         }
     }
 
-    private void calculerCollisionsPieces() {
+    public void calculerCollisionsPieces() {
         Position[] positionsPiecesBlanches = getPositionsPieces(BLANC);
         Position[] positionsPiecesNoires = getPositionsPieces(NOIR);
 
@@ -206,9 +206,9 @@ public class Echiquier {
                     m_positionsPiecesNoir.remove(piecePourPrise.getPosition());
                 }
             }
-            actualiserPositionsPieces();
+            //actualiserPositionsPieces();
             // TODO rechek methode
-            //actualiserPositionsPieces(p_piece, p_nouvelle);
+            actualiserPositionsPieces(p_piece, p_nouvelle);
             p_piece.deplacer(p_nouvelle);
 
             return true;

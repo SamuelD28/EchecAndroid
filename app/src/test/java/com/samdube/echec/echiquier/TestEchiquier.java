@@ -82,20 +82,57 @@ public class TestEchiquier extends TestCase {
 
 
     public void testDeplacerPiece() {
-        // Test case d'arrivé vide
         Echiquier echiquier = new Echiquier();
-//        Piece pion = echiquier.getPiece(new Position(0,1));
-//        Position positionPion = new Position(0, 2);
-//        echiquier.deplacerPiece(pion, positionPion);
-//        assertEquals(pion, echiquier.getPiece(positionPion));
 
-        // Test avec pièce à la position d'arriver
-        Piece cavalier = echiquier.getPiece(new Position(1, 0));
-        echiquier.deplacerPiece(cavalier, new Position(2, 2));
-        echiquier.deplacerPiece(cavalier, new Position(1, 4));
-        Position positionCavalier = new Position(2, 6);
-        echiquier.deplacerPiece(cavalier, new Position(2, 6));
+        // Test case d'arrivé vide
+        Piece pionNoir = echiquier.getPiece(new Position(0,1));
+        Position positionPion = new Position(0, 2);
+        echiquier.deplacerPiece(pionNoir, positionPion);
+        assertEquals(pionNoir, echiquier.getPiece(positionPion));
 
-        assertEquals(cavalier, echiquier.getPiece(positionCavalier));
+        // Test avec pièce à la position d'arriver -- Cavalier blanc mange un pion noir
+        Piece cavalierBlanc = echiquier.getPiece(new Position(1, 0));
+        echiquier.calculerCollisionsPieces();
+        echiquier.deplacerPiece(cavalierBlanc, new Position(2, 2));
+        echiquier.calculerCollisionsPieces();
+        echiquier.deplacerPiece(cavalierBlanc, new Position(1, 4));
+        echiquier.calculerCollisionsPieces();
+
+        Position positionArrive1 = new Position(2, 6);
+        echiquier.deplacerPiece(cavalierBlanc, positionArrive1);
+        assertEquals(cavalierBlanc, echiquier.getPiece(positionArrive1));
+
+        //echiquier.calculerCollisionsPieces();
+        assertFalse(echiquier.deplacerPiece(cavalierBlanc, new Position(7, 7)));
+
+        //Position p = new Position(1, 7);
+
+        Piece cavalierNoir = echiquier.getPiece(new Position(1, 7));
+
+        //assertEquals(cavalierNoir, echiquier.getPiece(p));
+
+        echiquier.calculerCollisionsPieces();
+
+
+        echiquier.deplacerPiece(cavalierNoir, new Position(2, 5));
+
+
+        echiquier.calculerCollisionsPieces();
+
+        assertEquals(cavalierNoir, echiquier.getPiece(new Position(2, 5)));
+
+
+        echiquier.deplacerPiece(cavalierNoir, new Position(1, 3));
+
+
+        echiquier.calculerCollisionsPieces();
+
+
+        echiquier.getPiece(new Position(1, 3));
+
+        Position positionArrive2 = new Position(2, 1);
+        echiquier.deplacerPiece(cavalierNoir, positionArrive2);
+        assertEquals(cavalierNoir, echiquier.getPiece(positionArrive2));
     }
+
 }

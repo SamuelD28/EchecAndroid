@@ -116,4 +116,16 @@ public class TestPosition extends TestCase {
         Position plusProcheCalcule = Position.ObtenirPositionLaPlusProche(origine, positions);
         assertEquals(plusProche, plusProcheCalcule);
     }
+
+    public void testCompareTo() {
+        Position position1 = new Position(0, 0);
+        Position position2 = new Position(1, 1);
+        Position position3 = new Position(7, 7);
+        Position position4 = new Position(0, 0);
+
+        assertTrue(position1.compareTo(position2) < 0);
+        assertTrue(position3.compareTo(position2) > 0);
+        assertTrue(position3.compareTo(position1) > 0);
+        assertTrue(position1.compareTo(position4) == 0);
+    }
 }
