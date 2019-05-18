@@ -49,4 +49,9 @@ public class TestTour extends TestPiece {
                 new Position(0, 0)
         };
     }
+
+    public void testConstructeurTourPromotion() {
+        Piece piece = new Tour(new Position(0,1), Piece.CouleurPiece.BLANC);
+        assertEquals(Piece.CouleurPiece.BLANC, piece.getCouleur());
+    }
 }

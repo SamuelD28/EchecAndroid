@@ -49,4 +49,9 @@ public class TestFou extends TestPiece {
                 new Position(0, 0)
         };
     }
+
+    public void testConstructeurFouPromotion() {
+        Piece piece = new Fou(new Position(0,1), Piece.CouleurPiece.BLANC);
+        assertEquals(Piece.CouleurPiece.BLANC, piece.getCouleur());
+    }
 }

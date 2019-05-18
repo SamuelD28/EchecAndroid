@@ -22,11 +22,11 @@ public abstract class Piece implements IObservable {
 
     private final int m_force;
 
-    private Position m_position;
+    Position m_position;
 
     private final Deplacement m_deplacement;
 
-    private final CouleurPiece m_couleur;
+    private  CouleurPiece m_couleur;
 
     /**
      * Constructeur initiant une nouvelle com.samdube.echec.piece. Accessible
@@ -46,8 +46,17 @@ public abstract class Piece implements IObservable {
         m_deplacement = p_deplacement;
     }
 
-    public static CouleurPiece getCouleurAvecPositionDepart(Position p_position){
-        return (p_position.getY() > 3)? CouleurPiece.NOIR : CouleurPiece.BLANC;
+    Piece(Position p_position, CouleurPiece p_couleur, Deplacement p_deplacement, char p_representation, int p_force) {
+        m_couleur = p_couleur;
+        m_observateurs = new ArrayList<>();
+        m_representation = p_representation;
+        m_force = p_force;
+        m_position = p_position;
+        m_deplacement = p_deplacement;
+    }
+
+    public static CouleurPiece getCouleurAvecPositionDepart(Position p_position) {
+        return (p_position.getY() > 3) ? CouleurPiece.NOIR : CouleurPiece.BLANC;
     }
 
     /**
@@ -61,28 +70,29 @@ public abstract class Piece implements IObservable {
             m_position = p_position;
             Notify();
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
-    public boolean peutDeplacer(Position p_position){
+    public boolean peutDeplacer(Position p_position) {
         return !m_position.equals(p_position) && Arrays.asList(m_deplacement.getDisponibles()).contains(p_position);
     }
 
-    public void calculerDeplacementPossibles(Position[] p_positionsPiecesBlanches, Position[] p_positionsPiecesNoires){
-        if(m_couleur == CouleurPiece.BLANC){
+    // TODO ici appeler principalement
+    public void calculerDeplacementPossibles(Position[] p_positionsPiecesBlanches, Position[] p_positionsPiecesNoires) {
+        if (m_couleur == CouleurPiece.BLANC) {
             m_deplacement.calculerDeplacementPossibles(m_position, p_positionsPiecesNoires, p_positionsPiecesBlanches);
-        }else{
+        } else {
             m_deplacement.calculerDeplacementPossibles(m_position, p_positionsPiecesBlanches, p_positionsPiecesNoires);
         }
     }
 
-    public Position[] getDeplacementsPossibles(){
+    public Position[] getDeplacementsPossibles() {
         return m_deplacement.getDisponibles();
     }
 
-    public Deplacement getDeplacement(){
+    public Deplacement getDeplacement() {
         return m_deplacement;
     }
 

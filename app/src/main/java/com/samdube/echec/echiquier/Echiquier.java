@@ -8,6 +8,7 @@ import com.samdube.echec.piece.Pion;
 import com.samdube.echec.piece.Reine;
 import com.samdube.echec.piece.Roi;
 import com.samdube.echec.piece.Tour;
+
 import java.util.ArrayList;
 
 import static com.samdube.echec.piece.Piece.CouleurPiece.*;
@@ -33,17 +34,42 @@ public class Echiquier {
     private ArrayList<Position> m_positionsPiecesNoir = new ArrayList<>();
 
     /**
+     * Piece qui est présentement en cours de changement de type de pièce
+     */
+    private Piece m_pionEnPromotion = null;
+
+    /**
+     * Indique s'il y une pièce qui est en cours de promotion dans l'échiquier
+     */
+    private boolean m_pionEnCoursDePromotion = false;
+
+    /**
      * Constructeur qui initialise l'échiquier
      */
     public Echiquier() {
         initialiser();
-        calculerCollisionsPieces();
-        actualiserPositionsPieces();
+        //calculerCollisionsPieces();
+        diviserPiecesDeChaqueCouleur();
     }
 
     /**
-     * Methode qui initialise l'com.samdube.echec.echiquier avec des m_cases vides
-     * representer ave des X.
+     * Permet de savoir si la partie est échec et mat dans l'échiquier
+     *
+     * @return Vrai si un roi est manquant dans l'échiquier
+     */
+    public boolean estEchecEtMat() {
+        int cpt = 0;
+        for (Piece p : m_pieces) {
+            if (p instanceof Roi) {
+                cpt++;
+            }
+        }
+        return cpt < 2;
+    }
+
+    /**
+     * Methode qui initialise l'echiquier avec des m_cases vides
+     * representer avec des X.
      */
     private void initialiser() {
         int i = 0;
@@ -60,44 +86,63 @@ public class Echiquier {
         }
     }
 
-    private void actualiserPositionsPieces(Piece p_piece, Position p_position){
-        if(p_piece.getCouleur() == BLANC){
+    /**
+     * Permet d'actualiser la position d'une piece apres un déplacement de celle-ci
+     *
+     * @param p_piece    La piece qui change de position
+     * @param p_position La nouvelle position de la pièce
+     */
+    private void actualiserPositionsPieces(Piece p_piece, Position p_position) {
+        if (p_piece.getCouleur() == BLANC) {
             m_positionsPiecesBlanches.remove(p_piece.getPosition());
             m_positionsPiecesBlanches.add(p_position);
-        }
-        else
-        {
+        } else {
             m_positionsPiecesNoir.remove(p_piece.getPosition());
             m_positionsPiecesNoir.add(p_position);
         }
     }
 
-    private void actualiserPositionsPieces(){
-        for(Piece piece : m_pieces){
-            if(piece.getCouleur() == BLANC){
+    /**
+     * Permet d'avoir toute les pièces de l'échiquier blanches et noirs dans
+     * deux listes distinctes pour les manipulations.
+     */
+    private void diviserPiecesDeChaqueCouleur() {
+        for (Piece piece : m_pieces) {
+            if (piece.getCouleur() == BLANC) {
                 m_positionsPiecesBlanches.add(piece.getPosition());
-            }
-            else{
+            } else {
                 m_positionsPiecesNoir.add(piece.getPosition());
             }
         }
     }
 
-    private Position[] getPositionsPieces(CouleurPiece p_couleur){
-        if(p_couleur == BLANC){
+    /**
+     * Permet d'obtenir la liste des positions de toute les pièce d'une certaine couleur
+     *
+     * @param p_couleur la couleur des pièces qu'on désire les positions
+     * @return Une array de toute les positions des pièces de la couleur désirée
+     */
+    private Position[] getPositionsPieces(CouleurPiece p_couleur) {
+        if (p_couleur == BLANC) {
             return m_positionsPiecesBlanches.toArray(new Position[0]);
-        }else{
+        } else {
             return m_positionsPiecesNoir.toArray(new Position[0]);
         }
     }
 
+    /**
+     * Permet de calculer toutes les possibilités de collisions pour toutes les
+     * pièces de l'échiquier
+     */
     public void calculerCollisionsPieces() {
         Position[] positionsPiecesBlanches = getPositionsPieces(BLANC);
         Position[] positionsPiecesNoires = getPositionsPieces(NOIR);
 
         for (Piece piece : m_pieces) {
-            if(piece.getCouleur() == BLANC){
+            if (piece.getCouleur() == BLANC) {
                 piece.calculerDeplacementPossibles(positionsPiecesBlanches, positionsPiecesNoires);
+            } else {
+                piece.calculerDeplacementPossibles(positionsPiecesNoires, positionsPiecesBlanches);
             }
         }
     }
@@ -115,7 +160,7 @@ public class Echiquier {
         int y = p_position.getY();
 
         if (y == 1 || y == 6) {
-            return new Pion(new Position(x,y));
+            return new Pion(new Position(x, y));
         } else if (y == 0 || y == 7) {
             if (x == 0 || x == 7) {
                 return new Tour(new Position(x, y));
@@ -161,7 +206,7 @@ public class Echiquier {
     /**
      * Permet d'avoir le nombre d'occurence d'une pièce dans l'échiquier courant
      *
-     * @param p_couleur   la couleur de la pièce désirée
+     * @param p_couleur la couleur de la pièce désirée
      * @return le nombre d'occurence de la pièce dans le jeu
      */
     int getNombrePieces(CouleurPiece p_couleur, Class<? extends Piece> p_typePiece) {
@@ -175,7 +220,7 @@ public class Echiquier {
     }
 
     /**
-     * Methode permettant d'obtenir la référence d'un pion
+     * Permet d'obtenir la référence d'un pion
      * à une position donnée.
      *
      * @param p_position La position du pion désiré
@@ -193,28 +238,68 @@ public class Echiquier {
         return pieceTrouve;
     }
 
+    /**
+     * Permet de déplacer une pièce dans l'échiquier
+     *
+     * @param p_piece    La pièce qu'on veut déplacer
+     * @param p_nouvelle La position qu'on désire pour la pièce
+     * @return Vrai si le déplacement à fonctionné sinon faux
+     */
     public boolean deplacerPiece(Piece p_piece, Position p_nouvelle) {
         if (p_piece.peutDeplacer(p_nouvelle)) {
-
             Piece piecePourPrise = getPiece(p_nouvelle);
 
-            if(piecePourPrise != null){
+            if (piecePourPrise != null) {
                 m_pieces.remove(piecePourPrise);
-                if(piecePourPrise.getCouleur() == BLANC){
+                if (piecePourPrise.getCouleur() == BLANC) {
                     m_positionsPiecesBlanches.remove(piecePourPrise.getPosition());
-                }else{
+                } else {
                     m_positionsPiecesNoir.remove(piecePourPrise.getPosition());
                 }
             }
-            //actualiserPositionsPieces();
-            // TODO rechek methode
+
             actualiserPositionsPieces(p_piece, p_nouvelle);
             p_piece.deplacer(p_nouvelle);
+
+            if (p_piece instanceof Pion && ((Pion) p_piece).getPeutPromotion()) {
+                m_pionEnCoursDePromotion = true;
+                m_pionEnPromotion = p_piece;
+            }
 
             return true;
         } else {
             return false;
         }
+    }
+
+    /**
+     * Permet de promouvoir un pion
+     */
+    public void promouvoirPion(/*char p_representation*/) {
+        Position p = m_pionEnPromotion.getPosition();
+        CouleurPiece c = m_pionEnPromotion.getCouleur();
+
+//        switch (p_representation) {
+//            case 'r' : m_pieces.add(new Reine(p, c)); break;
+//            case 'f' : m_pieces.add(new Fou(p, c)); break;
+//            case 'c' : m_pieces.add(new Cavalier(p, c)); break;
+//            case 't' : m_pieces.add(new Tour(p, c)); break;
+//            default: m_pieces.add(new Reine(p, c)); break;
+//        }
+
+        m_pieces.remove(m_pionEnPromotion);
+        m_pieces.add(new Reine(p, c));
+        m_pionEnPromotion = null;
+        m_pionEnCoursDePromotion = false;
+    }
+
+    /**
+     * Permet de savoir s'il y a un pion en cours de promotion dans l'échiquier
+     *
+     * @return Vrai si un pion est en cours de promotion
+     */
+    public boolean getPionEnCourDePromotion() {
+        return m_pionEnCoursDePromotion;
     }
 
     /**

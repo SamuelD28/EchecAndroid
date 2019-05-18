@@ -49,4 +49,9 @@ public class TestCavalier extends TestPiece {
                 new Position(7, 7)
         };
     }
+
+    public void testConstructeurCavalierPromotion() {
+        Piece piece = new Cavalier(new Position(0,1), Piece.CouleurPiece.BLANC);
+        assertEquals(Piece.CouleurPiece.BLANC, piece.getCouleur());
+    }
 }

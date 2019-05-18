@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Echec</string>
     <string name="action_settings">Settings</string>
+    <string name="button_reinitialiser">Réinitialiser</string>
+    <string name="dialogue_nom_titre">Entrer les noms</string>
+    <string name="entete_tour">Tour à :</string>
 </resources>

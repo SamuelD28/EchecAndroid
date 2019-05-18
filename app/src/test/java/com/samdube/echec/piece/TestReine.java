@@ -49,4 +49,9 @@ public class TestReine extends TestPiece {
                 new Position(0, 0)
         };
     }
+
+    public void testConstructeurReinePromotion() {
+        Piece piece = new Reine(new Position(0,1), Piece.CouleurPiece.BLANC);
+        assertEquals(Piece.CouleurPiece.BLANC, piece.getCouleur());
+    }
 }

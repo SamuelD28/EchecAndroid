@@ -71,16 +71,6 @@ public class TestEchiquier extends TestCase {
         assertNull(piece);
     }
 
-    /**
-     * Permet de tester l'actualisation des positions des pièces dans l'échiquier
-     */
-//    public void testActualiserPositionsPieces() {
-//        Echiquier echiquier = new Echiquier();
-//
-//        //echiquier.
-//    }
-
-
     public void testDeplacerPiece() {
         Echiquier echiquier = new Echiquier();
 
@@ -135,4 +125,33 @@ public class TestEchiquier extends TestCase {
         assertEquals(cavalierNoir, echiquier.getPiece(positionArrive2));
     }
 
+    public void testEchecEtMat() {
+        m_echiquier.deplacerPiece(m_echiquier.getPiece(new Position(1, 0)), new Position(2, 2));
+        m_echiquier.deplacerPiece(m_echiquier.getPiece(new Position(2, 2)), new Position(3, 4));
+        m_echiquier.deplacerPiece(m_echiquier.getPiece(new Position(3, 4)), new Position(5, 5));
+        m_echiquier.deplacerPiece(m_echiquier.getPiece(new Position(5, 5)), new Position(4, 7));
+
+        assertTrue(m_echiquier.estEchecEtMat());
+    }
+
+    public void testEnCoursDePromotion() {
+        m_echiquier.deplacerPiece(m_echiquier.getPiece(new Position(1, 1)), new Position(1, 3));
+        m_echiquier.deplacerPiece(m_echiquier.getPiece(new Position(1, 3)), new Position(1, 4));
+        m_echiquier.deplacerPiece(m_echiquier.getPiece(new Position(1, 4)), new Position(1, 5));
+        m_echiquier.deplacerPiece(m_echiquier.getPiece(new Position(1, 5)), new Position(0, 6));
+        m_echiquier.deplacerPiece(m_echiquier.getPiece(new Position(0, 6)), new Position(1, 7));
+
+        assertTrue(m_echiquier.getPionEnCourDePromotion());
+    }
+
+    public void testPromouvoirPion() {
+        m_echiquier.deplacerPiece(m_echiquier.getPiece(new Position(1, 1)), new Position(1, 3));
+        m_echiquier.deplacerPiece(m_echiquier.getPiece(new Position(1, 3)), new Position(1, 4));
+        m_echiquier.deplacerPiece(m_echiquier.getPiece(new Position(1, 4)), new Position(1, 5));
+        m_echiquier.deplacerPiece(m_echiquier.getPiece(new Position(1, 5)), new Position(0, 6));
+        m_echiquier.deplacerPiece(m_echiquier.getPiece(new Position(0, 6)), new Position(1, 7));
+
+        m_echiquier.promouvoirPion();
+        assertEquals(Reine.class, m_echiquier.getPiece(new Position(1, 7)).getClass());
+    }
 }

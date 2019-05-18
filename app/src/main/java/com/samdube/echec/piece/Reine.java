@@ -17,4 +17,8 @@ public class Reine extends Piece {
     public Reine(Position p_position) {
         super(p_position, new DeplacementReine(), 'q', 3);
     }
+
+    public Reine(Position p_position, CouleurPiece p_couleur) {
+        super(p_position, p_couleur, new DeplacementReine(), 'q', 3);
+    }
 }

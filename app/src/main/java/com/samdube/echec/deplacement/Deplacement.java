@@ -1,6 +1,8 @@
 package com.samdube.echec.deplacement;
 
 import com.samdube.echec.echiquier.Position;
+import com.samdube.echec.piece.Piece;
+import com.samdube.echec.piece.Pion;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +13,7 @@ import java.util.Objects;
  * sur un échelle de positions.
  *
  * @author Samuel Dubé
+ * @author Samuel Colassin
  */
 public abstract class Deplacement {
     private Position[] m_deplacementDisponibles;
@@ -57,7 +60,7 @@ public abstract class Deplacement {
      *
      * @param p_positions Possibilite a ajouter
      */
-    void ajouterDeplacementPossibles(Position... p_positions) {
+    public void ajouterDeplacementPossibles(Position... p_positions) {
         ArrayList<Position> temp = new ArrayList<>(Arrays.asList(m_deplacementDisponibles));
 
         for (Position position : p_positions) {
@@ -68,7 +71,12 @@ public abstract class Deplacement {
         m_deplacementDisponibles = temp.toArray(new Position[0]);
     }
 
-    void retirerDeplacementPossibles(Position... p_positions) {
+    /**
+     * Permet de retirer un deplacement possible
+     *
+     * @param p_positions La position qu'on doit retirer des déplacements possibles
+     */
+    public void retirerDeplacementPossibles(Position... p_positions) {
         ArrayList<Position> temp = new ArrayList<>(Arrays.asList(m_deplacementDisponibles));
 
         for (Position position : p_positions) {
@@ -89,7 +97,6 @@ public abstract class Deplacement {
      */
     public void calculerDeplacementPossibles(Position p_pointOrigine, Position[] p_collisionsInclusives, Position[] p_collisionsExclusives) {
         ArrayList<Position> possibilites = new ArrayList<>();
-
         for (Pas pas : m_pas) {
             for (int sequence = 1; sequence <= m_pasMaximum; sequence++) {
 
@@ -110,7 +117,6 @@ public abstract class Deplacement {
                 }
             }
         }
-
         m_deplacementDisponibles = possibilites.toArray(new Position[0]);
     }
 

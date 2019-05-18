@@ -1,6 +1,5 @@
 package com.samdube.echec.echiquier;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -14,7 +13,7 @@ import java.util.Objects;
  */
 public class Position implements Comparable<Position> {
     /**
-     * Constante utiliser pour mapper une lettre a une position dans un com.samdube.echec.echiquier
+     * Constante utiliser pour mapper une lettre a une position dans un echiquier
      */
     private final static List<Character> ECHELLE_POSITIONX = Arrays.asList('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H');
 
@@ -48,8 +47,7 @@ public class Position implements Comparable<Position> {
 
     /**
      * Classe contenant une excpetion qui est lancer
-     * lorsque la position passee au constructeur est
-     * invalide.
+     * lorsque la position passee au constructeur est invalide.
      *
      * @author Samuel Dube
      * @author Samuel Colassin
@@ -71,10 +69,9 @@ public class Position implements Comparable<Position> {
 
     /**
      * Constructeur permettant d'initialiser une
-     * nouvelle position sur l'com.samdube.echec.echiquier avec une coordonnee
-     * textuelle.
+     * nouvelle position sur l'echiquier avec une coordonnee textuelle.
      *
-     * @param p_positionTextuelle Position sur l'com.samdube.echec.echiquier represente de facon textuelle.
+     * @param p_positionTextuelle Position sur l'echiquier represente de facon textuelle.
      */
     public Position(String p_positionTextuelle) {
         int[] positionXY = parseTextuelleVersPositionXY(p_positionTextuelle);
@@ -89,10 +86,9 @@ public class Position implements Comparable<Position> {
 
     /**
      * Constructeur permettant d"initialiser une
-     * nouvelle position sur l"com.samdube.echec.echiquier avec une coordonnee
-     * chiffrer.
+     * nouvelle position sur l'echiquier avec une coordonnee chiffrer.
      *
-     * @param p_positionXY Position sur l'com.samdube.echec.echiquier. [0] = x, [1] = 1
+     * @param p_positionXY Position sur l'echiquier. [0] = x, [1] = 1
      */
     public Position(int... p_positionXY) {
         if (estDansLesLimites(p_positionXY)) {
@@ -105,8 +101,7 @@ public class Position implements Comparable<Position> {
 
     /**
      * Methode statique permettant de convertir une position
-     * textuelle en position xy sur l'com.samdube.echec.echiquier sous forme
-     * de array.
+     * textuelle en position xy sur l'echiquier sous forme de array.
      *
      * @param p_positionTextuelle Position textuelle a convertir
      * @return La position converti sous formes de array. [0] = x, [1] = y
@@ -115,7 +110,7 @@ public class Position implements Comparable<Position> {
         if (p_positionTextuelle.length() == 2) {
 
             int positionX = ECHELLE_POSITIONX.indexOf(Character.toUpperCase(p_positionTextuelle.charAt(0)));
-            // On retire 1 parce l'com.samdube.echec.echiquier est de 0 a 7
+            // On retire 1 parce que l'echiquier est de 0 a 7
             int positionY = Character.getNumericValue(p_positionTextuelle.charAt(1)) - 1;
 
             return new int[]{positionX, positionY};
@@ -126,7 +121,7 @@ public class Position implements Comparable<Position> {
 
     /**
      * Methode statique permettant de savoir si une position
-     * est dans les limites de la grille de l'com.samdube.echec.echiquier.
+     * est dans les limites de la grille de l'echiquier.
      *
      * @param p_positionXY Position a verifier. [0] = x, [1] = y
      * @return Vrai si la position est conforme sinon faux.
@@ -143,8 +138,7 @@ public class Position implements Comparable<Position> {
 
     /**
      * Methode permettant d'assigner la position
-     * de linstance a une nouvelle position representer
-     * sous forme textuelle
+     * de linstance a une nouvelle position representer sous forme textuelle
      *
      * @param p_positionTextuelle Position textuelle a assigner l'instance
      * @return Vrai si l'assignation a reussi sinon retourne faux.
@@ -163,8 +157,7 @@ public class Position implements Comparable<Position> {
 
     /**
      * Methode permettant d'assigner la position
-     * de l'instance a une nouvelle position representer
-     * sous forme de coordonnees.
+     * de l'instance a une nouvelle position representer sous forme de coordonnees.
      *
      * @param p_positionXY Position coordonnee a assigner l'instance. [0] = x, [1] = y
      * @return Vrai si l'assignation a reussi sinon retourne faux.
@@ -180,8 +173,7 @@ public class Position implements Comparable<Position> {
     }
 
     /**
-     * Methode qui permet d"obtenir la
-     * position x de l'instance courante.
+     * Methode qui permet d'obtenir la position x de l'instance courante.
      *
      * @return La position x
      */
@@ -190,8 +182,7 @@ public class Position implements Comparable<Position> {
     }
 
     /**
-     * Methode qui permet d"obtenir la
-     * position y de l'instance courante.
+     * Methode qui permet d'obtenir la position y de l'instance courante.
      *
      * @return La position ys
      */
@@ -201,8 +192,7 @@ public class Position implements Comparable<Position> {
 
     /**
      * Methode generant le hash code pour l'instance.
-     * Utiliser pour permettant la comparaison entre
-     * deux objects de type Position
+     * Utiliser pour permettant la comparaison entre deux objects de type Position
      *
      * @return Le hash code generer pour l'instance
      */
@@ -213,8 +203,7 @@ public class Position implements Comparable<Position> {
 
     /**
      * Methode permettant de comparer deux objects
-     * de type position pour savoir si les deux Position
-     * sont equivalente
+     * de type position pour savoir si les deux Position sont equivalente
      *
      * @param obj Position a comparer la courante instance
      * @return Vrai si les deux Position sont equivalentes sinon faux.

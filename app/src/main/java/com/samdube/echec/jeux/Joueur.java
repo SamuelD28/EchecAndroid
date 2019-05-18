@@ -1,12 +1,14 @@
 package com.samdube.echec.jeux;
 
+import com.samdube.echec.piece.Piece;
+
 /**
  * Classe permettant de créer les joueurs du com.samdube.echec.jeux d'échec
  *
  * @author Samuel Colassin
  */
 class Joueur {
-    private final CouleurJoueur m_couleur;
+    private final Piece.CouleurPiece m_couleur;
 
     private String m_nom;
 
@@ -15,7 +17,7 @@ class Joueur {
      *
      * @param p_couleur Couleur du joueur
      */
-    private Joueur(CouleurJoueur p_couleur) {
+    public Joueur(Piece.CouleurPiece p_couleur) {
         m_couleur = p_couleur;
     }
 
@@ -24,7 +26,7 @@ class Joueur {
      *
      * @return Couleur du joueur
      */
-    CouleurJoueur getCouleurJoueur() {
+    Piece.CouleurPiece getCouleurJoueur() {
         return m_couleur;
     }
 
@@ -45,9 +47,4 @@ class Joueur {
     void setNom(String p_nom) {
         m_nom = p_nom;
     }
-
-    /**
-     * Couleur que peut prendre un joueur
-     */
-    public enum CouleurJoueur {BLANC, NOIR}
 }

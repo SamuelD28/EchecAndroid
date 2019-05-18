@@ -1,7 +1,9 @@
 package com.samdube.echec.piece;
 
 import com.samdube.echec.deplacement.DeplacementPion;
+import com.samdube.echec.echiquier.Echiquier;
 import com.samdube.echec.echiquier.Position;
+
 
 /**
  * Teste la creation dune com.samdube.echec.piece de type pion
@@ -47,5 +49,33 @@ public class TestPion extends TestPiece {
                 new Position(1, 0),
                 new Position(1, 1)
         };
+    }
+
+    public void testAtteindrePromotion() {
+        // On fait atteindre le pion de l'autre côté (blanc)
+        Echiquier echiquier = new Echiquier();
+        echiquier.calculerCollisionsPieces();
+        assertTrue(echiquier.deplacerPiece(echiquier.getPiece(new Position(1, 1)), new Position(1, 3)));
+        echiquier.calculerCollisionsPieces();
+        assertTrue(echiquier.deplacerPiece(echiquier.getPiece(new Position(1, 3)), new Position(1, 4)));
+        echiquier.calculerCollisionsPieces();
+        assertTrue(echiquier.deplacerPiece(echiquier.getPiece(new Position(1, 4)), new Position(1, 5)));
+        echiquier.calculerCollisionsPieces();
+        assertTrue(echiquier.deplacerPiece(echiquier.getPiece(new Position(1, 5)), new Position(0, 6)));
+        echiquier.calculerCollisionsPieces();
+        assertTrue(echiquier.deplacerPiece(echiquier.getPiece(new Position(0, 6)), new Position(1, 7)));
+        echiquier.calculerCollisionsPieces();
+
+        // On fait atteindre le pion de l'autre côté (noir)
+        assertTrue(echiquier.deplacerPiece(echiquier.getPiece(new Position(6, 6)), new Position(6, 4)));
+        echiquier.calculerCollisionsPieces();
+        assertTrue(echiquier.deplacerPiece(echiquier.getPiece(new Position(6, 4)), new Position(6, 3)));
+        echiquier.calculerCollisionsPieces();
+        assertTrue(echiquier.deplacerPiece(echiquier.getPiece(new Position(6, 3)), new Position(6, 2)));
+        echiquier.calculerCollisionsPieces();
+        assertTrue(echiquier.deplacerPiece(echiquier.getPiece(new Position(6, 2)), new Position(7, 1)));
+        echiquier.calculerCollisionsPieces();
+        assertTrue(echiquier.deplacerPiece(echiquier.getPiece(new Position(7, 1)), new Position(6, 0)));
+        echiquier.calculerCollisionsPieces();
     }
 }

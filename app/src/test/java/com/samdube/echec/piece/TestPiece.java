@@ -86,11 +86,9 @@ public abstract class TestPiece extends TestCase {
      * Test le getter de déplacement disponible
      */
     public void testGetDeplacementPossible() {
-        // TODO Peut-être pas la meilleur facon de vérfier
-
         Piece pion = new Pion(new Position(0, 1));
         pion.calculerDeplacementPossibles(new Position[0], new Position[0]);
-        assertEquals(1, pion.getDeplacementsPossibles().length);
+        assertEquals(2, pion.getDeplacementsPossibles().length);
         Piece reine = new Reine(new Position(0, 7));
         reine.calculerDeplacementPossibles(new Position[0], new Position[0]);
         assertEquals(21, reine.getDeplacementsPossibles().length);
@@ -125,11 +123,11 @@ public abstract class TestPiece extends TestCase {
         Piece pieceB = getPieceActuel();
         Piece pieceC = getPieceDifferente();
 
-        assertTrue(pieceA.equals(pieceB));
-        assertTrue(pieceB.equals(pieceA));
+        assertEquals(pieceA, pieceB);
+        assertEquals(pieceB, pieceA);
 
-        assertTrue(pieceA.equals(pieceA));
-        assertTrue(pieceB.equals(pieceB));
+        assertEquals(pieceA, pieceA);
+        assertEquals(pieceB, pieceB);
 
         assertFalse(pieceA.equals(pieceC));
         assertFalse(pieceB.equals(pieceC));

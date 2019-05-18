@@ -17,4 +17,8 @@ public class Fou extends Piece{
     public Fou(Position p_position) {
         super(p_position, new DeplacementFou(), 'f', 2);
     }
+
+    public Fou(Position p_position, CouleurPiece p_couleur) {
+        super(p_position, p_couleur, new DeplacementFou(), 'f', 2);
+    }
 }

@@ -17,4 +17,8 @@ public class Tour extends Piece {
     public Tour(Position p_position) {
         super(p_position, new DeplacementTour(), 't', 2);
     }
+
+    public Tour(Position p_position, CouleurPiece p_couleur) {
+        super(p_position, p_couleur, new DeplacementTour(), 't', 2);
+    }
 }
