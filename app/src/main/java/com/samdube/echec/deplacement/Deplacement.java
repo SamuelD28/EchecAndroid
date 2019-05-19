@@ -80,9 +80,7 @@ public abstract class Deplacement {
         ArrayList<Position> temp = new ArrayList<>(Arrays.asList(m_deplacementDisponibles));
 
         for (Position position : p_positions) {
-            if (Arrays.asList(m_deplacementDisponibles).contains(position)) {
-                temp.remove(position);
-            }
+            temp.remove(position);
         }
         m_deplacementDisponibles = temp.toArray(new Position[0]);
     }

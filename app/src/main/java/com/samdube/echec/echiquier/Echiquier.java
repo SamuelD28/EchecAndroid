@@ -1,5 +1,6 @@
 package com.samdube.echec.echiquier;
 
+import com.samdube.echec.deplacement.Deplacement;
 import com.samdube.echec.piece.Cavalier;
 import com.samdube.echec.piece.Fou;
 import com.samdube.echec.piece.Piece;
@@ -8,7 +9,10 @@ import com.samdube.echec.piece.Pion;
 import com.samdube.echec.piece.Reine;
 import com.samdube.echec.piece.Roi;
 import com.samdube.echec.piece.Tour;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+
 import static com.samdube.echec.piece.Piece.CouleurPiece.*;
 
 /**
@@ -27,10 +31,6 @@ public class Echiquier {
 
     private final ArrayList<Piece> m_pieces = new ArrayList<>();
 
-    private ArrayList<Position> m_positionsPiecesBlanches = new ArrayList<>();
-
-    private ArrayList<Position> m_positionsPiecesNoir = new ArrayList<>();
-
     /**
      * Piece qui est présentement en cours de changement de type de pièce
      */
@@ -41,16 +41,12 @@ public class Echiquier {
      */
     private boolean m_pionEnCoursDePromotion = false;
 
-    private boolean m_roiNoirEnEchec = false;
-
-    private boolean m_roiBlancEnEchec = false;
-
     /**
      * Constructeur qui initialise l'échiquier
      */
     public Echiquier() {
         initialiser();
-        diviserPiecesDeChaqueCouleur();
+        calculerTousDeplacements();
     }
 
     /**
@@ -72,65 +68,73 @@ public class Echiquier {
         }
     }
 
-    /**
-     * Permet d'actualiser la position d'une piece apres un déplacement de celle-ci
-     *
-     * @param p_piece    La piece qui change de position
-     * @param p_position La nouvelle position de la pièce
-     */
-    private void actualiserPositionsPieces(Piece p_piece, Position p_position) {
-        if (p_piece.getCouleur() == BLANC) {
-            m_positionsPiecesBlanches.remove(p_piece.getPosition());
-            m_positionsPiecesBlanches.add(p_position);
-        } else {
-            m_positionsPiecesNoir.remove(p_piece.getPosition());
-            m_positionsPiecesNoir.add(p_position);
-        }
-    }
-
-    /**
-     * Permet d'avoir toute les pièces de l'échiquier blanches et noirs dans
-     * deux listes distinctes pour les manipulations.
-     */
-    private void diviserPiecesDeChaqueCouleur() {
-        for (Piece piece : m_pieces) {
-            if (piece.getCouleur() == BLANC) {
-                m_positionsPiecesBlanches.add(piece.getPosition());
-            } else {
-                m_positionsPiecesNoir.add(piece.getPosition());
+    private Position[] obtenirPositionsPieces(CouleurPiece p_couleur)
+    {
+        ArrayList<Position> positions = new ArrayList<>();
+        for (Piece piece : m_pieces){
+            if(piece.getCouleur() == p_couleur){
+                positions.add(piece.getPosition());
             }
         }
-    }
-
-    /**
-     * Permet d'obtenir la liste des positions de toute les pièce d'une certaine couleur
-     *
-     * @param p_couleur la couleur des pièces qu'on désire les positions
-     * @return Une array de toute les positions des pièces de la couleur désirée
-     */
-    private Position[] getPositionsPieces(CouleurPiece p_couleur) {
-        if (p_couleur == BLANC) {
-            return m_positionsPiecesBlanches.toArray(new Position[0]);
-        } else {
-            return m_positionsPiecesNoir.toArray(new Position[0]);
-        }
+        return positions.toArray(new Position[0]);
     }
 
     /**
      * Permet de calculer toutes les possibilités de collisions pour toutes les
      * pièces de l'échiquier
      */
-    public void calculerCollisionsPieces() {
-        Position[] positionsPiecesBlanches = getPositionsPieces(BLANC);
-        Position[] positionsPiecesNoires = getPositionsPieces(NOIR);
-
+    public void calculerTousDeplacements() {
+        Position[] positionsPiecesBlanches = obtenirPositionsPieces(BLANC);
+        Position[] positionsPiecesNoires = obtenirPositionsPieces(NOIR);
         for (Piece piece : m_pieces) {
-            if (piece.getCouleur() == BLANC) {
-                piece.calculerDeplacementPossibles(positionsPiecesBlanches, positionsPiecesNoires);
-            } else {
-                piece.calculerDeplacementPossibles(positionsPiecesNoires, positionsPiecesBlanches);
+            piece.calculerDeplacementPossibles(positionsPiecesBlanches, positionsPiecesNoires);
+        }
+        ajusterDeplacementRoi(BLANC);
+        ajusterDeplacementRoi(NOIR);
+    }
+
+
+    /**
+     * Methode pour obtenir un roi d'une couleur
+     * donne.
+     *
+     * @param p_couleur Couleur du roi a trouver
+     * @return Roi trouve
+     */
+    private Roi getRoi(CouleurPiece p_couleur) {
+        Roi roi = null;
+        for (Piece piece : m_pieces) {
+            if (piece.getCouleur() == p_couleur && piece instanceof Roi){
+                roi = (Roi)piece;
             }
         }
+        return roi;
+    }
+
+    public void ajusterDeplacementRoi(CouleurPiece p_couleur){
+        CouleurPiece couleurInverse = (p_couleur == BLANC)? NOIR : BLANC;
+        Position[] champsAction = getChampsDactions(couleurInverse);
+        Roi roi = getRoi(p_couleur);
+        Deplacement deplacementRoi = roi.getDeplacement();
+
+        if(Arrays.asList(champsAction).contains(roi.getPosition())){
+            roi.setEstEchec(true);
+        }else{
+            roi.setEstEchec(false);
+        }
+        deplacementRoi.retirerDeplacementPossibles(champsAction);
+
+        if(deplacementRoi.getDisponibles().length == 0 && roi.estEchec()){
+            roi.setEchecEtMath(true);
+        }
+    }
+
+    public boolean estEchec(CouleurPiece p_couleur){
+        return getRoi(p_couleur).estEchec();
+    }
+
+    public boolean estEchecEtMath(CouleurPiece p_couleur){
+        return getRoi(p_couleur).estEchecEtMath();
     }
 
     /**
@@ -191,7 +195,7 @@ public class Echiquier {
     /**
      * Permet d'avoir le nombre d'occurence d'une pièce dans l'échiquier courant
      *
-     * @param p_couleur la couleur de la pièce désirée
+     * @param p_couleur   la couleur de la pièce désirée
      * @param p_typePiece type de la piece a aller chercher
      * @return le nombre d'occurence de la pièce dans le jeu
      */
@@ -203,6 +207,23 @@ public class Echiquier {
             }
         }
         return nombrePiece;
+    }
+
+
+    public Position[] getChampsDactions(CouleurPiece p_couleur) {
+        ArrayList<Piece> pieces = new ArrayList<>();
+        for (Piece piece : m_pieces) {
+            if (piece.getCouleur() == p_couleur) {
+                pieces.add(piece);
+            }
+        }
+
+        ArrayList<Position> positions = new ArrayList<>();
+        for (Piece piece : pieces) {
+            positions.addAll(Arrays.asList(piece.getDeplacementsPossibles()));
+        }
+
+        return positions.toArray(new Position[0]);
     }
 
     /**
@@ -217,7 +238,7 @@ public class Echiquier {
         for (Piece piece : m_pieces) {
             if (piece.getPosition().equals(p_position)) {
                 pieceTrouve = piece;
-                pieceTrouve.calculerDeplacementPossibles(getPositionsPieces(BLANC), getPositionsPieces(NOIR));
+                calculerTousDeplacements();
                 break;
             }
         }
@@ -233,45 +254,14 @@ public class Echiquier {
      */
     public boolean deplacerPiece(Piece p_piece, Position p_nouvelle) {
         if (p_piece.peutDeplacer(p_nouvelle)) {
-            Piece piecePourPrise = getPiece(p_nouvelle);
 
+            Piece piecePourPrise = getPiece(p_nouvelle);
             if (piecePourPrise != null) {
                 m_pieces.remove(piecePourPrise);
-                if (piecePourPrise.getCouleur() == BLANC) {
-                    m_positionsPiecesBlanches.remove(piecePourPrise.getPosition());
-                } else {
-                    m_positionsPiecesNoir.remove(piecePourPrise.getPosition());
-                }
             }
 
-            actualiserPositionsPieces(p_piece, p_nouvelle);
             p_piece.deplacer(p_nouvelle);
-
-            if (p_piece instanceof Pion && ((Pion) p_piece).getPeutPromotion()) {
-                m_pionEnCoursDePromotion = true;
-                m_pionEnPromotion = p_piece;
-            }
-
-            p_piece.calculerDeplacementPossibles(getPositionsPieces(BLANC), getPositionsPieces(NOIR));
-            for (Position p: p_piece.getDeplacementsPossibles()) {
-                if (p_piece.getCouleur() == BLANC && m_positionsPiecesNoir.contains(p)) {
-                    for (Piece piece: m_pieces) {
-                        if (piece.getPosition() == p && piece instanceof Roi) {
-                            // Est en echec Roi Noir
-                            m_roiNoirEnEchec = true;
-                        }
-                    }
-                }
-                else if (p_piece.getCouleur() == NOIR && m_positionsPiecesBlanches.contains(p)) {
-                    for (Piece piece: m_pieces) {
-                        if (piece.getPosition() == p && piece instanceof Roi) {
-                            // Est en echec Roi blanc
-                            m_roiBlancEnEchec = true;
-                        }
-                    }
-                }
-            }
-
+            calculerTousDeplacements();
 
             return true;
         } else {

@@ -9,7 +9,9 @@ import com.samdube.echec.echiquier.Position;
  * @author Samuel Dube
  */
 public class Roi extends Piece {
-    private boolean m_estEnEchec;
+    private boolean m_estEchec;
+
+    private boolean m_estEchecEtMath;
 
     /**
      * Constructeur initiant un nouveau roi
@@ -26,8 +28,12 @@ public class Roi extends Piece {
      *
      * @return Vrai si le roi est en echec
      */
-    public boolean getEstEnEchec() {
-        return m_estEnEchec;
+    public boolean estEchec() {
+        return m_estEchec;
+    }
+
+    public boolean estEchecEtMath() {
+        return m_estEchecEtMath;
     }
 
     /**
@@ -36,7 +42,11 @@ public class Roi extends Piece {
      *
      * @param m_estEnEchec Vrai si le roi est en echec
      */
-    public void setEstEnEchec(boolean m_estEnEchec) {
-        this.m_estEnEchec = m_estEnEchec;
+    public void setEstEchec(boolean m_estEnEchec) {
+        this.m_estEchec = m_estEnEchec;
+    }
+
+    public void setEchecEtMath(boolean m_estEchecEtMath) {
+        this.m_estEchecEtMath = m_estEchecEtMath;
     }
 }

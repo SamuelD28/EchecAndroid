@@ -24,10 +24,14 @@ import com.samdube.echec.echiquier.Position;
 import com.samdube.echec.jeux.Manager;
 import com.samdube.echec.piece.Piece;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static android.support.v4.content.res.ResourcesCompat.getColor;
 import static android.support.v4.content.res.ResourcesCompat.getDrawable;
 import static com.samdube.echec.echiquier.Echiquier.TAILLE_ECHIQUIER;
 import static com.samdube.echec.piece.Piece.CouleurPiece.BLANC;
+import static com.samdube.echec.piece.Piece.CouleurPiece.NOIR;
 
 /**
  * Classe qui permet de creer un fragement de jeu d'échec
@@ -225,9 +229,13 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
 
                 effacerDeplacementPossible();
 
-                if (m_echiquier.estEchecEtMat()) {
-                    Toast.makeText(getActivity(), "Partie gagnée par :" + m_manager.getNomJoueurEnTour(), Toast.LENGTH_SHORT).show();
-                    //desactiverBoutton();
+                if (m_echiquier.estEchec(BLANC) || m_echiquier.estEchec(NOIR)) {
+                    Toast.makeText(getActivity(), "Echec joueur:" + m_manager.getNomJoueurEnTour(), Toast.LENGTH_SHORT).show();
+                }
+
+                if(m_echiquier.estEchecEtMath(BLANC) || m_echiquier.estEchecEtMath(NOIR)){
+                    Toast.makeText(getActivity(), "Echec et math joueur:" + m_manager.getNomJoueurEnTour(), Toast.LENGTH_SHORT).show();
+                    desactiverBoutton();
                 }
 
                 m_pieceSelectionner = null;
@@ -363,29 +371,21 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
     }
 
     //TODO Faire fonctionner Désactiver les boutons
-//    private void desactiverBoutton() {
-//        //List<View> bouttons = m_chessboardTableLayout.getTouchables();
-//
-////        for(View v : bouttons){
-////            if( v instanceof Button ) {
-////                v.setEnabled(false);
-////            }
-////        }
-//
-//        for (int i = 0; i < m_chessboardTableLayout.getChildCount(); i++) {
-//            View v = m_chessboardTableLayout.getChildAt(i);
-//            if (v instanceof Button) {
-//                v.setClickable(false);
-//
-//            }
-//        }
-//    }
+    private void desactiverBoutton() {
+        ArrayList<View> bouttons = m_chessboardTableLayout.getTouchables();
+
+        for(View v : bouttons){
+            if( v instanceof Button ) {
+                v.setEnabled(false);
+            }
+        }
+
+        for (int i = 0; i < m_chessboardTableLayout.getChildCount(); i++) {
+            View v = m_chessboardTableLayout.getChildAt(i);
+            if (v instanceof Button) {
+                v.setClickable(false);
+
+            }
+        }
+    }
 }
-
-
-//final TextView textJ1 = new TextView(getContext());
-//final TextView textJ2 = new TextView(getContext());
-//textJ1.setText("J1");
-//textJ2.setText("J2");
-//layout.addView(textJ1);
-//layout.addView(textJ2);
