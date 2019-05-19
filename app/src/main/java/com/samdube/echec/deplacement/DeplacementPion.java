@@ -1,7 +1,6 @@
 package com.samdube.echec.deplacement;
 
 import com.samdube.echec.echiquier.Position;
-
 import static com.samdube.echec.piece.Piece.*;
 
 /**

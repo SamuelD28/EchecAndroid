@@ -8,9 +8,7 @@ import com.samdube.echec.piece.Pion;
 import com.samdube.echec.piece.Reine;
 import com.samdube.echec.piece.Roi;
 import com.samdube.echec.piece.Tour;
-
 import java.util.ArrayList;
-
 import static com.samdube.echec.piece.Piece.CouleurPiece.*;
 
 /**
@@ -48,23 +46,7 @@ public class Echiquier {
      */
     public Echiquier() {
         initialiser();
-        //calculerCollisionsPieces();
         diviserPiecesDeChaqueCouleur();
-    }
-
-    /**
-     * Permet de savoir si la partie est échec et mat dans l'échiquier
-     *
-     * @return Vrai si un roi est manquant dans l'échiquier
-     */
-    public boolean estEchecEtMat() {
-        int cpt = 0;
-        for (Piece p : m_pieces) {
-            if (p instanceof Roi) {
-                cpt++;
-            }
-        }
-        return cpt < 2;
     }
 
     /**
@@ -151,11 +133,10 @@ public class Echiquier {
      * Permet d'obtenir la pièce à mettre sur l'échiquier
      * selon la position dans celui-ci.
      *
+     * @param p_position Position de depart de la piece
      * @return Le type de pièce à mettre dans l'échiquier
      */
     private Piece obtenirPiecePositionDepart(Position p_position) {
-        Piece piece = null;
-
         int x = p_position.getX();
         int y = p_position.getY();
 
@@ -175,7 +156,7 @@ public class Echiquier {
             }
         }
 
-        return piece;
+        return null;
     }
 
     /**
@@ -207,6 +188,7 @@ public class Echiquier {
      * Permet d'avoir le nombre d'occurence d'une pièce dans l'échiquier courant
      *
      * @param p_couleur la couleur de la pièce désirée
+     * @param p_typePiece type de la piece a aller chercher
      * @return le nombre d'occurence de la pièce dans le jeu
      */
     int getNombrePieces(CouleurPiece p_couleur, Class<? extends Piece> p_typePiece) {
@@ -275,18 +257,9 @@ public class Echiquier {
     /**
      * Permet de promouvoir un pion
      */
-    public void promouvoirPion(/*char p_representation*/) {
+    public void promouvoirPion() {
         Position p = m_pionEnPromotion.getPosition();
         CouleurPiece c = m_pionEnPromotion.getCouleur();
-
-//        switch (p_representation) {
-//            case 'r' : m_pieces.add(new Reine(p, c)); break;
-//            case 'f' : m_pieces.add(new Fou(p, c)); break;
-//            case 'c' : m_pieces.add(new Cavalier(p, c)); break;
-//            case 't' : m_pieces.add(new Tour(p, c)); break;
-//            default: m_pieces.add(new Reine(p, c)); break;
-//        }
-
         m_pieces.remove(m_pionEnPromotion);
         m_pieces.add(new Reine(p, c));
         m_pionEnPromotion = null;
