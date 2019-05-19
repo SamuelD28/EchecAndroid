@@ -41,6 +41,10 @@ public class Echiquier {
      */
     private boolean m_pionEnCoursDePromotion = false;
 
+    private boolean m_roiNoirEnEchec = false;
+
+    private boolean m_roiBlancEnEchec = false;
+
     /**
      * Constructeur qui initialise l'échiquier
      */
@@ -247,6 +251,27 @@ public class Echiquier {
                 m_pionEnCoursDePromotion = true;
                 m_pionEnPromotion = p_piece;
             }
+
+            p_piece.calculerDeplacementPossibles(getPositionsPieces(BLANC), getPositionsPieces(NOIR));
+            for (Position p: p_piece.getDeplacementsPossibles()) {
+                if (p_piece.getCouleur() == BLANC && m_positionsPiecesNoir.contains(p)) {
+                    for (Piece piece: m_pieces) {
+                        if (piece.getPosition() == p && piece instanceof Roi) {
+                            // Est en echec Roi Noir
+                            m_roiNoirEnEchec = true;
+                        }
+                    }
+                }
+                else if (p_piece.getCouleur() == NOIR && m_positionsPiecesBlanches.contains(p)) {
+                    for (Piece piece: m_pieces) {
+                        if (piece.getPosition() == p && piece instanceof Roi) {
+                            // Est en echec Roi blanc
+                            m_roiBlancEnEchec = true;
+                        }
+                    }
+                }
+            }
+
 
             return true;
         } else {
