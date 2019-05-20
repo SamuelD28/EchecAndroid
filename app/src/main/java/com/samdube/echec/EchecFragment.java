@@ -66,10 +66,6 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
-    /**
-     * Methode qui initialise une partie dechec et
-     * ses differents composantes necessaires.
-     */
     private void Init() {
         m_echiquier = new Echiquier();
         if (m_manager == null) {
@@ -216,6 +212,9 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
             } else {
                 deselectionnerPieceEchiquier();
             }
+        }
+        if (m_echiquier.getEnCourDePromotion()) {
+            afficherDialoguePromotion(nouvellePosition);
         }
         actualiserEtatUI();
     }
@@ -366,41 +365,63 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
         dialogue.show();
     }
 
-    // TODO ne marche pas vraiment
-    private void afficherDialoguePromotion() {
+    private void afficherDialoguePromotion(Position p_position) {
         AlertDialog dialogue = new AlertDialog.Builder(getActivity())
-                .setTitle("Veuillez entrer la premiere lettre de la piece que vous voulez")
-                .setPositiveButton(android.R.string.ok, null)
+                .setTitle(R.string.titre_promotion_dialogue)
                 .create();
-
         dialogue.setCanceledOnTouchOutside(false);
         dialogue.setCancelable(false);
         LinearLayout layout = new LinearLayout(getContext());
         layout.setOrientation(LinearLayout.VERTICAL);
-        final EditText promotion = new EditText(getContext());
-        layout.addView(promotion);
-        dialogue.setView(layout);
-        dialogue.setOnShowListener(new DialogInterface.OnShowListener() {
+        final Button boutonReine = new Button(getContext());
+        final Button boutonFou = new Button(getContext());
+        final Button boutonCavalier = new Button(getContext());
+        final Button boutonTour = new Button(getContext());
+        boutonReine.setText(R.string.reine);
+        boutonFou.setText(R.string.fou);
+        boutonCavalier.setText(R.string.cavalier);
+        boutonTour.setText(R.string.tour);
+        boutonReine.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onShow(final DialogInterface p_dialogue) {
-                Button buttonOk = ((AlertDialog) p_dialogue).getButton(AlertDialog.BUTTON_POSITIVE);
-                if (buttonOk != null) {
-                    buttonOk.setOnClickListener(new View.OnClickListener() {
-
-                        @Override
-                        public void onClick(View view) {
-                            if (promotion.getText().toString().trim().length() == 1) {
-                                m_manager.setPromotion(promotion.getText().charAt(0));
-                                p_dialogue.dismiss();
-                            } else {
-                                Toast.makeText(getActivity(), "Trop de caractère", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                }
+            public void onClick(View v) {
+                promouvoirPion(p_position, 'r');
+                dialogue.dismiss();
             }
         });
+        boutonFou.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                promouvoirPion(p_position, 'f');
+                dialogue.dismiss();
+            }
+        });
+        boutonCavalier.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                promouvoirPion(p_position, 'c');
+                dialogue.dismiss();
+            }
+        });
+        boutonTour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                promouvoirPion(p_position, 't');
+                dialogue.dismiss();
+            }
+        });
+        layout.addView(boutonReine);
+        layout.addView(boutonFou);
+        layout.addView(boutonCavalier);
+        layout.addView(boutonTour);
+        dialogue.setView(layout);
         dialogue.show();
+    }
+
+    private void promouvoirPion(Position p_position, char p_representation) {
+        m_echiquier.promouvoirPion(p_representation);
+        int buttonId = Integer.valueOf(String.valueOf(p_position.getX() + "" + p_position.getY()));
+        ImageButton button = m_chessboardTableLayout.findViewById(buttonId);
+        assignerImageBouton(m_echiquier.getPiece(p_position), button);
     }
 
     //TODO Faire fonctionner Désactiver les boutons
@@ -417,7 +438,6 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
             View v = m_chessboardTableLayout.getChildAt(i);
             if (v instanceof Button) {
                 v.setClickable(false);
-
             }
         }
     }
