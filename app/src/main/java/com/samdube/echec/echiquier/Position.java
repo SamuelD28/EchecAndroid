@@ -120,6 +120,18 @@ public class Position implements Comparable<Position> {
     }
 
     /**
+     * Permet de transformer une Position en version textuelle
+     *
+     * @param p_position La postion à transformer
+     * @return La position sous forme textuelle
+     */
+    public static String parsePositionVersTexte(Position p_position) {
+        int y = p_position.getY() + 1;
+        String xx = ECHELLE_POSITIONX.get(p_position.getX()).toString();
+        return xx + y + "";
+    }
+
+    /**
      * Methode statique permettant de savoir si une position
      * est dans les limites de la grille de l'echiquier.
      *
