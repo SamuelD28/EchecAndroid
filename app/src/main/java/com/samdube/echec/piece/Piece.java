@@ -179,4 +179,36 @@ public abstract class Piece implements IObservable {
     public int hashCode() {
         return Objects.hash(m_position, m_couleur);
     }
+
+    public static Piece creerCopie(Piece p_piece) {
+
+        if (p_piece.getCouleur() == CouleurPiece.BLANC) {
+            switch (p_piece.getRepresentation()) {
+                case 'r': return new Roi(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), CouleurPiece.BLANC);
+                case 'q': return new Reine(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), CouleurPiece.BLANC);
+                case 'f': return new Fou(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), CouleurPiece.BLANC);
+                case 'c': return new Cavalier(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), CouleurPiece.BLANC);
+                case 't': return new Tour(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), CouleurPiece.BLANC);
+                case 'p': return new Pion(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), CouleurPiece.BLANC);
+            }
+        } else {
+            switch (p_piece.getRepresentation()) {
+                case 'r': return new Roi(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), CouleurPiece.NOIR);
+                case 'q': return new Reine(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()),CouleurPiece.NOIR);
+                case 'f': return new Fou(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), CouleurPiece.NOIR);
+                case 'c': return new Cavalier(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), CouleurPiece.NOIR);
+                case 't': return new Tour(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), CouleurPiece.NOIR);
+                case 'p': return new Pion(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), CouleurPiece.NOIR);
+            }
+        }
+//
+//        case 'r': return new Roi(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), p_piece.getCouleur());
+//        case 'q': return new Reine(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), p_piece.getCouleur());
+//        case 'f': return new Fou(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), p_piece.getCouleur());
+//        case 'c': return new Cavalier(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), p_piece.getCouleur());
+//        case 't': return new Tour(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), p_piece.getCouleur());
+//        case 'p': return new Pion(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), p_piece.getCouleur());
+
+        return null;
+    }
 }

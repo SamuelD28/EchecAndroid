@@ -54,11 +54,22 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
         m_chessboardTableLayout = view.findViewById(R.id.main_board_id);
         m_joueurEnTourTextView = view.findViewById(R.id.tourJoueur_textView);
 
-        Button m_buttonReinitialiser = view.findViewById(R.id.button_reinitialiser);
-        m_buttonReinitialiser.setOnClickListener(new View.OnClickListener() {
+        Button buttonReinitialiser = view.findViewById(R.id.button_reinitialiser);
+        buttonReinitialiser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Init();
+            }
+        });
+
+        Button buttonRevenir = view.findViewById(R.id.button6);
+        buttonRevenir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                m_echiquier.revenirEtatPrecedent();
+                m_manager.revenirTour();
+                dessinerEchiquier();
+                actualiserEtatUI();
             }
         });
 

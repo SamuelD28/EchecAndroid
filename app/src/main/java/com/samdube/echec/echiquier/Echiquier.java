@@ -12,6 +12,7 @@ import com.samdube.echec.piece.Tour;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static com.samdube.echec.piece.Piece.CouleurPiece.*;
 
@@ -29,9 +30,11 @@ public class Echiquier {
 
     private final Position[] m_cases = new Position[TAILLE_ECHIQUIER * TAILLE_ECHIQUIER];
 
-    private final ArrayList<Piece> m_pieces = new ArrayList<>();
+    private ArrayList<Piece> m_pieces = new ArrayList<>();
 
     private Piece m_pieceSelectionner = null;
+
+    private ArrayList<ArrayList<Piece>> m_listeDesChangements = new ArrayList<>();
 
     /**
      * Piece qui est présentement en cours de changement de type de pièce
@@ -49,6 +52,7 @@ public class Echiquier {
     public Echiquier() {
         initialiser();
         calculerTousDeplacements();
+        m_listeDesChangements.add(copierListeDesPieces());
     }
 
     /**
@@ -198,8 +202,7 @@ public class Echiquier {
         }
 
         if (getPiece(new Position(5, yaxis)) != null ||
-                getPiece(new Position(5, yaxis)) != null)
-        {
+                getPiece(new Position(5, yaxis)) != null) {
             return false;
         }
 
@@ -221,8 +224,7 @@ public class Echiquier {
 
         if (getPiece(new Position(1, yaxis)) != null ||
                 getPiece(new Position(2, yaxis)) != null ||
-                getPiece(new Position(3, yaxis)) != null)
-        {
+                getPiece(new Position(3, yaxis)) != null) {
             return false;
         }
 
@@ -326,12 +328,31 @@ public class Echiquier {
             if (p_piece instanceof Pion && ((Pion) p_piece).getPeutPromotion()) {
                 m_pionPromu = p_piece;
                 m_enCoursDePromotion = true;
+            } else {
+                m_listeDesChangements.add(copierListeDesPieces());
             }
 
             return true;
         } else {
             return false;
         }
+    }
+
+    public void revenirEtatPrecedent() {
+        if (m_listeDesChangements.size() > 1) {
+            m_pieces = new ArrayList<>();
+            m_pieces.addAll(m_listeDesChangements.get(m_listeDesChangements.size() - 2));
+            m_listeDesChangements.remove(m_listeDesChangements.size() - 1);
+        }
+        calculerTousDeplacements();
+    }
+
+    public ArrayList<Piece> copierListeDesPieces() {
+        ArrayList<Piece> nouvellesListe = new ArrayList<>();
+        for (Piece piece : m_pieces) {
+            nouvellesListe.add(Piece.creerCopie(piece));
+        }
+        return nouvellesListe;
     }
 
     /**
@@ -343,11 +364,22 @@ public class Echiquier {
         m_pieces.remove(m_pionPromu);
 
         switch (p_representation) {
-            case 'r': m_pieces.add(new Reine(p, c)); break;
-            case 'f': m_pieces.add(new Fou(p, c)); break;
-            case 'c': m_pieces.add(new Cavalier(p, c)); break;
-            case 't': m_pieces.add(new Tour(p, c)); break;
+            case 'r':
+                m_pieces.add(new Reine(p, c));
+                break;
+            case 'f':
+                m_pieces.add(new Fou(p, c));
+                break;
+            case 'c':
+                m_pieces.add(new Cavalier(p, c));
+                break;
+            case 't':
+                m_pieces.add(new Tour(p, c));
+                break;
         }
+
+        //m_listeDesChangements.remove(m_listeDesChangements.get(m_listeDesChangements.size() - 1));
+        m_listeDesChangements.add(copierListeDesPieces());
 
         m_pionPromu = null;
         m_enCoursDePromotion = false;
