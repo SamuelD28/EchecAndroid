@@ -284,7 +284,7 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
             Toast.makeText(getActivity(), "Echec et math joueur:" + m_manager.getNomJoueurEnTour(), Toast.LENGTH_SHORT).show();
         }
 
-        m_joueurEnTourTextView.setText(m_manager.getNomJoueurEnTour());
+        m_joueurEnTourTextView.setText(m_manager.getNomJoueurEnTour() + " : " + m_manager.getCouleurJoueurEnTour());
     }
 
     /**
