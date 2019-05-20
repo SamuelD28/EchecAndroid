@@ -66,6 +66,10 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    /**
+     * Methode qui initialise une partie dechec et
+     * ses differents composantes necessaires.
+     */
     private void Init() {
         m_echiquier = new Echiquier();
         if (m_manager == null) {
@@ -376,9 +380,7 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
         final EditText promotion = new EditText(getContext());
         layout.addView(promotion);
         dialogue.setView(layout);
-
         dialogue.setOnShowListener(new DialogInterface.OnShowListener() {
-
             @Override
             public void onShow(final DialogInterface p_dialogue) {
                 Button buttonOk = ((AlertDialog) p_dialogue).getButton(AlertDialog.BUTTON_POSITIVE);

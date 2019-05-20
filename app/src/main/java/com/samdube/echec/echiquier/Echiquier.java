@@ -1,5 +1,7 @@
 package com.samdube.echec.echiquier;
 
+import android.widget.Toast;
+
 import com.samdube.echec.deplacement.Deplacement;
 import com.samdube.echec.piece.Cavalier;
 import com.samdube.echec.piece.Fou;
@@ -119,6 +121,19 @@ public class Echiquier {
         }
         ajusterDeplacementRoi(BLANC);
         ajusterDeplacementRoi(NOIR);
+        ajusterDeplacementRoque();
+    }
+
+    private void ajusterDeplacementRoque(){
+        if(peutGrandRoque(BLANC)){
+            Tour tourBlanche = (Tour)getPiece(new Position(0,0));
+            tourBlanche.getDeplacement().ajouterDeplacementPossibles(new Position(0,4));
+        }
+
+        if(peutPetitRoque(BLANC)){
+            Tour tourBlanche = (Tour)getPiece(new Position(0,7));
+            tourBlanche.getDeplacement().ajouterDeplacementPossibles(new Position(0,4));
+        }
     }
 
     /**
@@ -183,50 +198,68 @@ public class Echiquier {
         return getRoi(p_couleur).estEchecEtMath();
     }
 
-
-    public boolean peutPetitRoque(CouleurPiece p_couleur) {
+    /**
+     * Methode generique pour teste un grand et petit roque.
+     *
+     * @param p_couleur        Couleur a tester
+     * @param p_tourX          Position x de la tour a veifier
+     * @param p_positionsLibre Position devant etre libre
+     * @return Vrai si on peut roque
+     */
+    private boolean peutRoque(CouleurPiece p_couleur, int p_tourX, Position[] p_positionsLibre) {
         int yaxis = (p_couleur == BLANC) ? 0 : 7;
-        Piece piece = getPiece(new Position(7, yaxis));
-
+        Piece piece = getPiece(new Position(0, yaxis));
         if (!(piece instanceof Tour)) {
             return false;
         }
-
         Tour tour = (Tour) piece;
         if (!getRoi(p_couleur).peutRoquer() || !tour.peutRoquer()) {
             return false;
         }
 
-        if (getPiece(new Position(5, yaxis)) != null ||
-                getPiece(new Position(5, yaxis)) != null)
-        {
-            return false;
+        for (Position p : p_positionsLibre) {
+            if (getPiece(p) != null) {
+                return false;
+            }
         }
-
         return true;
     }
 
+    /**
+     * Methode permettant de savoir si une couleur
+     * peut effectuer un grand roque
+     *
+     * @param p_couleur Couleur a verifier
+     * @return Vrai si on peut effectuer un petit roque
+     */
+    public boolean peutPetitRoque(CouleurPiece p_couleur) {
+        int yaxis = (p_couleur == BLANC) ? 0 : 7;
+        return peutRoque(
+                p_couleur,
+                0,
+                new Position[]{
+                        new Position(5, yaxis),
+                        new Position(6, yaxis)
+                });
+    }
+
+    /**
+     * Methode permettant de savoir si une couleur
+     * petu effectuer un grand roque
+     *
+     * @param p_couleur Couleur a verifier
+     * @return Vrai si on peut faire un grand roque
+     */
     public boolean peutGrandRoque(CouleurPiece p_couleur) {
         int yaxis = (p_couleur == BLANC) ? 0 : 7;
-        Piece piece = getPiece(new Position(0, yaxis));
-
-        if (!(piece instanceof Tour)) {
-            return false;
-        }
-
-        Tour tour = (Tour) piece;
-        if (!getRoi(p_couleur).peutRoquer() || !tour.peutRoquer()) {
-            return false;
-        }
-
-        if (getPiece(new Position(1, yaxis)) != null ||
-                getPiece(new Position(2, yaxis)) != null ||
-                getPiece(new Position(3, yaxis)) != null)
-        {
-            return false;
-        }
-
-        return true;
+        return peutRoque(
+                p_couleur,
+                0,
+                new Position[]{
+                        new Position(1, yaxis),
+                        new Position(2, yaxis),
+                        new Position(3, yaxis)
+                });
     }
 
     /**
