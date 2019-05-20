@@ -358,6 +358,7 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 actualiserEtatUI();
+                dessinerEchiquier();
             }
         });
         dialogue.show();
