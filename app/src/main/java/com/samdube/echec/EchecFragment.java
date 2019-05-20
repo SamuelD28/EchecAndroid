@@ -301,6 +301,10 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
             desactiverCases();
         }
 
+        if(m_echiquier.getPieceSelectionner() != null){
+            changerCouleurCase(R.color.design_default_color_primary, m_echiquier.getPieceSelectionner().getPosition());
+        }
+
         m_joueurEnTourTextView.setText(m_manager.getNomJoueurEnTour() + " : " + m_manager.getCouleurJoueurEnTour());
     }
 

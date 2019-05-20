@@ -50,61 +50,61 @@
             android:scrollbars="vertical">
 
             <LinearLayout
+                android:id="@+id/coup_linearlayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/lightGray"
-                android:orientation="vertical"
-                android:id="@+id/coup_linearlayout">
+                android:orientation="vertical">
 
                 <!--<Button-->
-                    <!--android:id="@+id/button6"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:backgroundTint="@color/platinum"-->
-                    <!--android:fontFamily="@font/roboto_slab_thin"-->
-                    <!--android:text="A1 - B8"-->
-                    <!--android:textAllCaps="false"-->
-                    <!--android:textStyle="bold" />-->
+                <!--android:id="@+id/button6"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:backgroundTint="@color/platinum"-->
+                <!--android:fontFamily="@font/roboto_slab_thin"-->
+                <!--android:text="A1 - B8"-->
+                <!--android:textAllCaps="false"-->
+                <!--android:textStyle="bold" />-->
 
                 <!--<Button-->
-                    <!--android:id="@+id/button7"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:backgroundTint="@color/platinum"-->
-                    <!--android:fontFamily="@font/roboto_slab_thin"-->
-                    <!--android:text="A1 - B8"-->
-                    <!--android:textAllCaps="false"-->
-                    <!--android:textStyle="bold" />-->
+                <!--android:id="@+id/button7"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:backgroundTint="@color/platinum"-->
+                <!--android:fontFamily="@font/roboto_slab_thin"-->
+                <!--android:text="A1 - B8"-->
+                <!--android:textAllCaps="false"-->
+                <!--android:textStyle="bold" />-->
 
                 <!--<Button-->
-                    <!--android:id="@+id/button8"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:backgroundTint="@color/platinum"-->
-                    <!--android:fontFamily="@font/roboto_slab_thin"-->
-                    <!--android:text="A1 - B8"-->
-                    <!--android:textAllCaps="false"-->
-                    <!--android:textStyle="bold" />-->
+                <!--android:id="@+id/button8"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:backgroundTint="@color/platinum"-->
+                <!--android:fontFamily="@font/roboto_slab_thin"-->
+                <!--android:text="A1 - B8"-->
+                <!--android:textAllCaps="false"-->
+                <!--android:textStyle="bold" />-->
 
                 <!--<Button-->
-                    <!--android:id="@+id/button9"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:backgroundTint="@color/platinum"-->
-                    <!--android:fontFamily="@font/roboto_slab_thin"-->
-                    <!--android:text="A1 - B8"-->
-                    <!--android:textAllCaps="false"-->
-                    <!--android:textStyle="bold" />-->
+                <!--android:id="@+id/button9"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:backgroundTint="@color/platinum"-->
+                <!--android:fontFamily="@font/roboto_slab_thin"-->
+                <!--android:text="A1 - B8"-->
+                <!--android:textAllCaps="false"-->
+                <!--android:textStyle="bold" />-->
 
                 <!--<Button-->
-                    <!--android:id="@+id/button10"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:backgroundTint="@color/platinum"-->
-                    <!--android:fontFamily="@font/roboto_slab_thin"-->
-                    <!--android:text="A1 - B8"-->
-                    <!--android:textAllCaps="false"-->
-                    <!--android:textStyle="bold" />-->
+                <!--android:id="@+id/button10"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:backgroundTint="@color/platinum"-->
+                <!--android:fontFamily="@font/roboto_slab_thin"-->
+                <!--android:text="A1 - B8"-->
+                <!--android:textAllCaps="false"-->
+                <!--android:textStyle="bold" />-->
             </LinearLayout>
         </ScrollView>
 
