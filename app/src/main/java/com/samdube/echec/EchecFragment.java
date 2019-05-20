@@ -18,11 +18,14 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.samdube.echec.echiquier.Echiquier;
 import com.samdube.echec.echiquier.Position;
 import com.samdube.echec.jeux.Manager;
 import com.samdube.echec.piece.Piece;
+
 import java.util.ArrayList;
+
 import static android.support.v4.content.res.ResourcesCompat.getColor;
 import static android.support.v4.content.res.ResourcesCompat.getDrawable;
 import static com.samdube.echec.echiquier.Echiquier.TAILLE_ECHIQUIER;
@@ -40,15 +43,9 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
 
     private TextView m_joueurEnTourTextView;
 
-    private TextView m_petitRoque;
+    private Echiquier m_echiquier;
 
-    private TextView m_grandRoque;
-
-    private Echiquier m_echiquier = new Echiquier();
-
-    private Manager m_manager = new Manager(m_echiquier);
-
-    private Button m_buttonReinitialiser;
+    private Manager m_manager;
 
     @Nullable
     @Override
@@ -56,22 +53,28 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
         View view = p_inflater.inflate(R.layout.echec_layout, p_container, false);
         m_chessboardTableLayout = view.findViewById(R.id.main_board_id);
         m_joueurEnTourTextView = view.findViewById(R.id.tourJoueur_textView);
-        m_buttonReinitialiser = view.findViewById(R.id.button_reinitialiser);
-        m_joueurEnTourTextView.setText(m_manager.getNomJoueurEnTour());
+
+        Button m_buttonReinitialiser = view.findViewById(R.id.button_reinitialiser);
         m_buttonReinitialiser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //afficherDialogueNomJoueur();
-                m_echiquier = new Echiquier();
-                m_manager.reinitialiserPartie();
-                m_joueurEnTourTextView.setText(m_manager.getNomJoueurEnTour());
-                dessinerEchiquier();
+                Init();
             }
         });
 
-
-        afficherDialogueNomJoueur();
+        Init();
         return view;
+    }
+
+    private void Init() {
+        m_echiquier = new Echiquier();
+        if (m_manager == null) {
+            m_manager = new Manager(m_echiquier);
+            afficherDialogueNomJoueur();
+        }
+        m_manager.reinitialiserPartie();
+        dessinerEchiquier();
+        actualiserEtatUI();
     }
 
     /**
@@ -193,49 +196,84 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        ImageButton b = (ImageButton) v;
-        Position position = (Position) b.getTag();
+        ImageButton imageBouton = (ImageButton) v;
+        Position nouvellePosition = (Position) imageBouton.getTag();
 
         if (m_echiquier.getPieceSelectionner() == null) {
-            m_echiquier.setSieceSelectionner(m_echiquier.getPiece(position));
-
-            if (m_echiquier.getPieceSelectionner()  != null &&
-                    m_echiquier.getPieceSelectionner().getCouleur() == m_manager.getCouleurJoueurEnTour()) {
-                afficherDeplacementPossible();
-            } else {
-                m_echiquier.setSieceSelectionner(null);
-            }
+            selectionnerPieceEchiquier(nouvellePosition);
         } else {
-            Position positionPiece = m_echiquier.getPieceSelectionner().getPosition();
+            Piece pieceSelectionner = m_echiquier.getPieceSelectionner();
+            Position anciennePosition = pieceSelectionner.getPosition();
 
-            if (m_echiquier.deplacerPiece(m_echiquier.getPieceSelectionner(), position)) {
+            if (m_echiquier.deplacerPiece(pieceSelectionner, nouvellePosition)) {
+                deplacerPieceSelectionner(anciennePosition, nouvellePosition);
 
-                int buttonId = Integer.valueOf(String.valueOf(positionPiece.getX() + "" + positionPiece.getY()));
-                ImageButton button = m_chessboardTableLayout.findViewById(buttonId);
-                button.setImageDrawable(null);
-
-                assignerImageBouton(m_echiquier.getPieceSelectionner(), b);
-                effacerDeplacementPossible();
-
-                m_echiquier.setSieceSelectionner(null);
                 m_manager.terminerTour();
-                m_joueurEnTourTextView.setText(m_manager.getNomJoueurEnTour());
             } else {
-                effacerDeplacementPossible();
-                m_echiquier.setSieceSelectionner(null);
+                deselectionnerPieceEchiquier();
             }
+        }
+        actualiserEtatUI();
+    }
+
+    /**
+     * Methode pour changer le UI afin dafficher
+     * le deplacement dune piece dans la grille
+     *
+     * @param p_anciennePosition Ancienne position de la piece
+     * @param p_nouvellePosition Nouvelle position de la piece
+     */
+    private void deplacerPieceSelectionner(Position p_anciennePosition, Position p_nouvellePosition) {
+        int buttonId = Integer.valueOf(String.valueOf(p_anciennePosition.getX() + "" + p_anciennePosition.getY()));
+        ImageButton ancienBouton = m_chessboardTableLayout.findViewById(buttonId);
+        ancienBouton.setImageDrawable(null);
+
+        buttonId = Integer.valueOf(String.valueOf(p_nouvellePosition.getX() + "" + p_nouvellePosition.getY()));
+        ImageButton nouveauPiece = m_chessboardTableLayout.findViewById(buttonId);
+        assignerImageBouton(m_echiquier.getPieceSelectionner(), nouveauPiece);
+
+        effacerDeplacementPossible();
+        m_echiquier.setPieceSelectionner(null);
+    }
+
+    /**
+     * Methode qui deselectionner la piece selectionner
+     * de lechiquier et qui met a jour UI
+     */
+    private void deselectionnerPieceEchiquier() {
+        effacerDeplacementPossible();
+        m_echiquier.setPieceSelectionner(null);
+    }
+
+    /**
+     * Methode qui selectionne une piece de lechiquier
+     * a partir de la grille et qui met a jour le ui
+     *
+     * @param p_position Position a selectionner dans la grille
+     */
+    private void selectionnerPieceEchiquier(Position p_position) {
+        Piece pieceSelectionner = m_echiquier.getPiece(p_position);
+        if (pieceSelectionner != null && pieceSelectionner.getCouleur() == m_manager.getCouleurJoueurEnTour()) {
+            m_echiquier.setPieceSelectionner(pieceSelectionner);
+            afficherDeplacementPossible();
         }
     }
 
-    private void verifierEtatPartie(){
+    /**
+     * Methode qui actualise le UI avec les differents qui
+     * surviennent dans la partie
+     */
+    private void actualiserEtatUI() {
         if (m_echiquier.estEchec(BLANC) || m_echiquier.estEchec(NOIR)) {
             Toast.makeText(getActivity(), "Echec joueur:" + m_manager.getNomJoueurEnTour(), Toast.LENGTH_SHORT).show();
         }
 
-        if(m_echiquier.estEchecEtMath(BLANC) || m_echiquier.estEchecEtMath(NOIR)){
+        if (m_echiquier.estEchecEtMath(BLANC) || m_echiquier.estEchecEtMath(NOIR)) {
             Toast.makeText(getActivity(), "Echec et math joueur:" + m_manager.getNomJoueurEnTour(), Toast.LENGTH_SHORT).show();
             desactiverBoutton();
         }
+
+        m_joueurEnTourTextView.setText(m_manager.getCouleurJoueurEnTour().toString());
     }
 
     /**
@@ -293,7 +331,6 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
         layout.addView(textJ2);
         layout.addView(saisieJoueurNoir);
         dialogue.setView(layout);
-
         dialogue.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(final DialogInterface p_dialogue) {
@@ -307,7 +344,6 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
                                     && saisieJoueurNoir.getText().toString().trim().length() > 0) {
                                 m_manager.setNomsJoueurs(saisieJoueurBlanc.getText().toString(),
                                         saisieJoueurNoir.getText().toString());
-                                m_joueurEnTourTextView.setText(m_manager.getNomJoueurEnTour());
                                 p_dialogue.dismiss();
                             } else {
                                 Toast.makeText(getActivity(), "Nom trop court", Toast.LENGTH_SHORT).show();
@@ -369,8 +405,8 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
     private void desactiverBoutton() {
         ArrayList<View> bouttons = m_chessboardTableLayout.getTouchables();
 
-        for(View v : bouttons){
-            if( v instanceof Button ) {
+        for (View v : bouttons) {
+            if (v instanceof Button) {
                 v.setEnabled(false);
             }
         }

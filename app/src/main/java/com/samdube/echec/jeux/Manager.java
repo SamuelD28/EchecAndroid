@@ -1,5 +1,7 @@
 package com.samdube.echec.jeux;
 
+import android.support.design.internal.BottomNavigationItemView;
+
 import com.samdube.echec.echiquier.Echiquier;
 import com.samdube.echec.echiquier.Position;
 import com.samdube.echec.piece.Piece;
@@ -12,11 +14,14 @@ import com.samdube.echec.piece.Piece;
  */
 public class Manager {
     private Joueur m_joueurBlanc = new Joueur(Piece.CouleurPiece.BLANC);
-    private Joueur m_joueurNoir = new Joueur(Piece.CouleurPiece.NOIR);
-    private int m_tour = 0;
-    private Echiquier m_echiquer;
-    private char m_promotion;
 
+    private Joueur m_joueurNoir = new Joueur(Piece.CouleurPiece.NOIR);
+
+    private int m_tour = 0;
+
+    private Echiquier m_echiquer;
+
+    private char m_promotion;
 
     public Manager(Echiquier p_echiquier) {
         m_echiquer = p_echiquier;
