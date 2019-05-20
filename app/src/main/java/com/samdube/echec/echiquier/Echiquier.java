@@ -103,7 +103,7 @@ public class Echiquier {
      *
      * @param m_pieceSelectionner Piece selectionner
      */
-    public void setSieceSelectionner(Piece m_pieceSelectionner) {
+    public void setPieceSelectionner(Piece m_pieceSelectionner) {
         this.m_pieceSelectionner = m_pieceSelectionner;
     }
 
