@@ -50,8 +50,6 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
 
     private Echiquier m_echiquier = new Echiquier();
 
-    private Piece m_pieceSelectionner;
-
     private Manager m_manager = new Manager(m_echiquier);
 
     private Button m_buttonReinitialiser;
@@ -62,8 +60,6 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
         View view = p_inflater.inflate(R.layout.echec_layout, p_container, false);
         m_chessboardTableLayout = view.findViewById(R.id.main_board_id);
         m_joueurEnTourTextView = view.findViewById(R.id.joueur_en_tour_text_view);
-        m_petitRoque = view.findViewById(R.id.petitRoque);
-        m_grandRoque = view.findViewById(R.id.grandRoque);
         m_buttonReinitialiser = view.findViewById(R.id.button_reinitialiser);
         m_joueurEnTourTextView.setText(m_manager.getNomJoueurEnTour());
         m_buttonReinitialiser.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +73,9 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
             }
         });
 
+        //Debugging purpose only
+        m_petitRoque = view.findViewById(R.id.petitRoque);
+        m_grandRoque = view.findViewById(R.id.grandRoque);
         m_petitRoque.setText(String.valueOf(m_echiquier.peutPetitRoque(BLANC)));
         m_grandRoque.setText(String.valueOf(m_echiquier.peutGrandRoque(BLANC)));
 
@@ -213,52 +212,56 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
         ImageButton b = (ImageButton) v;
         Position position = (Position) b.getTag();
 
-        if (m_pieceSelectionner == null) {
-            m_pieceSelectionner = m_echiquier.getPiece(position);
-            if (m_pieceSelectionner != null &&
-                    m_pieceSelectionner.getCouleur() == m_manager.getCouleurJoueurEnTour()) {
+        if (m_echiquier.getPieceSelectionner() == null) {
+            m_echiquier.setSieceSelectionner(m_echiquier.getPiece(position));
+
+            if (m_echiquier.getPieceSelectionner()  != null &&
+                    m_echiquier.getPieceSelectionner().getCouleur() == m_manager.getCouleurJoueurEnTour()) {
                 afficherDeplacementPossible();
             } else {
-                m_pieceSelectionner = null;
+                m_echiquier.setSieceSelectionner(null);
             }
         } else {
-            Position positionPiece = m_pieceSelectionner.getPosition();
-            if (m_echiquier.deplacerPiece(m_pieceSelectionner, position)) {
+            Position positionPiece = m_echiquier.getPieceSelectionner().getPosition();
+
+            if (m_echiquier.deplacerPiece(m_echiquier.getPieceSelectionner(), position)) {
+
                 int buttonId = Integer.valueOf(String.valueOf(positionPiece.getX() + "" + positionPiece.getY()));
                 ImageButton button = m_chessboardTableLayout.findViewById(buttonId);
                 button.setImageDrawable(null);
 
+//                if (m_echiquier.getPionEnCourDePromotion()) {
+//
+//                    //afficherDialoguePromotion();
+//                    m_echiquier.promouvoirPion(/*m_manager.getPromotion()*/);
+//
+//                    buttonId = Integer.valueOf(String.valueOf(position.getX() + "" + position.getY()));
+//                    button = m_chessboardTableLayout.findViewById(buttonId);
+//                    assignerImageBouton(m_echiquier.getPiece(position), button);
+//                } else {
+//                }
 
-                if (m_echiquier.getPionEnCourDePromotion()) {
-
-                    //afficherDialoguePromotion();
-                    m_echiquier.promouvoirPion(/*m_manager.getPromotion()*/);
-
-                    buttonId = Integer.valueOf(String.valueOf(position.getX() + "" + position.getY()));
-                    button = m_chessboardTableLayout.findViewById(buttonId);
-                    assignerImageBouton(m_echiquier.getPiece(position), button);
-                } else {
-                    assignerImageBouton(m_pieceSelectionner, b);
-                }
-
+                assignerImageBouton(m_echiquier.getPieceSelectionner(), b);
                 effacerDeplacementPossible();
 
-                if (m_echiquier.estEchec(BLANC) || m_echiquier.estEchec(NOIR)) {
-                    Toast.makeText(getActivity(), "Echec joueur:" + m_manager.getNomJoueurEnTour(), Toast.LENGTH_SHORT).show();
-                }
-
-                if(m_echiquier.estEchecEtMath(BLANC) || m_echiquier.estEchecEtMath(NOIR)){
-                    Toast.makeText(getActivity(), "Echec et math joueur:" + m_manager.getNomJoueurEnTour(), Toast.LENGTH_SHORT).show();
-                    desactiverBoutton();
-                }
-
-                m_pieceSelectionner = null;
+                m_echiquier.setSieceSelectionner(null);
                 m_manager.terminerTour();
                 m_joueurEnTourTextView.setText(m_manager.getNomJoueurEnTour());
             } else {
                 effacerDeplacementPossible();
-                m_pieceSelectionner = null;
+                m_echiquier.setSieceSelectionner(null);
             }
+        }
+    }
+
+    private void verifierEtatPartie(){
+        if (m_echiquier.estEchec(BLANC) || m_echiquier.estEchec(NOIR)) {
+            Toast.makeText(getActivity(), "Echec joueur:" + m_manager.getNomJoueurEnTour(), Toast.LENGTH_SHORT).show();
+        }
+
+        if(m_echiquier.estEchecEtMath(BLANC) || m_echiquier.estEchecEtMath(NOIR)){
+            Toast.makeText(getActivity(), "Echec et math joueur:" + m_manager.getNomJoueurEnTour(), Toast.LENGTH_SHORT).show();
+            desactiverBoutton();
         }
     }
 
@@ -269,8 +272,7 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
     private void afficherDeplacementPossible() {
         m_petitRoque.setText(String.valueOf(m_echiquier.peutPetitRoque(BLANC)));
         m_grandRoque.setText(String.valueOf(m_echiquier.peutGrandRoque(BLANC)));
-
-        for (Position positionDisponible : m_pieceSelectionner.getDeplacementsPossibles()) {
+        for (Position positionDisponible : m_echiquier.getPieceSelectionner().getDeplacementsPossibles()) {
             int buttonId = Integer.valueOf(String.valueOf(positionDisponible.getX() + "" + positionDisponible.getY()));
             ImageButton button = m_chessboardTableLayout.findViewById(buttonId);
             button.setBackgroundColor(getColor(getResources(), R.color.colorAccent, null));

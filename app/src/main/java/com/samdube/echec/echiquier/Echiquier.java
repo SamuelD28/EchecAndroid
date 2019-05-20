@@ -31,6 +31,8 @@ public class Echiquier {
 
     private final ArrayList<Piece> m_pieces = new ArrayList<>();
 
+    private Piece m_pieceSelectionner = null;
+
     /**
      * Piece qui est présentement en cours de changement de type de pièce
      */
@@ -86,6 +88,26 @@ public class Echiquier {
     }
 
     /**
+     * Getter pour obtenir la piece selectionner
+     * dans lechiquier
+     *
+     * @return La piece selectionner
+     */
+    public Piece getPieceSelectionner() {
+        return m_pieceSelectionner;
+    }
+
+    /**
+     * Setter pour selectionner une piece
+     * pour lechiquier
+     *
+     * @param m_pieceSelectionner Piece selectionner
+     */
+    public void setSieceSelectionner(Piece m_pieceSelectionner) {
+        this.m_pieceSelectionner = m_pieceSelectionner;
+    }
+
+    /**
      * Permet de calculer toutes les possibilités de collisions pour toutes les
      * pièces de l'échiquier
      */
@@ -134,8 +156,8 @@ public class Echiquier {
         } else {
             roi.setEstEchec(false);
         }
-        deplacementRoi.retirerDeplacementPossibles(champsAction);
 
+        deplacementRoi.retirerDeplacementPossibles(champsAction);
         if (deplacementRoi.getDisponibles().length == 0 && roi.estEchec()) {
             roi.setEchecEtMath(true);
         }
@@ -199,7 +221,7 @@ public class Echiquier {
 
         if (getPiece(new Position(1, yaxis)) != null ||
                 getPiece(new Position(2, yaxis)) != null ||
-                getPiece(new Position(2, yaxis)) != null)
+                getPiece(new Position(3, yaxis)) != null)
         {
             return false;
         }
