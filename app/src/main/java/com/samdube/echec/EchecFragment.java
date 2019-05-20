@@ -47,29 +47,21 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
 
     private Manager m_manager;
 
+    private LinearLayout m_listeCoupLayout;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater p_inflater, @Nullable ViewGroup p_container, @Nullable Bundle p_savedInstanceState) {
         View view = p_inflater.inflate(R.layout.echec_layout, p_container, false);
         m_chessboardTableLayout = view.findViewById(R.id.main_board_id);
         m_joueurEnTourTextView = view.findViewById(R.id.tourJoueur_textView);
+        m_listeCoupLayout = view.findViewById(R.id.coup_linearlayout);
 
         Button buttonReinitialiser = view.findViewById(R.id.button_reinitialiser);
         buttonReinitialiser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Init();
-            }
-        });
-
-        Button buttonRevenir = view.findViewById(R.id.button6);
-        buttonRevenir.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                m_echiquier.revenirEtatPrecedent();
-                m_manager.revenirTour();
-                dessinerEchiquier();
-                actualiserEtatUI();
             }
         });
 
@@ -226,20 +218,40 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
         ImageButton imageBouton = (ImageButton) v;
         Position nouvellePosition = (Position) imageBouton.getTag();
 
+
         if (m_echiquier.getPieceSelectionner() == null) {
             selectionnerPieceEchiquier(nouvellePosition);
         } else {
+            Position anciennePosition = new Position(m_echiquier.getPieceSelectionner().getPosition().getX(),
+                    m_echiquier.getPieceSelectionner().getPosition().getY());
+
             if (m_echiquier.deplacerPiece(m_echiquier.getPieceSelectionner(), nouvellePosition)) {
                 m_manager.terminerTour();
             }
 
             deselectionnerPieceEchiquier();
-        }
-        if (m_echiquier.getEnCourDePromotion()) {
-            afficherDialoguePromotion(nouvellePosition);
+
+            if (m_echiquier.getEnCourDePromotion()) {
+                afficherDialoguePromotion(nouvellePosition);
+            }
+
+            ajouterCoupListe(anciennePosition, nouvellePosition );
         }
 
         actualiserEtatUI();
+    }
+
+    /**
+     * Permet d'ajouter un bouton pour revenir au coup afficher
+     *
+     * @param p_ancienne Ancienne position de la pièce déplacer
+     * @param p_nouvelle Nouvelle position de la pièce déplacer
+     */
+    public void ajouterCoupListe(Position p_ancienne, Position p_nouvelle) {
+        Button myButton = new Button (getContext());
+        String deplacement = Position.parsePositionVersTexte(p_ancienne) + " - " + Position.parsePositionVersTexte(p_nouvelle);
+        myButton.setText(deplacement);
+        m_listeCoupLayout.addView(myButton);
     }
 
     /**
