@@ -12,6 +12,7 @@ import com.samdube.echec.piece.Tour;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static com.samdube.echec.piece.Piece.CouleurPiece.*;
 
@@ -29,9 +30,11 @@ public class Echiquier {
 
     private final Position[] m_cases = new Position[TAILLE_ECHIQUIER * TAILLE_ECHIQUIER];
 
-    private final ArrayList<Piece> m_pieces = new ArrayList<>();
+    private ArrayList<Piece> m_pieces = new ArrayList<>();
 
     private Piece m_pieceSelectionner = null;
+
+    private ArrayList<ArrayList<Piece>> m_listeDesChangements = new ArrayList<>();
 
     /**
      * Piece qui est présentement en cours de changement de type de pièce
@@ -49,6 +52,7 @@ public class Echiquier {
     public Echiquier() {
         initialiser();
         calculerTousDeplacements();
+        m_listeDesChangements.add(copierListeDesPieces());
     }
 
     /**
@@ -362,6 +366,18 @@ public class Echiquier {
                     m_pionPromu = p_piece;
                     m_enCoursDePromotion = true;
                 }
+            if (piecePourPrise != null) {
+                m_pieces.remove(piecePourPrise);
+            }
+
+            p_piece.deplacer(p_nouvelle);
+            calculerTousDeplacements();
+
+            if (p_piece instanceof Pion && ((Pion) p_piece).getPeutPromotion()) {
+                m_pionPromu = p_piece;
+                m_enCoursDePromotion = true;
+            } else {
+                m_listeDesChangements.add(copierListeDesPieces());
             }
 
             return true;
@@ -403,6 +419,31 @@ public class Echiquier {
     }
 
     /**
+     * Permet de revenir à un état précédant de l'échiquier
+     */
+    public void revenirEtatPrecedent() {
+        if (m_listeDesChangements.size() > 1) {
+            m_pieces = new ArrayList<>();
+            m_pieces.addAll(m_listeDesChangements.get(m_listeDesChangements.size() - 2));
+            m_listeDesChangements.remove(m_listeDesChangements.size() - 1);
+        }
+        calculerTousDeplacements();
+    }
+
+    /**
+     * Permet de copier en profondeur une liste des pièces sur l'échiquier
+     *
+     * @return La liste des pièces sur l'échiquier
+     */
+    private ArrayList<Piece> copierListeDesPieces() {
+        ArrayList<Piece> nouvellesListe = new ArrayList<>();
+        for (Piece piece : m_pieces) {
+            nouvellesListe.add(Piece.creerCopie(piece));
+        }
+        return nouvellesListe;
+    }
+
+    /**
      * Permet de promouvoir un pion
      */
     public void promouvoirPion(char p_representation) {
@@ -424,6 +465,8 @@ public class Echiquier {
                 m_pieces.add(new Tour(p, c));
                 break;
         }
+        //m_listeDesChangements.remove(m_listeDesChangements.get(m_listeDesChangements.size() - 1));
+        m_listeDesChangements.add(copierListeDesPieces());
 
         m_pionPromu = null;
         m_enCoursDePromotion = false;

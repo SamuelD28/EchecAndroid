@@ -1,6 +1,7 @@
 package com.samdube.echec.piece;
 
 import com.samdube.echec.deplacement.DeplacementPion;
+import com.samdube.echec.deplacement.DeplacementRoi;
 import com.samdube.echec.echiquier.Position;
 
 /**
@@ -17,6 +18,10 @@ public class Pion extends Piece {
      */
     public Pion(Position p_position) {
         super(p_position, new DeplacementPion(getCouleurAvecPositionDepart(p_position)), 'p', 1);
+    }
+
+    public Pion(Position p_position, CouleurPiece p_couleur) {
+        super(p_position, p_couleur, new DeplacementPion(p_couleur), 'p', 1);
     }
 
     @Override

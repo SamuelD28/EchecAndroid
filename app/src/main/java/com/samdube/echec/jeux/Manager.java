@@ -21,8 +21,6 @@ public class Manager {
 
     private Echiquier m_echiquer;
 
-    private char m_promotion;
-
     public Manager(Echiquier p_echiquier) {
         m_echiquer = p_echiquier;
     }
@@ -31,12 +29,13 @@ public class Manager {
         m_tour = 0;
     }
 
-    public void setPromotion(char p_promotion) {
-        m_promotion = p_promotion;
-    }
-
-    public char getPromotion() {
-        return m_promotion;
+    /**
+     * Permet de revenir a un tour antérieur
+     */
+    public void revenirTour() {
+        if (m_tour > 0) {
+            m_tour--;
+        }
     }
 
     public Piece.CouleurPiece getCouleurJoueurEnTour() {

@@ -8,5 +8,8 @@
     <string name="fou">Fou</string>
     <string name="cavalier">Cavalier</string>
     <string name="tour">Tour</string>
-    <string name="titre_promotion_dialogue">Tour</string>
+    <string name="titre_promotion_dialogue">Veuillez choisir votre pièce pour la promotion</string>
+    <string name="joueur_blanc_dialogue">Joueur Blanc</string>
+    <string name="joueur_noir_dialogue">Joueur Noir</string>
+    <string name="validation_nom">Veuillez entrer deux noms différents entre 3 et 11 caractères</string>
 </resources>
