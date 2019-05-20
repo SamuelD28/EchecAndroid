@@ -276,7 +276,7 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
             desactiverBoutton();
         }
 
-        m_joueurEnTourTextView.setText(m_manager.getCouleurJoueurEnTour().toString());
+        m_joueurEnTourTextView.setText(m_manager.getNomJoueurEnTour());
     }
 
     /**
@@ -315,24 +315,22 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
      */
     private void afficherDialogueNomJoueur() {
         AlertDialog dialogue = new AlertDialog.Builder(getActivity())
-                //.setTitle("Noms Joueur blanc & Joueur Noir")
                 .setPositiveButton(android.R.string.ok, null)
                 .create();
-
         dialogue.setCanceledOnTouchOutside(false);
         dialogue.setCancelable(false);
         LinearLayout layout = new LinearLayout(getContext());
         layout.setOrientation(LinearLayout.VERTICAL);
-        final EditText saisieJoueurBlanc = new EditText(getContext());
-        final EditText saisieJoueurNoir = new EditText(getContext());
-        final TextView textJ1 = new TextView(getContext());
-        final TextView textJ2 = new TextView(getContext());
-        textJ1.setText("Joueur Blanc");
-        textJ2.setText("Joueur Noir");
-        layout.addView(textJ1);
-        layout.addView(saisieJoueurBlanc);
-        layout.addView(textJ2);
-        layout.addView(saisieJoueurNoir);
+        final EditText saisieJBlanc = new EditText(getContext());
+        final EditText saisieJNoir = new EditText(getContext());
+        final TextView texteJBlanc = new TextView(getContext());
+        final TextView texteJNoir = new TextView(getContext());
+        texteJBlanc.setText(R.string.joueur_blanc_dialogue);
+        texteJNoir.setText(R.string.joueur_noir_dialogue);
+        layout.addView(texteJBlanc);
+        layout.addView(saisieJBlanc);
+        layout.addView(texteJNoir);
+        layout.addView(saisieJNoir);
         dialogue.setView(layout);
         dialogue.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
@@ -340,16 +338,16 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
                 Button buttonOk = ((AlertDialog) p_dialogue).getButton(AlertDialog.BUTTON_POSITIVE);
                 if (buttonOk != null) {
                     buttonOk.setOnClickListener(new View.OnClickListener() {
-
                         @Override
                         public void onClick(View view) {
-                            if (saisieJoueurBlanc.getText().toString().trim().length() > 0
-                                    && saisieJoueurNoir.getText().toString().trim().length() > 0) {
-                                m_manager.setNomsJoueurs(saisieJoueurBlanc.getText().toString(),
-                                        saisieJoueurNoir.getText().toString());
+                            String jblanc = saisieJBlanc.getText().toString().trim();
+                            String jnoir = saisieJNoir.getText().toString().trim();
+
+                            if (validerSaisieNom(jblanc, jnoir)) {
+                                m_manager.setNomsJoueurs(jblanc, jnoir);
                                 p_dialogue.dismiss();
                             } else {
-                                Toast.makeText(getActivity(), "Nom trop court", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), R.string.validation_nom, Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -359,7 +357,7 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
         dialogue.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                dessinerEchiquier();
+                actualiserEtatUI();
             }
         });
         dialogue.show();
@@ -422,6 +420,11 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
         int buttonId = Integer.valueOf(String.valueOf(p_position.getX() + "" + p_position.getY()));
         ImageButton button = m_chessboardTableLayout.findViewById(buttonId);
         assignerImageBouton(m_echiquier.getPiece(p_position), button);
+    }
+
+    private boolean validerSaisieNom(String p_nomBlanc, String p_nomNoir) {
+        return !p_nomBlanc.equals(p_nomNoir) && p_nomBlanc.length() > 2 && p_nomNoir.length() > 2 &&
+                p_nomBlanc.length() < 12 && p_nomNoir.length() < 12;
     }
 
     //TODO Faire fonctionner Désactiver les boutons

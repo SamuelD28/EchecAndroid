@@ -1,6 +1,9 @@
 package com.samdube.echec.deplacement;
 
 import com.samdube.echec.echiquier.Position;
+
+import java.util.Arrays;
+
 import static com.samdube.echec.piece.Piece.*;
 
 /**
@@ -29,9 +32,13 @@ public class DeplacementPion extends Deplacement {
     public void calculerDeplacementPossibles(Position p_pointOrigine, Position[] p_collisionsInclusives, Position[] p_collisionsExclusives) {
         super.calculerDeplacementPossibles(p_pointOrigine, p_collisionsInclusives, p_collisionsExclusives);
 
-        if (p_pointOrigine.getY() == 6 && m_couleur == CouleurPiece.NOIR) {
+        if (p_pointOrigine.getY() == 6 && m_couleur == CouleurPiece.NOIR &&
+                !Arrays.asList(p_collisionsInclusives).contains(new Position(p_pointOrigine.getX(), p_pointOrigine.getY() - 1)) &&
+                !Arrays.asList(p_collisionsInclusives).contains(new Position(p_pointOrigine.getX(), p_pointOrigine.getY() - 2))) {
             this.ajouterDeplacementPossibles(new Position(p_pointOrigine.getX(), p_pointOrigine.getY() - 2));
-        } else if (p_pointOrigine.getY() == 1 && m_couleur == CouleurPiece.BLANC) {
+        } else if (p_pointOrigine.getY() == 1 && m_couleur == CouleurPiece.BLANC &&
+                !Arrays.asList(p_collisionsInclusives).contains(new Position(p_pointOrigine.getX(), p_pointOrigine.getY() + 1)) &&
+                !Arrays.asList(p_collisionsInclusives).contains(new Position(p_pointOrigine.getX(), p_pointOrigine.getY() + 2))) {
             this.ajouterDeplacementPossibles(new Position(p_pointOrigine.getX(), p_pointOrigine.getY() + 2));
         }
 
@@ -69,8 +76,8 @@ public class DeplacementPion extends Deplacement {
      * Permet de savoir s'il y a une pièce à manger à la position calculée
      *
      * @param p_position Position qui est potentiellement posible de manger
-     * @param p_x Coordonnée x de la position à vérifier
-     * @param p_y Coordonnée y de la position à vérifier
+     * @param p_x        Coordonnée x de la position à vérifier
+     * @param p_y        Coordonnée y de la position à vérifier
      * @return Vrai si il y a une position à manger sinon faux
      */
     private boolean pieceAManger(Position p_position, int p_x, int p_y) {
