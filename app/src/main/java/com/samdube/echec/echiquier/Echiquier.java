@@ -361,15 +361,15 @@ public class Echiquier {
                     m_pieces.remove(piecePourPrise);
                 }
 
+                p_piece.deplacer(p_nouvelle);
+                calculerTousDeplacements();
+
                 if (p_piece instanceof Pion && ((Pion) p_piece).getPeutPromotion()) {
                     m_pionPromu = p_piece;
                     m_enCoursDePromotion = true;
                 } else {
                     m_listeDesChangements.add(copierListeDesPieces());
                 }
-
-                p_piece.deplacer(p_nouvelle);
-                calculerTousDeplacements();
             }
 
             return true;
