@@ -68,11 +68,17 @@ public class Echiquier {
         }
     }
 
-    private Position[] obtenirPositionsPieces(CouleurPiece p_couleur)
-    {
+    /**
+     * Methode permettant d'obtenir toutes les positions
+     * des pieces d'une couleur donnee
+     *
+     * @param p_couleur Couleur des pieces a recenser
+     * @return Positions des pieces de la couleur donne
+     */
+    private Position[] obtenirPositionsPieces(CouleurPiece p_couleur) {
         ArrayList<Position> positions = new ArrayList<>();
-        for (Piece piece : m_pieces){
-            if(piece.getCouleur() == p_couleur){
+        for (Piece piece : m_pieces) {
+            if (piece.getCouleur() == p_couleur) {
                 positions.add(piece.getPosition());
             }
         }
@@ -83,7 +89,7 @@ public class Echiquier {
      * Permet de calculer toutes les possibilités de collisions pour toutes les
      * pièces de l'échiquier
      */
-    public void calculerTousDeplacements() {
+    private void calculerTousDeplacements() {
         Position[] positionsPiecesBlanches = obtenirPositionsPieces(BLANC);
         Position[] positionsPiecesNoires = obtenirPositionsPieces(NOIR);
         for (Piece piece : m_pieces) {
@@ -92,7 +98,6 @@ public class Echiquier {
         ajusterDeplacementRoi(BLANC);
         ajusterDeplacementRoi(NOIR);
     }
-
 
     /**
      * Methode pour obtenir un roi d'une couleur
@@ -104,37 +109,102 @@ public class Echiquier {
     private Roi getRoi(CouleurPiece p_couleur) {
         Roi roi = null;
         for (Piece piece : m_pieces) {
-            if (piece.getCouleur() == p_couleur && piece instanceof Roi){
-                roi = (Roi)piece;
+            if (piece.getCouleur() == p_couleur && piece instanceof Roi) {
+                roi = (Roi) piece;
             }
         }
         return roi;
     }
 
-    public void ajusterDeplacementRoi(CouleurPiece p_couleur){
-        CouleurPiece couleurInverse = (p_couleur == BLANC)? NOIR : BLANC;
+    /**
+     * Methode permettant dajuster le deplacement d"un roi
+     * dune couleur donne en fonction des mouvements quil ne
+     * peut effectuer
+     *
+     * @param p_couleur Couleur du roi
+     */
+    private void ajusterDeplacementRoi(CouleurPiece p_couleur) {
+        CouleurPiece couleurInverse = (p_couleur == BLANC) ? NOIR : BLANC;
         Position[] champsAction = getChampsDactions(couleurInverse);
         Roi roi = getRoi(p_couleur);
         Deplacement deplacementRoi = roi.getDeplacement();
 
-        if(Arrays.asList(champsAction).contains(roi.getPosition())){
+        if (Arrays.asList(champsAction).contains(roi.getPosition())) {
             roi.setEstEchec(true);
-        }else{
+        } else {
             roi.setEstEchec(false);
         }
         deplacementRoi.retirerDeplacementPossibles(champsAction);
 
-        if(deplacementRoi.getDisponibles().length == 0 && roi.estEchec()){
+        if (deplacementRoi.getDisponibles().length == 0 && roi.estEchec()) {
             roi.setEchecEtMath(true);
         }
     }
 
-    public boolean estEchec(CouleurPiece p_couleur){
+    /**
+     * Getter pour savoir si une couleur est en echec
+     *
+     * @param p_couleur Couleur a verifier
+     * @return Vrai la couleur est en echec
+     */
+    public boolean estEchec(CouleurPiece p_couleur) {
         return getRoi(p_couleur).estEchec();
     }
 
-    public boolean estEchecEtMath(CouleurPiece p_couleur){
+    /**
+     * Getter pour savoir si une couleur est en echec et math
+     *
+     * @param p_couleur Couleur a verifier
+     * @return Vrai si la couleur est en echec et math
+     */
+    public boolean estEchecEtMath(CouleurPiece p_couleur) {
         return getRoi(p_couleur).estEchecEtMath();
+    }
+
+
+    public boolean peutPetitRoque(CouleurPiece p_couleur) {
+        int yaxis = (p_couleur == BLANC) ? 0 : 7;
+        Piece piece = getPiece(new Position(7, yaxis));
+
+        if (!(piece instanceof Tour)) {
+            return false;
+        }
+
+        Tour tour = (Tour) piece;
+        if (!getRoi(p_couleur).peutRoquer() || !tour.peutRoquer()) {
+            return false;
+        }
+
+        if (getPiece(new Position(5, yaxis)) != null ||
+                getPiece(new Position(5, yaxis)) != null)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean peutGrandRoque(CouleurPiece p_couleur) {
+        int yaxis = (p_couleur == BLANC) ? 0 : 7;
+        Piece piece = getPiece(new Position(0, yaxis));
+
+        if (!(piece instanceof Tour)) {
+            return false;
+        }
+
+        Tour tour = (Tour) piece;
+        if (!getRoi(p_couleur).peutRoquer() || !tour.peutRoquer()) {
+            return false;
+        }
+
+        if (getPiece(new Position(1, yaxis)) != null ||
+                getPiece(new Position(2, yaxis)) != null ||
+                getPiece(new Position(2, yaxis)) != null)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -168,49 +238,13 @@ public class Echiquier {
     }
 
     /**
-     * Obtient le nombre de pièce dans l'échiquier
+     * Methode calculant tout le champ d'action des pieces
+     * dune couleur donne
      *
-     * @return Le nombre de pièce dans l'échiquier
+     * @param p_couleur Couleur a ressencer tout le champ daction
+     * @return Le champ daction de la couleur
      */
-    int getNombrePieces() {
-        return m_pieces.size();
-    }
-
-    /**
-     * Obtient le nombre de pièce dans l'échiquier d'une certaine couleur
-     *
-     * @param p_couleur La couleur dont on veut le nombre de pièce
-     * @return Le nombre de pièce dans l'échiquier d'une certaine couleur
-     */
-    int getNombrePieces(CouleurPiece p_couleur) {
-        int nombrePiece = 0;
-        for (Piece piece : m_pieces) {
-            if (piece.getCouleur() == p_couleur) {
-                nombrePiece++;
-            }
-        }
-        return nombrePiece;
-    }
-
-    /**
-     * Permet d'avoir le nombre d'occurence d'une pièce dans l'échiquier courant
-     *
-     * @param p_couleur   la couleur de la pièce désirée
-     * @param p_typePiece type de la piece a aller chercher
-     * @return le nombre d'occurence de la pièce dans le jeu
-     */
-    int getNombrePieces(CouleurPiece p_couleur, Class<? extends Piece> p_typePiece) {
-        int nombrePiece = 0;
-        for (Piece piece : m_pieces) {
-            if (piece.getCouleur() == p_couleur && piece.getClass() == p_typePiece) {
-                nombrePiece++;
-            }
-        }
-        return nombrePiece;
-    }
-
-
-    public Position[] getChampsDactions(CouleurPiece p_couleur) {
+    private Position[] getChampsDactions(CouleurPiece p_couleur) {
         ArrayList<Piece> pieces = new ArrayList<>();
         for (Piece piece : m_pieces) {
             if (piece.getCouleur() == p_couleur) {
@@ -239,6 +273,10 @@ public class Echiquier {
             if (piece.getPosition().equals(p_position)) {
                 pieceTrouve = piece;
                 calculerTousDeplacements();
+
+                if (estEchec(pieceTrouve.getCouleur()) && !(pieceTrouve instanceof Roi)) {
+                    pieceTrouve = null;
+                }
                 break;
             }
         }

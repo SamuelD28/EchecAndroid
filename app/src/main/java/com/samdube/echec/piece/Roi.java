@@ -9,6 +9,8 @@ import com.samdube.echec.echiquier.Position;
  * @author Samuel Dube
  */
 public class Roi extends Piece {
+    private boolean m_peutRoquer;
+
     private boolean m_estEchec;
 
     private boolean m_estEchecEtMath;
@@ -20,6 +22,7 @@ public class Roi extends Piece {
      */
     public Roi(Position p_position) {
         super(p_position, new DeplacementRoi(), 'r', 1);
+        m_peutRoquer = true;
     }
 
     /**
@@ -32,6 +35,11 @@ public class Roi extends Piece {
         return m_estEchec;
     }
 
+    /**
+     * Getter pour savoir si le roi est echec et mat
+     *
+     * @return Vrai si le roi est echec et math
+     */
     public boolean estEchecEtMath() {
         return m_estEchecEtMath;
     }
@@ -46,7 +54,28 @@ public class Roi extends Piece {
         this.m_estEchec = m_estEnEchec;
     }
 
+    /**
+     * Setter pour changer la valeur de echec et math
+     *
+     * @param m_estEchecEtMath Valeur pour echec et math
+     */
     public void setEchecEtMath(boolean m_estEchecEtMath) {
         this.m_estEchecEtMath = m_estEchecEtMath;
+    }
+
+    /**
+     * Getter pour savoir le roi peut roquer
+     *
+     * @return Vrai si le roi peut roquer
+     */
+    public boolean peutRoquer() {
+        return m_peutRoquer;
+    }
+
+
+    @Override
+    public boolean deplacer(Position p_position) {
+        m_peutRoquer = false;
+        return super.deplacer(p_position);
     }
 }

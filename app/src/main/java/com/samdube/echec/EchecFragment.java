@@ -41,10 +41,19 @@ import static com.samdube.echec.piece.Piece.CouleurPiece.NOIR;
  */
 public class EchecFragment extends Fragment implements View.OnClickListener {
     private TableLayout m_chessboardTableLayout;
+
     private TextView m_joueurEnTourTextView;
+
+    private TextView m_petitRoque;
+
+    private TextView m_grandRoque;
+
     private Echiquier m_echiquier = new Echiquier();
+
     private Piece m_pieceSelectionner;
+
     private Manager m_manager = new Manager(m_echiquier);
+
     private Button m_buttonReinitialiser;
 
     @Nullable
@@ -53,6 +62,8 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
         View view = p_inflater.inflate(R.layout.echec_layout, p_container, false);
         m_chessboardTableLayout = view.findViewById(R.id.main_board_id);
         m_joueurEnTourTextView = view.findViewById(R.id.joueur_en_tour_text_view);
+        m_petitRoque = view.findViewById(R.id.petitRoque);
+        m_grandRoque = view.findViewById(R.id.grandRoque);
         m_buttonReinitialiser = view.findViewById(R.id.button_reinitialiser);
         m_joueurEnTourTextView.setText(m_manager.getNomJoueurEnTour());
         m_buttonReinitialiser.setOnClickListener(new View.OnClickListener() {
@@ -65,6 +76,9 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
                 dessinerEchiquier();
             }
         });
+
+        m_petitRoque.setText(String.valueOf(m_echiquier.peutPetitRoque(BLANC)));
+        m_grandRoque.setText(String.valueOf(m_echiquier.peutGrandRoque(BLANC)));
 
         view.getViewTreeObserver().addOnWindowFocusChangeListener(new ViewTreeObserver.OnWindowFocusChangeListener() {
             @Override
@@ -253,6 +267,9 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
      * lorsqu'une piec est sélectionner
      */
     private void afficherDeplacementPossible() {
+        m_petitRoque.setText(String.valueOf(m_echiquier.peutPetitRoque(BLANC)));
+        m_grandRoque.setText(String.valueOf(m_echiquier.peutGrandRoque(BLANC)));
+
         for (Position positionDisponible : m_pieceSelectionner.getDeplacementsPossibles()) {
             int buttonId = Integer.valueOf(String.valueOf(positionDisponible.getX() + "" + positionDisponible.getY()));
             ImageButton button = m_chessboardTableLayout.findViewById(buttonId);

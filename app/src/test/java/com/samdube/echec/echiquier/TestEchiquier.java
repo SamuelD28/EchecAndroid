@@ -32,22 +32,6 @@ public class TestEchiquier extends TestCase {
     }
 
     /**
-     * Permet de tester si l'échiquier retourne le bon nombre de pièce désiré
-     * sur l'échiquier selon la couleur et le type de la pièce.
-     */
-    public void testGetNombrePiece() {
-        assertEquals(32, m_echiquier.getNombrePieces());
-        assertEquals(16, m_echiquier.getNombrePieces(NOIR));
-        assertEquals(16, m_echiquier.getNombrePieces(BLANC));
-        assertEquals(2, m_echiquier.getNombrePieces(BLANC, Tour.class));
-        assertEquals(2, m_echiquier.getNombrePieces(BLANC, Fou.class));
-        assertEquals(2, m_echiquier.getNombrePieces(BLANC, Cavalier.class));
-        assertEquals(8, m_echiquier.getNombrePieces(BLANC, Pion.class));
-        assertEquals(1, m_echiquier.getNombrePieces(BLANC, Roi.class));
-        assertEquals(1, m_echiquier.getNombrePieces(BLANC, Reine.class));
-    }
-
-    /**
      * Permet de tester si l'échiquier retourne la bonne pièce selon une position
      * dans l'échiquier.
      */
@@ -82,11 +66,11 @@ public class TestEchiquier extends TestCase {
 
         // Test avec pièce à la position d'arriver -- Cavalier blanc mange un pion noir
         Piece cavalierBlanc = echiquier.getPiece(new Position(1, 0));
-        echiquier.calculerCollisionsPieces();
+        echiquier.calculerTousDeplacements();
         echiquier.deplacerPiece(cavalierBlanc, new Position(2, 2));
-        echiquier.calculerCollisionsPieces();
+        echiquier.calculerTousDeplacements();
         echiquier.deplacerPiece(cavalierBlanc, new Position(1, 4));
-        echiquier.calculerCollisionsPieces();
+        echiquier.calculerTousDeplacements();
 
         Position positionArrive1 = new Position(2, 6);
         echiquier.deplacerPiece(cavalierBlanc, positionArrive1);
@@ -101,13 +85,13 @@ public class TestEchiquier extends TestCase {
 
         //assertEquals(cavalierNoir, echiquier.getPiece(p));
 
-        echiquier.calculerCollisionsPieces();
+        echiquier.calculerTousDeplacements();
 
 
         echiquier.deplacerPiece(cavalierNoir, new Position(2, 5));
 
 
-        echiquier.calculerCollisionsPieces();
+        echiquier.calculerTousDeplacements();
 
         assertEquals(cavalierNoir, echiquier.getPiece(new Position(2, 5)));
 
@@ -115,7 +99,7 @@ public class TestEchiquier extends TestCase {
         echiquier.deplacerPiece(cavalierNoir, new Position(1, 3));
 
 
-        echiquier.calculerCollisionsPieces();
+        echiquier.calculerTousDeplacements();
 
 
         echiquier.getPiece(new Position(1, 3));
@@ -131,7 +115,7 @@ public class TestEchiquier extends TestCase {
         m_echiquier.deplacerPiece(m_echiquier.getPiece(new Position(3, 4)), new Position(5, 5));
         m_echiquier.deplacerPiece(m_echiquier.getPiece(new Position(5, 5)), new Position(4, 7));
 
-        assertTrue(m_echiquier.estEchecEtMat());
+        assertTrue(m_echiquier.estEchecEtMath(NOIR));
     }
 
     public void testEnCoursDePromotion() {
