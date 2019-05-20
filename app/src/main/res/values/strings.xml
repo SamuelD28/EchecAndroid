@@ -4,4 +4,9 @@
     <string name="button_reinitialiser">Réinitialiser</string>
     <string name="dialogue_nom_titre">Entrer les noms</string>
     <string name="entete_tour">Tour à :</string>
+    <string name="reine">Reine</string>
+    <string name="fou">Fou</string>
+    <string name="cavalier">Cavalier</string>
+    <string name="tour">Tour</string>
+    <string name="titre_promotion_dialogue">Tour</string>
 </resources>

@@ -125,7 +125,7 @@ public class TestEchiquier extends TestCase {
         m_echiquier.deplacerPiece(m_echiquier.getPiece(new Position(1, 5)), new Position(0, 6));
         m_echiquier.deplacerPiece(m_echiquier.getPiece(new Position(0, 6)), new Position(1, 7));
 
-        assertTrue(m_echiquier.getPionEnCourDePromotion());
+        assertTrue(m_echiquier.getEnCourDePromotion());
     }
 
     public void testPromouvoirPion() {

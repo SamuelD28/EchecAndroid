@@ -36,12 +36,12 @@ public class Echiquier {
     /**
      * Piece qui est présentement en cours de changement de type de pièce
      */
-    private Piece m_pionEnPromotion = null;
+    private Piece m_pionPromu = null;
 
     /**
      * Indique s'il y une pièce qui est en cours de promotion dans l'échiquier
      */
-    private boolean m_pionEnCoursDePromotion = false;
+    private boolean m_enCoursDePromotion = false;
 
     /**
      * Constructeur qui initialise l'échiquier
@@ -323,6 +323,11 @@ public class Echiquier {
             p_piece.deplacer(p_nouvelle);
             calculerTousDeplacements();
 
+            if (p_piece instanceof Pion && ((Pion) p_piece).getPeutPromotion()) {
+                m_pionPromu = p_piece;
+                m_enCoursDePromotion = true;
+            }
+
             return true;
         } else {
             return false;
@@ -332,13 +337,20 @@ public class Echiquier {
     /**
      * Permet de promouvoir un pion
      */
-    public void promouvoirPion() {
-        Position p = m_pionEnPromotion.getPosition();
-        CouleurPiece c = m_pionEnPromotion.getCouleur();
-        m_pieces.remove(m_pionEnPromotion);
-        m_pieces.add(new Reine(p, c));
-        m_pionEnPromotion = null;
-        m_pionEnCoursDePromotion = false;
+    public void promouvoirPion(char p_representation) {
+        Position p = m_pionPromu.getPosition();
+        CouleurPiece c = m_pionPromu.getCouleur();
+        m_pieces.remove(m_pionPromu);
+
+        switch (p_representation) {
+            case 'r': m_pieces.add(new Reine(p, c)); break;
+            case 'f': m_pieces.add(new Fou(p, c)); break;
+            case 'c': m_pieces.add(new Cavalier(p, c)); break;
+            case 't': m_pieces.add(new Tour(p, c)); break;
+        }
+
+        m_pionPromu = null;
+        m_enCoursDePromotion = false;
     }
 
     /**
@@ -346,8 +358,8 @@ public class Echiquier {
      *
      * @return Vrai si un pion est en cours de promotion
      */
-    public boolean getPionEnCourDePromotion() {
-        return m_pionEnCoursDePromotion;
+    public boolean getEnCourDePromotion() {
+        return m_enCoursDePromotion;
     }
 
     /**

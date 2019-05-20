@@ -26,7 +26,7 @@ public class Tour extends Piece {
      * @param p_position Position de la tour sur lechiquier
      * @param p_couleur Couleur de la tour
      */
-    Tour(Position p_position, CouleurPiece p_couleur) {
+    public Tour(Position p_position, CouleurPiece p_couleur) {
         super(p_position, p_couleur, new DeplacementTour(), 't', 2);
     }
 
