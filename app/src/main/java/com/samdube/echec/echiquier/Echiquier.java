@@ -49,7 +49,7 @@ public class Echiquier {
      */
     public Echiquier() {
         initialiser();
-        calculerTousDeplacements();
+        calculerDeplacements();
         m_listeDesChangements.add(copierListeDesPieces());
     }
 
@@ -113,7 +113,7 @@ public class Echiquier {
      * Permet de calculer toutes les possibilités de collisions pour toutes les
      * pièces de l'échiquier
      */
-    private void calculerTousDeplacements() {
+    private void calculerDeplacements() {
         Position[] positionsPiecesBlanches = obtenirPositionsPieces(BLANC);
         Position[] positionsPiecesNoires = obtenirPositionsPieces(NOIR);
         for (Piece piece : m_pieces) {
@@ -123,6 +123,22 @@ public class Echiquier {
         ajusterDeplacementRoi(NOIR);
         ajusterDeplacementRoque(BLANC);
         ajusterDeplacementRoque(NOIR);
+    }
+
+    /**
+     * Permet de calculer toutes les possibilités de collisions pour toutes les
+     * pièces de l'échiquier
+     */
+    private void calculerDeplacements(CouleurPiece p_couleur) {
+        Position[] positionsPiecesBlanches = obtenirPositionsPieces(BLANC);
+        Position[] positionsPiecesNoires = obtenirPositionsPieces(NOIR);
+        for (Piece piece : m_pieces) {
+            if(piece.getCouleur() == p_couleur){
+                piece.calculerDeplacementPossibles(positionsPiecesBlanches, positionsPiecesNoires);
+            }
+        }
+        ajusterDeplacementRoi(p_couleur);
+        ajusterDeplacementRoque(p_couleur);
     }
 
     /**
@@ -331,6 +347,25 @@ public class Echiquier {
         return pieceTrouve;
     }
 
+    public boolean deplacementPeutSauverRoi(CouleurPiece p_couleurRoi,
+                                            Piece p_pieceADeplacer,
+                                            Position p_positionDeplacement){
+        Roi roi = getRoi(p_couleurRoi);
+        Position positionOriginal = p_pieceADeplacer.getPosition();
+        if(p_pieceADeplacer.deplacer(p_positionDeplacement)){
+            calculerDeplacements();
+            if(!roi.estEchec() && !roi.estEchecEtMath()){
+                return true;
+            }else{
+                p_pieceADeplacer.deplacer(positionOriginal);
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
+
+
     /**
      * Permet de déplacer une pièce dans l'échiquier
      *
@@ -339,24 +374,23 @@ public class Echiquier {
      * @return Vrai si le déplacement à fonctionné sinon faux
      */
     public boolean deplacerPiece(Piece p_piece, Position p_nouvelle) {
-
-        if (estEchec(p_piece.getCouleur()) && !(p_piece instanceof Roi) || estEchecEtMath()) {
+        if(estEchecEtMath()){
             return false;
         }
 
-        if (p_piece.peutDeplacer(p_nouvelle)) {
+        if (p_piece.peutDeplacer(p_nouvelle) || deplacementPeutSauverRoi(p_piece.getCouleur(), p_piece, p_nouvelle)) {
             Piece piecePourPrise = getPiece(p_nouvelle);
 
             if (peutEffectuerRoque(p_piece, piecePourPrise)) {
                 effectuerRoque(p_piece, piecePourPrise);
-                calculerTousDeplacements();
+                calculerDeplacements();
             } else {
                 if (piecePourPrise != null) {
                     m_pieces.remove(piecePourPrise);
                 }
 
                 p_piece.deplacer(p_nouvelle);
-                calculerTousDeplacements();
+                calculerDeplacements();
 
                 if (p_piece instanceof Pion && ((Pion) p_piece).getPeutPromotion()) {
                     m_pionPromu = p_piece;
@@ -428,7 +462,7 @@ public class Echiquier {
             m_pieces.addAll(m_listeDesChangements.get(m_listeDesChangements.size() - 2));
             m_listeDesChangements.remove(m_listeDesChangements.size() - 1);
         }
-        calculerTousDeplacements();
+        calculerDeplacements();
     }
 
     /**
