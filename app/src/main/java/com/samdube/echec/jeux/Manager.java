@@ -32,9 +32,9 @@ public class Manager {
     /**
      * Permet de revenir a un tour antérieur
      */
-    public void revenirTour() {
+    public void revenirTour(int p_nombre) {
         if (m_tour > 0) {
-            m_tour--;
+            m_tour -= p_nombre;
         }
     }
 

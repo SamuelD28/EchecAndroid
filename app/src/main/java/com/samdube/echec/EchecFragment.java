@@ -49,6 +49,8 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
 
     private LinearLayout m_listeCoupLayout;
 
+    private int compteur = 1;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater p_inflater, @Nullable ViewGroup p_container, @Nullable Bundle p_savedInstanceState) {
@@ -78,6 +80,8 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
             afficherDialogueNomJoueur();
             m_manager = new Manager(m_echiquier);
         }
+        compteur = 1;
+        m_listeCoupLayout.removeAllViews();
         m_manager.reinitialiserPartie();
         dessinerEchiquier();
         actualiserEtatUI();
@@ -248,10 +252,23 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
      * @param p_nouvelle Nouvelle position de la pièce déplacer
      */
     public void ajouterCoupListe(Position p_ancienne, Position p_nouvelle) {
-        Button myButton = new Button (getContext());
+        Button boutton = new Button (getContext());
         String deplacement = Position.parsePositionVersTexte(p_ancienne) + " - " + Position.parsePositionVersTexte(p_nouvelle);
-        myButton.setText(deplacement);
-        m_listeCoupLayout.addView(myButton);
+        boutton.setText(deplacement);
+        boutton.setTag(compteur); // 1
+        compteur++; // 2
+        boutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int i = Integer.parseInt(boutton.getTag().toString()); // 1
+                m_echiquier.revenirEtatPrecedent(i - 1);
+                m_manager.revenirTour(i);
+                actualiserEtatUI();
+                compteur -= (i - 1);
+                m_listeCoupLayout.removeViews(i - 1, m_listeCoupLayout.getChildCount() - i + 1);
+            }
+        });
+        m_listeCoupLayout.addView(boutton);
     }
 
     /**

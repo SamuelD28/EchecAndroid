@@ -457,11 +457,22 @@ public class Echiquier {
     /**
      * Permet de revenir à un état précédant de l'échiquier
      */
-    public void revenirEtatPrecedent() {
-        if (m_listeDesChangements.size() > 1) {
+    public void revenirEtatPrecedent(int p_index) {
+        if (p_index >= 0) {
+
             m_pieces = new ArrayList<>();
-            m_pieces.addAll(m_listeDesChangements.get(m_listeDesChangements.size() - 2));
-            m_listeDesChangements.remove(m_listeDesChangements.size() - 1);
+            m_pieces.addAll(m_listeDesChangements.get(p_index));
+
+            //m_pieces.addAll(m_listeDesChangements.get(m_listeDesChangements.size() - 2));
+
+            if (m_listeDesChangements.size() > 1) {
+
+                for (int i = p_index + 1; i < m_listeDesChangements.size(); i++) {
+                    m_listeDesChangements.remove(m_listeDesChangements.get(i));
+                }
+
+                //m_listeDesChangements.remove(m_listeDesChangements.size() - 1);
+            }
         }
         calculerDeplacements();
     }
