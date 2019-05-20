@@ -18,15 +18,11 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.samdube.echec.echiquier.Echiquier;
 import com.samdube.echec.echiquier.Position;
 import com.samdube.echec.jeux.Manager;
 import com.samdube.echec.piece.Piece;
-
 import java.util.ArrayList;
-import java.util.Arrays;
-
 import static android.support.v4.content.res.ResourcesCompat.getColor;
 import static android.support.v4.content.res.ResourcesCompat.getDrawable;
 import static com.samdube.echec.echiquier.Echiquier.TAILLE_ECHIQUIER;
@@ -59,7 +55,7 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(@NonNull LayoutInflater p_inflater, @Nullable ViewGroup p_container, @Nullable Bundle p_savedInstanceState) {
         View view = p_inflater.inflate(R.layout.echec_layout, p_container, false);
         m_chessboardTableLayout = view.findViewById(R.id.main_board_id);
-        m_joueurEnTourTextView = view.findViewById(R.id.joueur_en_tour_text_view);
+        m_joueurEnTourTextView = view.findViewById(R.id.tourJoueur_textView);
         m_buttonReinitialiser = view.findViewById(R.id.button_reinitialiser);
         m_joueurEnTourTextView.setText(m_manager.getNomJoueurEnTour());
         m_buttonReinitialiser.setOnClickListener(new View.OnClickListener() {
@@ -73,18 +69,6 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        //Debugging purpose only
-        m_petitRoque = view.findViewById(R.id.petitRoque);
-        m_grandRoque = view.findViewById(R.id.grandRoque);
-        m_petitRoque.setText(String.valueOf(m_echiquier.peutPetitRoque(BLANC)));
-        m_grandRoque.setText(String.valueOf(m_echiquier.peutGrandRoque(BLANC)));
-
-        view.getViewTreeObserver().addOnWindowFocusChangeListener(new ViewTreeObserver.OnWindowFocusChangeListener() {
-            @Override
-            public void onWindowFocusChanged(final boolean p_hasFocus) {
-                dessinerEchiquier();
-            }
-        });
 
         afficherDialogueNomJoueur();
         return view;
@@ -230,17 +214,6 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
                 ImageButton button = m_chessboardTableLayout.findViewById(buttonId);
                 button.setImageDrawable(null);
 
-//                if (m_echiquier.getPionEnCourDePromotion()) {
-//
-//                    //afficherDialoguePromotion();
-//                    m_echiquier.promouvoirPion(/*m_manager.getPromotion()*/);
-//
-//                    buttonId = Integer.valueOf(String.valueOf(position.getX() + "" + position.getY()));
-//                    button = m_chessboardTableLayout.findViewById(buttonId);
-//                    assignerImageBouton(m_echiquier.getPiece(position), button);
-//                } else {
-//                }
-
                 assignerImageBouton(m_echiquier.getPieceSelectionner(), b);
                 effacerDeplacementPossible();
 
@@ -270,8 +243,6 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
      * lorsqu'une piec est sélectionner
      */
     private void afficherDeplacementPossible() {
-        m_petitRoque.setText(String.valueOf(m_echiquier.peutPetitRoque(BLANC)));
-        m_grandRoque.setText(String.valueOf(m_echiquier.peutGrandRoque(BLANC)));
         for (Position positionDisponible : m_echiquier.getPieceSelectionner().getDeplacementsPossibles()) {
             int buttonId = Integer.valueOf(String.valueOf(positionDisponible.getX() + "" + positionDisponible.getY()));
             ImageButton button = m_chessboardTableLayout.findViewById(buttonId);
@@ -324,7 +295,6 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
         dialogue.setView(layout);
 
         dialogue.setOnShowListener(new DialogInterface.OnShowListener() {
-
             @Override
             public void onShow(final DialogInterface p_dialogue) {
                 Button buttonOk = ((AlertDialog) p_dialogue).getButton(AlertDialog.BUTTON_POSITIVE);
@@ -345,6 +315,12 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
                         }
                     });
                 }
+            }
+        });
+        dialogue.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                dessinerEchiquier();
             }
         });
         dialogue.show();
