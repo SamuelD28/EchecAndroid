@@ -287,13 +287,18 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
         if (m_echiquier.estEchec(BLANC) || m_echiquier.estEchec(BLANC)) {
             Position positionRoi = m_echiquier.getRoi(BLANC).getPosition();
             changerCouleurCase(R.color.colorPrimary, positionRoi);
-            Toast.makeText(getActivity(), "Echec joueur:" + m_manager.getNomJoueurEnTour(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Echec : " + m_manager.getNomJoueurEnTour(), Toast.LENGTH_SHORT).show();
         }
 
-        if (m_echiquier.estEchec(NOIR) || m_echiquier.estEchecEtMath(NOIR)) {
+        if (m_echiquier.estEchec(NOIR)) {
             Position positionRoi = m_echiquier.getRoi(NOIR).getPosition();
             changerCouleurCase(R.color.colorPrimary, positionRoi);
-            Toast.makeText(getActivity(), "Echec et math joueur:" + m_manager.getNomJoueurEnTour(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Echec : " + m_manager.getNomJoueurEnTour(), Toast.LENGTH_SHORT).show();
+        }
+
+        if(m_echiquier.estEchecEtMath()){
+            Toast.makeText(getActivity(), "Echec : " + m_manager.getNomJoueurEnTour(), Toast.LENGTH_SHORT).show();
+            desactiverCases();
         }
 
         m_joueurEnTourTextView.setText(m_manager.getNomJoueurEnTour() + " : " + m_manager.getCouleurJoueurEnTour());
@@ -318,6 +323,14 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
             int buttonId = Integer.valueOf(String.valueOf(position.getX() + "" + position.getY()));
             ImageButton button = m_chessboardTableLayout.findViewById(buttonId);
             button.setBackgroundColor(getColor(getResources(), p_colorID, null));
+        }
+    }
+
+    private void desactiverCases() {
+        for (Position position : m_echiquier.getCases()) {
+            int buttonId = Integer.valueOf(String.valueOf(position.getX() + "" + position.getY()));
+            ImageButton button = m_chessboardTableLayout.findViewById(buttonId);
+            button.setEnabled(false);
         }
     }
 
@@ -456,23 +469,5 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
     private boolean validerSaisieNom(String p_nomBlanc, String p_nomNoir) {
         return !p_nomBlanc.equals(p_nomNoir) && p_nomBlanc.length() > 2 && p_nomNoir.length() > 2 &&
                 p_nomBlanc.length() < 12 && p_nomNoir.length() < 12;
-    }
-
-    //TODO Faire fonctionner Désactiver les boutons
-    private void desactiverBoutton() {
-        ArrayList<View> bouttons = m_chessboardTableLayout.getTouchables();
-
-        for (View v : bouttons) {
-            if (v instanceof Button) {
-                v.setEnabled(false);
-            }
-        }
-
-        for (int i = 0; i < m_chessboardTableLayout.getChildCount(); i++) {
-            View v = m_chessboardTableLayout.getChildAt(i);
-            if (v instanceof Button) {
-                v.setClickable(false);
-            }
-        }
     }
 }

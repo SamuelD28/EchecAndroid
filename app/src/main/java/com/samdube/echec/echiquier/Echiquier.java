@@ -9,10 +9,8 @@ import com.samdube.echec.piece.Pion;
 import com.samdube.echec.piece.Reine;
 import com.samdube.echec.piece.Roi;
 import com.samdube.echec.piece.Tour;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import static com.samdube.echec.piece.Piece.CouleurPiece.*;
 
@@ -207,11 +205,10 @@ public class Echiquier {
     /**
      * Getter pour savoir si une couleur est en echec et math
      *
-     * @param p_couleur Couleur a verifier
-     * @return Vrai si la couleur est en echec et math
+     * @return Vrai si une couleur est en echec
      */
-    public boolean estEchecEtMath(CouleurPiece p_couleur) {
-        return getRoi(p_couleur).estEchecEtMath();
+    public boolean estEchecEtMath() {
+        return getRoi(NOIR).estEchecEtMath() || getRoi(BLANC).estEchecEtMath();
     }
 
     /**
@@ -343,7 +340,7 @@ public class Echiquier {
      */
     public boolean deplacerPiece(Piece p_piece, Position p_nouvelle) {
 
-        if (estEchec(p_piece.getCouleur()) && !(p_piece instanceof Roi)) {
+        if (estEchec(p_piece.getCouleur()) && !(p_piece instanceof Roi) || estEchecEtMath()) {
             return false;
         }
 
