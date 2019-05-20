@@ -338,6 +338,9 @@ public class Echiquier {
         }
     }
 
+    /**
+     * Permet de revenir à un état précédant de l'échiquier
+     */
     public void revenirEtatPrecedent() {
         if (m_listeDesChangements.size() > 1) {
             m_pieces = new ArrayList<>();
@@ -347,7 +350,12 @@ public class Echiquier {
         calculerTousDeplacements();
     }
 
-    public ArrayList<Piece> copierListeDesPieces() {
+    /**
+     * Permet de copier en profondeur une liste des pièces sur l'échiquier
+     *
+     * @return La liste des pièces sur l'échiquier
+     */
+    private ArrayList<Piece> copierListeDesPieces() {
         ArrayList<Piece> nouvellesListe = new ArrayList<>();
         for (Piece piece : m_pieces) {
             nouvellesListe.add(Piece.creerCopie(piece));
@@ -377,7 +385,6 @@ public class Echiquier {
                 m_pieces.add(new Tour(p, c));
                 break;
         }
-
         //m_listeDesChangements.remove(m_listeDesChangements.get(m_listeDesChangements.size() - 1));
         m_listeDesChangements.add(copierListeDesPieces());
 

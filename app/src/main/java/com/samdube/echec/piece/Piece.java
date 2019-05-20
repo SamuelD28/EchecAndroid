@@ -26,7 +26,7 @@ public abstract class Piece implements IObservable {
 
     private final Deplacement m_deplacement;
 
-    private  CouleurPiece m_couleur;
+    private CouleurPiece m_couleur;
 
     /**
      * Constructeur initiant une nouvelle com.samdube.echec.piece. Accessible
@@ -180,35 +180,27 @@ public abstract class Piece implements IObservable {
         return Objects.hash(m_position, m_couleur);
     }
 
+    /**
+     * Permet de créer un copie en profondeur d'une pièce
+     *
+     * @param p_piece La pièce à copier
+     * @return La copie de la pièce
+     */
     public static Piece creerCopie(Piece p_piece) {
-
-        if (p_piece.getCouleur() == CouleurPiece.BLANC) {
-            switch (p_piece.getRepresentation()) {
-                case 'r': return new Roi(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), CouleurPiece.BLANC);
-                case 'q': return new Reine(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), CouleurPiece.BLANC);
-                case 'f': return new Fou(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), CouleurPiece.BLANC);
-                case 'c': return new Cavalier(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), CouleurPiece.BLANC);
-                case 't': return new Tour(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), CouleurPiece.BLANC);
-                case 'p': return new Pion(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), CouleurPiece.BLANC);
-            }
-        } else {
-            switch (p_piece.getRepresentation()) {
-                case 'r': return new Roi(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), CouleurPiece.NOIR);
-                case 'q': return new Reine(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()),CouleurPiece.NOIR);
-                case 'f': return new Fou(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), CouleurPiece.NOIR);
-                case 'c': return new Cavalier(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), CouleurPiece.NOIR);
-                case 't': return new Tour(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), CouleurPiece.NOIR);
-                case 'p': return new Pion(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), CouleurPiece.NOIR);
-            }
+        switch (p_piece.getRepresentation()) {
+            case 'r':
+                return new Roi(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), p_piece.getCouleur());
+            case 'q':
+                return new Reine(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), p_piece.getCouleur());
+            case 'f':
+                return new Fou(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), p_piece.getCouleur());
+            case 'c':
+                return new Cavalier(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), p_piece.getCouleur());
+            case 't':
+                return new Tour(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), p_piece.getCouleur());
+            case 'p':
+                return new Pion(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), p_piece.getCouleur());
         }
-//
-//        case 'r': return new Roi(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), p_piece.getCouleur());
-//        case 'q': return new Reine(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), p_piece.getCouleur());
-//        case 'f': return new Fou(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), p_piece.getCouleur());
-//        case 'c': return new Cavalier(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), p_piece.getCouleur());
-//        case 't': return new Tour(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), p_piece.getCouleur());
-//        case 'p': return new Pion(new Position(p_piece.getPosition().getX(), p_piece.getPosition().getY()), p_piece.getCouleur());
-
         return null;
     }
 }

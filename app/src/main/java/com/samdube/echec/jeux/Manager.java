@@ -29,6 +29,9 @@ public class Manager {
         m_tour = 0;
     }
 
+    /**
+     * Permet de revenir a un tour antérieur
+     */
     public void revenirTour() {
         if (m_tour > 0) {
             m_tour--;
