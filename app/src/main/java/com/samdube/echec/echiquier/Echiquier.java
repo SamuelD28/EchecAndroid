@@ -348,36 +348,28 @@ public class Echiquier {
         }
 
         if (p_piece.peutDeplacer(p_nouvelle)) {
-
             Piece piecePourPrise = getPiece(p_nouvelle);
 
             if (peutEffectuerRoque(p_piece, piecePourPrise)) {
-                if(p_piece instanceof Roi){
-                    effectuerRoque((Roi)p_piece, (Tour)piecePourPrise);
-                }else{
-                    effectuerRoque((Roi)piecePourPrise, (Tour)p_piece);
+                if (p_piece instanceof Roi) {
+                    effectuerRoque((Roi) p_piece, (Tour) piecePourPrise);
+                } else {
+                    effectuerRoque((Roi) piecePourPrise, (Tour) p_piece);
                 }
             } else {
                 if (piecePourPrise != null) {
                     m_pieces.remove(piecePourPrise);
                 }
-                p_piece.deplacer(p_nouvelle);
+
                 if (p_piece instanceof Pion && ((Pion) p_piece).getPeutPromotion()) {
                     m_pionPromu = p_piece;
                     m_enCoursDePromotion = true;
+                } else {
+                    m_listeDesChangements.add(copierListeDesPieces());
                 }
-            if (piecePourPrise != null) {
-                m_pieces.remove(piecePourPrise);
-            }
 
-            p_piece.deplacer(p_nouvelle);
-            calculerTousDeplacements();
-
-            if (p_piece instanceof Pion && ((Pion) p_piece).getPeutPromotion()) {
-                m_pionPromu = p_piece;
-                m_enCoursDePromotion = true;
-            } else {
-                m_listeDesChangements.add(copierListeDesPieces());
+                p_piece.deplacer(p_nouvelle);
+                calculerTousDeplacements();
             }
 
             return true;
@@ -390,7 +382,7 @@ public class Echiquier {
      * Methode qui verifie si les pieces en prises remplissent
      * les conditions dun roque
      *
-     * @param piece Piece qui effectue une prise
+     * @param piece      Piece qui effectue une prise
      * @param piecePrise Prise qui se fait prendre
      * @return Vrai si on peut roque
      */
@@ -403,7 +395,7 @@ public class Echiquier {
      * Methode qui effectuer le deplacement de roque
      * pour une tour et un roi donne
      *
-     * @param roi Roi a roquer
+     * @param roi  Roi a roquer
      * @param tour Tour a roquer
      */
     private void effectuerRoque(Roi roi, Tour tour) {
