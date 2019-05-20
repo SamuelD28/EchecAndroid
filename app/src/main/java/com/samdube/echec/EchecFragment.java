@@ -66,11 +66,14 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    /**
+     * Methode qui initialise une partie dechec
+     */
     private void Init() {
         m_echiquier = new Echiquier();
         if (m_manager == null) {
-            m_manager = new Manager(m_echiquier);
             afficherDialogueNomJoueur();
+            m_manager = new Manager(m_echiquier);
         }
         m_manager.reinitialiserPartie();
         dessinerEchiquier();
@@ -142,6 +145,19 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
         return b;
     }
 
+    private void actualierEchiquier(){
+        for(Position p : m_echiquier.getCases()){
+            int buttonId = Integer.valueOf(String.valueOf(p.getX() + "" + p.getY()));
+            ImageButton button = m_chessboardTableLayout.findViewById(buttonId);
+            Piece piece = m_echiquier.getPiece(p);
+            if(piece!=null){
+                assignerImageBouton(piece, button);
+            }else{
+                button.setImageDrawable(null);
+            }
+        }
+    }
+
     /**
      * Permet d'ajouter une image au bouton
      *
@@ -202,41 +218,18 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
         if (m_echiquier.getPieceSelectionner() == null) {
             selectionnerPieceEchiquier(nouvellePosition);
         } else {
-            Piece pieceSelectionner = m_echiquier.getPieceSelectionner();
-            Position anciennePosition = pieceSelectionner.getPosition();
-
-            if (m_echiquier.deplacerPiece(pieceSelectionner, nouvellePosition)) {
-                deplacerPieceSelectionner(anciennePosition, nouvellePosition);
-
+            if (m_echiquier.deplacerPiece(m_echiquier.getPieceSelectionner(), nouvellePosition)) {
+                m_echiquier.calculerTousDeplacements();
                 m_manager.terminerTour();
-            } else {
-                deselectionnerPieceEchiquier();
             }
+
+            deselectionnerPieceEchiquier();
         }
         if (m_echiquier.getEnCourDePromotion()) {
             afficherDialoguePromotion(nouvellePosition);
         }
+
         actualiserEtatUI();
-    }
-
-    /**
-     * Methode pour changer le UI afin dafficher
-     * le deplacement dune piece dans la grille
-     *
-     * @param p_anciennePosition Ancienne position de la piece
-     * @param p_nouvellePosition Nouvelle position de la piece
-     */
-    private void deplacerPieceSelectionner(Position p_anciennePosition, Position p_nouvellePosition) {
-        int buttonId = Integer.valueOf(String.valueOf(p_anciennePosition.getX() + "" + p_anciennePosition.getY()));
-        ImageButton ancienBouton = m_chessboardTableLayout.findViewById(buttonId);
-        ancienBouton.setImageDrawable(null);
-
-        buttonId = Integer.valueOf(String.valueOf(p_nouvellePosition.getX() + "" + p_nouvellePosition.getY()));
-        ImageButton nouveauPiece = m_chessboardTableLayout.findViewById(buttonId);
-        assignerImageBouton(m_echiquier.getPieceSelectionner(), nouveauPiece);
-
-        effacerDeplacementPossible();
-        m_echiquier.setPieceSelectionner(null);
     }
 
     /**
@@ -267,13 +260,18 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
      * surviennent dans la partie
      */
     private void actualiserEtatUI() {
-        if (m_echiquier.estEchec(BLANC) || m_echiquier.estEchec(NOIR)) {
+        actualierEchiquier();
+
+        if (m_echiquier.estEchec(BLANC) || m_echiquier.estEchec(BLANC)) {
+            Position positionRoi = m_echiquier.getRoi(BLANC).getPosition();
+            changerCouleurCase(R.color.colorPrimary, positionRoi);
             Toast.makeText(getActivity(), "Echec joueur:" + m_manager.getNomJoueurEnTour(), Toast.LENGTH_SHORT).show();
         }
 
-        if (m_echiquier.estEchecEtMath(BLANC) || m_echiquier.estEchecEtMath(NOIR)) {
+        if (m_echiquier.estEchec(NOIR) || m_echiquier.estEchecEtMath(NOIR)) {
+            Position positionRoi = m_echiquier.getRoi(NOIR).getPosition();
+            changerCouleurCase(R.color.colorPrimary, positionRoi);
             Toast.makeText(getActivity(), "Echec et math joueur:" + m_manager.getNomJoueurEnTour(), Toast.LENGTH_SHORT).show();
-            desactiverBoutton();
         }
 
         m_joueurEnTourTextView.setText(m_manager.getCouleurJoueurEnTour().toString());
@@ -284,10 +282,20 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
      * lorsqu'une piec est sélectionner
      */
     private void afficherDeplacementPossible() {
-        for (Position positionDisponible : m_echiquier.getPieceSelectionner().getDeplacementsPossibles()) {
-            int buttonId = Integer.valueOf(String.valueOf(positionDisponible.getX() + "" + positionDisponible.getY()));
+        changerCouleurCase(R.color.colorAccent, m_echiquier.getPieceSelectionner().getDeplacementsPossibles());
+    }
+
+    /**
+     * Methode pour changer la couleur dune case sur lechiquier
+     *
+     * @param p_colorID       Couleur a assinger
+     * @param p_positionCases Positions des cases a changer la couleur
+     */
+    private void changerCouleurCase(int p_colorID, Position... p_positionCases) {
+        for (Position position : p_positionCases) {
+            int buttonId = Integer.valueOf(String.valueOf(position.getX() + "" + position.getY()));
             ImageButton button = m_chessboardTableLayout.findViewById(buttonId);
-            button.setBackgroundColor(getColor(getResources(), R.color.colorAccent, null));
+            button.setBackgroundColor(getColor(getResources(), p_colorID, null));
         }
     }
 

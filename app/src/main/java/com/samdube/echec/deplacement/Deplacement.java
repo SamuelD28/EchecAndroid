@@ -50,7 +50,7 @@ public abstract class Deplacement {
      *
      * @return Nombre de pas possible
      */
-    public int getNombrePas() {
+    int getNombrePas() {
         return m_pas.length;
     }
 

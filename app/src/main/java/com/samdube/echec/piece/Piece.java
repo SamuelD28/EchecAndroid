@@ -22,6 +22,8 @@ public abstract class Piece implements IObservable {
 
     private final int m_force;
 
+    private boolean m_jamaisJouer = true;
+
     Position m_position;
 
     private final Deplacement m_deplacement;
@@ -68,6 +70,7 @@ public abstract class Piece implements IObservable {
     public boolean deplacer(Position p_position) {
         if (peutDeplacer(p_position)) {
             m_position = p_position;
+            m_jamaisJouer = false;
             Notify();
             return true;
         } else {
@@ -79,7 +82,6 @@ public abstract class Piece implements IObservable {
         return !m_position.equals(p_position) && Arrays.asList(m_deplacement.getDisponibles()).contains(p_position);
     }
 
-    // TODO ici appeler principalement
     public void calculerDeplacementPossibles(Position[] p_positionsPiecesBlanches, Position[] p_positionsPiecesNoires) {
         if (m_couleur == CouleurPiece.BLANC) {
             m_deplacement.calculerDeplacementPossibles(m_position, p_positionsPiecesNoires, p_positionsPiecesBlanches);
@@ -103,6 +105,10 @@ public abstract class Piece implements IObservable {
      */
     public char getRepresentation() {
         return m_representation;
+    }
+
+    public boolean jamaisJouer() {
+        return m_jamaisJouer;
     }
 
     /**
@@ -132,6 +138,7 @@ public abstract class Piece implements IObservable {
         return m_position;
     }
 
+
     /**
      * Enum pour les couleurs possibles pour les pieces
      */
@@ -143,7 +150,7 @@ public abstract class Piece implements IObservable {
         /**
          * Couleur noir
          */
-        NOIR
+        NOIR;
     }
 
     @Override

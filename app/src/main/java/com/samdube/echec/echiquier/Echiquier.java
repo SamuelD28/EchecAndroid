@@ -1,7 +1,5 @@
 package com.samdube.echec.echiquier;
 
-import android.widget.Toast;
-
 import com.samdube.echec.deplacement.Deplacement;
 import com.samdube.echec.piece.Cavalier;
 import com.samdube.echec.piece.Fou;
@@ -113,7 +111,7 @@ public class Echiquier {
      * Permet de calculer toutes les possibilités de collisions pour toutes les
      * pièces de l'échiquier
      */
-    private void calculerTousDeplacements() {
+    public void calculerTousDeplacements() {
         Position[] positionsPiecesBlanches = obtenirPositionsPieces(BLANC);
         Position[] positionsPiecesNoires = obtenirPositionsPieces(NOIR);
         for (Piece piece : m_pieces) {
@@ -121,18 +119,32 @@ public class Echiquier {
         }
         ajusterDeplacementRoi(BLANC);
         ajusterDeplacementRoi(NOIR);
-        ajusterDeplacementRoque();
+        ajusterDeplacementRoque(BLANC);
+        ajusterDeplacementRoque(NOIR);
     }
 
-    private void ajusterDeplacementRoque(){
-        if(peutGrandRoque(BLANC)){
-            Tour tourBlanche = (Tour)getPiece(new Position(0,0));
-            tourBlanche.getDeplacement().ajouterDeplacementPossibles(new Position(0,4));
-        }
+    /**
+     * Methode qui ajoute des deplacements disponible
+     * aux pieces cibles si un roque est possible
+     *
+     * @param p_couleur Couleur a verfier le roque
+     */
+    private void ajusterDeplacementRoque(CouleurPiece p_couleur) {
+        int yaxis = (p_couleur == BLANC) ? 0 : 7;
 
-        if(peutPetitRoque(BLANC)){
-            Tour tourBlanche = (Tour)getPiece(new Position(0,7));
-            tourBlanche.getDeplacement().ajouterDeplacementPossibles(new Position(0,4));
+        if (peutGrandRoque(p_couleur)) {
+            Roi roi = getRoi(p_couleur);
+            Tour tour = (Tour) getPiece(new Position(0, yaxis));
+
+            roi.getDeplacement().ajouterDeplacementPossibles(tour.getPosition());
+            tour.getDeplacement().ajouterDeplacementPossibles(roi.getPosition());
+        }
+        if (peutPetitRoque(p_couleur)) {
+            Roi roi = getRoi(p_couleur);
+            Tour tour = (Tour) getPiece(new Position(7, yaxis));
+
+            roi.getDeplacement().ajouterDeplacementPossibles(tour.getPosition());
+            tour.getDeplacement().ajouterDeplacementPossibles(roi.getPosition());
         }
     }
 
@@ -143,7 +155,7 @@ public class Echiquier {
      * @param p_couleur Couleur du roi a trouver
      * @return Roi trouve
      */
-    private Roi getRoi(CouleurPiece p_couleur) {
+    public Roi getRoi(CouleurPiece p_couleur) {
         Roi roi = null;
         for (Piece piece : m_pieces) {
             if (piece.getCouleur() == p_couleur && piece instanceof Roi) {
@@ -199,48 +211,27 @@ public class Echiquier {
     }
 
     /**
-     * Methode generique pour teste un grand et petit roque.
-     *
-     * @param p_couleur        Couleur a tester
-     * @param p_tourX          Position x de la tour a veifier
-     * @param p_positionsLibre Position devant etre libre
-     * @return Vrai si on peut roque
-     */
-    private boolean peutRoque(CouleurPiece p_couleur, int p_tourX, Position[] p_positionsLibre) {
-        int yaxis = (p_couleur == BLANC) ? 0 : 7;
-        Piece piece = getPiece(new Position(0, yaxis));
-        if (!(piece instanceof Tour)) {
-            return false;
-        }
-        Tour tour = (Tour) piece;
-        if (!getRoi(p_couleur).peutRoquer() || !tour.peutRoquer()) {
-            return false;
-        }
-
-        for (Position p : p_positionsLibre) {
-            if (getPiece(p) != null) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
      * Methode permettant de savoir si une couleur
      * peut effectuer un grand roque
      *
      * @param p_couleur Couleur a verifier
      * @return Vrai si on peut effectuer un petit roque
      */
-    public boolean peutPetitRoque(CouleurPiece p_couleur) {
+    private boolean peutPetitRoque(CouleurPiece p_couleur) {
         int yaxis = (p_couleur == BLANC) ? 0 : 7;
-        return peutRoque(
-                p_couleur,
-                0,
-                new Position[]{
-                        new Position(5, yaxis),
-                        new Position(6, yaxis)
-                });
+        Piece piece = getPiece(new Position(7, yaxis));
+
+        if (!(piece instanceof Tour)) {
+            return false;
+        }
+        Tour tour = (Tour) piece;
+
+        if (!getRoi(p_couleur).jamaisJouer() || !tour.jamaisJouer()) {
+            return false;
+        }
+
+        return getPiece(new Position(5, yaxis)) == null &&
+                getPiece(new Position(6, yaxis)) == null;
     }
 
     /**
@@ -250,16 +241,22 @@ public class Echiquier {
      * @param p_couleur Couleur a verifier
      * @return Vrai si on peut faire un grand roque
      */
-    public boolean peutGrandRoque(CouleurPiece p_couleur) {
+    private boolean peutGrandRoque(CouleurPiece p_couleur) {
         int yaxis = (p_couleur == BLANC) ? 0 : 7;
-        return peutRoque(
-                p_couleur,
-                0,
-                new Position[]{
-                        new Position(1, yaxis),
-                        new Position(2, yaxis),
-                        new Position(3, yaxis)
-                });
+        Piece piece = getPiece(new Position(0, yaxis));
+
+        if (!(piece instanceof Tour)) {
+            return false;
+        }
+        Tour tour = (Tour) piece;
+
+        if (!getRoi(p_couleur).jamaisJouer() || !tour.jamaisJouer()) {
+            return false;
+        }
+
+        return getPiece(new Position(1, yaxis)) == null &&
+                getPiece(new Position(2, yaxis)) == null &&
+                getPiece(new Position(3, yaxis)) == null;
     }
 
     /**
@@ -327,11 +324,6 @@ public class Echiquier {
         for (Piece piece : m_pieces) {
             if (piece.getPosition().equals(p_position)) {
                 pieceTrouve = piece;
-                calculerTousDeplacements();
-
-                if (estEchec(pieceTrouve.getCouleur()) && !(pieceTrouve instanceof Roi)) {
-                    pieceTrouve = null;
-                }
                 break;
             }
         }
@@ -346,24 +338,67 @@ public class Echiquier {
      * @return Vrai si le déplacement à fonctionné sinon faux
      */
     public boolean deplacerPiece(Piece p_piece, Position p_nouvelle) {
+
+        if (estEchec(p_piece.getCouleur()) && !(p_piece instanceof Roi)) {
+            return false;
+        }
+
         if (p_piece.peutDeplacer(p_nouvelle)) {
 
             Piece piecePourPrise = getPiece(p_nouvelle);
-            if (piecePourPrise != null) {
-                m_pieces.remove(piecePourPrise);
-            }
 
-            p_piece.deplacer(p_nouvelle);
-            calculerTousDeplacements();
-
-            if (p_piece instanceof Pion && ((Pion) p_piece).getPeutPromotion()) {
-                m_pionPromu = p_piece;
-                m_enCoursDePromotion = true;
+            if (peutEffectuerRoque(p_piece, piecePourPrise)) {
+                if(p_piece instanceof Roi){
+                    effectuerRoque((Roi)p_piece, (Tour)piecePourPrise);
+                }else{
+                    effectuerRoque((Roi)piecePourPrise, (Tour)p_piece);
+                }
+            } else {
+                if (piecePourPrise != null) {
+                    m_pieces.remove(piecePourPrise);
+                }
+                p_piece.deplacer(p_nouvelle);
+                if (p_piece instanceof Pion && ((Pion) p_piece).getPeutPromotion()) {
+                    m_pionPromu = p_piece;
+                    m_enCoursDePromotion = true;
+                }
             }
 
             return true;
         } else {
             return false;
+        }
+    }
+
+    /**
+     * Methode qui verifie si les pieces en prises remplissent
+     * les conditions dun roque
+     *
+     * @param piece Piece qui effectue une prise
+     * @param piecePrise Prise qui se fait prendre
+     * @return Vrai si on peut roque
+     */
+    private boolean peutEffectuerRoque(Piece piece, Piece piecePrise) {
+        return (piece instanceof Roi && piecePrise instanceof Tour && piece.getCouleur() == piecePrise.getCouleur() ||
+                piece instanceof Tour && piecePrise instanceof Roi && piece.getCouleur() == piecePrise.getCouleur());
+    }
+
+    /**
+     * Methode qui effectuer le deplacement de roque
+     * pour une tour et un roi donne
+     *
+     * @param roi Roi a roquer
+     * @param tour Tour a roquer
+     */
+    private void effectuerRoque(Roi roi, Tour tour) {
+        int yaxis = (roi.getCouleur() == BLANC) ? 0 : 7;
+
+        if (peutPetitRoque(roi.getCouleur())) {
+            roi.deplacer(new Position(5, yaxis));
+            tour.deplacer(new Position(4, yaxis));
+        } else {
+            roi.deplacer(new Position(3, yaxis));
+            tour.deplacer(new Position(4, yaxis));
         }
     }
 
@@ -376,10 +411,18 @@ public class Echiquier {
         m_pieces.remove(m_pionPromu);
 
         switch (p_representation) {
-            case 'r': m_pieces.add(new Reine(p, c)); break;
-            case 'f': m_pieces.add(new Fou(p, c)); break;
-            case 'c': m_pieces.add(new Cavalier(p, c)); break;
-            case 't': m_pieces.add(new Tour(p, c)); break;
+            case 'r':
+                m_pieces.add(new Reine(p, c));
+                break;
+            case 'f':
+                m_pieces.add(new Fou(p, c));
+                break;
+            case 'c':
+                m_pieces.add(new Cavalier(p, c));
+                break;
+            case 't':
+                m_pieces.add(new Tour(p, c));
+                break;
         }
 
         m_pionPromu = null;
