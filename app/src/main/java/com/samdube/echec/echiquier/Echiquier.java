@@ -115,7 +115,7 @@ public class Echiquier {
      * Permet de calculer toutes les possibilités de collisions pour toutes les
      * pièces de l'échiquier
      */
-    public void calculerTousDeplacements() {
+    private void calculerTousDeplacements() {
         Position[] positionsPiecesBlanches = obtenirPositionsPieces(BLANC);
         Position[] positionsPiecesNoires = obtenirPositionsPieces(NOIR);
         for (Piece piece : m_pieces) {
@@ -351,11 +351,8 @@ public class Echiquier {
             Piece piecePourPrise = getPiece(p_nouvelle);
 
             if (peutEffectuerRoque(p_piece, piecePourPrise)) {
-                if (p_piece instanceof Roi) {
-                    effectuerRoque((Roi) p_piece, (Tour) piecePourPrise);
-                } else {
-                    effectuerRoque((Roi) piecePourPrise, (Tour) p_piece);
-                }
+                effectuerRoque(p_piece, piecePourPrise);
+                calculerTousDeplacements();
             } else {
                 if (piecePourPrise != null) {
                     m_pieces.remove(piecePourPrise);
@@ -395,20 +392,33 @@ public class Echiquier {
      * Methode qui effectuer le deplacement de roque
      * pour une tour et un roi donne
      *
-     * @param roi  Roi a roquer
-     * @param tour Tour a roquer
+     * @param piece      Piece effectuant prise
+     * @param piecePrise Piece etant prise
+     * @return Vrai si le roque a ete effectuer
      */
-    private void effectuerRoque(Roi roi, Tour tour) {
-        int yaxis = (roi.getCouleur() == BLANC) ? 0 : 7;
+    private boolean effectuerRoque(Piece piece, Piece piecePrise) {
+        try {
+            Roi roi = (piece instanceof Roi) ? (Roi) piece : (Roi) piecePrise;
+            Tour tour = (piece instanceof Tour) ? (Tour) piece : (Tour) piecePrise;
 
-        if (peutPetitRoque(roi.getCouleur())) {
-            roi.getDeplacement().ajouterDeplacementPossibles(new Position(6,yaxis));
-            roi.deplacer(new Position(6, yaxis));
-            tour.deplacer(new Position(5, yaxis));
-        } else {
-            roi.getDeplacement().ajouterDeplacementPossibles(new Position(2,yaxis));
-            roi.deplacer(new Position(2, yaxis));
-            tour.deplacer(new Position(3, yaxis));
+            int yaxis = (roi.getCouleur() == BLANC) ? 0 : 7;
+
+            if (peutPetitRoque(roi.getCouleur()) && tour.getPosition().equals(new Position(7, yaxis))) {
+                roi.getDeplacement().ajouterDeplacementPossibles(new Position(6, yaxis));
+                roi.deplacer(new Position(6, yaxis));
+                tour.deplacer(new Position(5, yaxis));
+                return true;
+            }
+            if (peutGrandRoque(roi.getCouleur()) && tour.getPosition().equals(new Position(0, yaxis))) {
+                roi.getDeplacement().ajouterDeplacementPossibles(new Position(2, yaxis));
+                roi.deplacer(new Position(2, yaxis));
+                tour.deplacer(new Position(3, yaxis));
+                return true;
+            }
+            return false;
+        }
+        catch (Exception e){
+            return false;
         }
     }
 
