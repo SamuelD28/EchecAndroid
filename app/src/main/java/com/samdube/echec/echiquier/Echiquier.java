@@ -352,12 +352,17 @@ public class Echiquier {
                                             Position p_positionDeplacement){
         Roi roi = getRoi(p_couleurRoi);
         Position positionOriginal = p_pieceADeplacer.getPosition();
-        if(p_pieceADeplacer.deplacer(p_positionDeplacement)){
+
+        if(p_pieceADeplacer.peutDeplacer(p_positionDeplacement)){
+            p_pieceADeplacer.deplacer(p_positionDeplacement);
             calculerDeplacements();
+
             if(!roi.estEchec() && !roi.estEchecEtMath()){
                 return true;
             }else{
+                p_pieceADeplacer.getDeplacement().ajouterDeplacementPossibles(positionOriginal);
                 p_pieceADeplacer.deplacer(positionOriginal);
+                calculerDeplacements();
                 return false;
             }
         }else{
@@ -374,35 +379,31 @@ public class Echiquier {
      * @return Vrai si le déplacement à fonctionné sinon faux
      */
     public boolean deplacerPiece(Piece p_piece, Position p_nouvelle) {
-        if(estEchecEtMath()){
+        if(estEchecEtMath() || !p_piece.peutDeplacer(p_nouvelle)){
             return false;
         }
 
-        if (p_piece.peutDeplacer(p_nouvelle) || deplacementPeutSauverRoi(p_piece.getCouleur(), p_piece, p_nouvelle)) {
-            Piece piecePourPrise = getPiece(p_nouvelle);
+        Piece piecePourPrise = getPiece(p_nouvelle);
 
-            if (peutEffectuerRoque(p_piece, piecePourPrise)) {
-                effectuerRoque(p_piece, piecePourPrise);
-                calculerDeplacements();
+        if(peutEffectuerRoque(p_piece, piecePourPrise)){
+            return effectuerRoque(p_piece, piecePourPrise);
+        }
+        else if(estEchec(p_piece.getCouleur())){
+            return deplacementPeutSauverRoi(p_piece.getCouleur(), p_piece, p_nouvelle);
+        }
+        else{
+            m_pieces.remove(piecePourPrise);
+            p_piece.deplacer(p_nouvelle);
+
+            if (p_piece instanceof Pion && ((Pion) p_piece).getPeutPromotion()) {
+                m_pionPromu = p_piece;
+                m_enCoursDePromotion = true;
             } else {
-                if (piecePourPrise != null) {
-                    m_pieces.remove(piecePourPrise);
-                }
-
-                p_piece.deplacer(p_nouvelle);
-                calculerDeplacements();
-
-                if (p_piece instanceof Pion && ((Pion) p_piece).getPeutPromotion()) {
-                    m_pionPromu = p_piece;
-                    m_enCoursDePromotion = true;
-                } else {
-                    m_listeDesChangements.add(copierListeDesPieces());
-                }
+                m_listeDesChangements.add(copierListeDesPieces());
             }
 
+            calculerDeplacements();
             return true;
-        } else {
-            return false;
         }
     }
 
