@@ -9,6 +9,7 @@ import com.samdube.echec.piece.Pion;
 import com.samdube.echec.piece.Reine;
 import com.samdube.echec.piece.Roi;
 import com.samdube.echec.piece.Tour;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -133,7 +134,7 @@ public class Echiquier {
         Position[] positionsPiecesBlanches = obtenirPositionsPieces(BLANC);
         Position[] positionsPiecesNoires = obtenirPositionsPieces(NOIR);
         for (Piece piece : m_pieces) {
-            if(piece.getCouleur() == p_couleur){
+            if (piece.getCouleur() == p_couleur) {
                 piece.calculerDeplacementPossibles(positionsPiecesBlanches, positionsPiecesNoires);
             }
         }
@@ -347,25 +348,44 @@ public class Echiquier {
         return pieceTrouve;
     }
 
-    public boolean deplacementPeutSauverRoi(CouleurPiece p_couleurRoi,
-                                            Piece p_pieceADeplacer,
-                                            Position p_positionDeplacement){
-        Roi roi = getRoi(p_couleurRoi);
+    public boolean deplacementMetEnPerilRoi(Piece p_pieceADeplacer, Position p_positionDeplacement) {
+        Roi roi = getRoi(p_pieceADeplacer.getCouleur());
         Position positionOriginal = p_pieceADeplacer.getPosition();
 
-        if(p_pieceADeplacer.peutDeplacer(p_positionDeplacement)){
+        if (p_pieceADeplacer.peutDeplacer(p_positionDeplacement)) {
             p_pieceADeplacer.deplacer(p_positionDeplacement);
             calculerDeplacements();
 
-            if(!roi.estEchec() && !roi.estEchecEtMath()){
+            if (roi.estEchec() || roi.estEchecEtMath()) {
+                p_pieceADeplacer.getDeplacement().ajouterDeplacementPossibles(positionOriginal);
+                p_pieceADeplacer.deplacer(positionOriginal);
+                calculerDeplacements();
                 return true;
-            }else{
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public boolean deplacementPeutSauverRoi(Piece p_pieceADeplacer, Position p_positionDeplacement) {
+        Roi roi = getRoi(p_pieceADeplacer.getCouleur());
+        Position positionOriginal = p_pieceADeplacer.getPosition();
+
+        if (p_pieceADeplacer.peutDeplacer(p_positionDeplacement)) {
+            p_pieceADeplacer.deplacer(p_positionDeplacement);
+            calculerDeplacements();
+
+            if (!roi.estEchec() && !roi.estEchecEtMath()) {
+                return true;
+            } else {
                 p_pieceADeplacer.getDeplacement().ajouterDeplacementPossibles(positionOriginal);
                 p_pieceADeplacer.deplacer(positionOriginal);
                 calculerDeplacements();
                 return false;
             }
-        }else{
+        } else {
             return false;
         }
     }
@@ -379,19 +399,17 @@ public class Echiquier {
      * @return Vrai si le déplacement à fonctionné sinon faux
      */
     public boolean deplacerPiece(Piece p_piece, Position p_nouvelle) {
-        if(estEchecEtMath() || !p_piece.peutDeplacer(p_nouvelle)){
+        if (estEchecEtMath() || !p_piece.peutDeplacer(p_nouvelle)) {
             return false;
         }
 
         Piece piecePourPrise = getPiece(p_nouvelle);
 
-        if(peutEffectuerRoque(p_piece, piecePourPrise)){
+        if (peutEffectuerRoque(p_piece, piecePourPrise)) {
             return effectuerRoque(p_piece, piecePourPrise);
-        }
-        else if(estEchec(p_piece.getCouleur())){
-            return deplacementPeutSauverRoi(p_piece.getCouleur(), p_piece, p_nouvelle);
-        }
-        else{
+        } else if (estEchec(p_piece.getCouleur())) {
+            return deplacementPeutSauverRoi(p_piece, p_nouvelle);
+        } else if(!deplacementMetEnPerilRoi(p_piece,p_nouvelle)){
             m_pieces.remove(piecePourPrise);
             p_piece.deplacer(p_nouvelle);
 
@@ -404,6 +422,8 @@ public class Echiquier {
 
             calculerDeplacements();
             return true;
+        }else{
+            return false;
         }
     }
 
@@ -448,8 +468,7 @@ public class Echiquier {
                 return true;
             }
             return false;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
