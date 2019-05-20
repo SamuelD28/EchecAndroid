@@ -402,11 +402,13 @@ public class Echiquier {
         int yaxis = (roi.getCouleur() == BLANC) ? 0 : 7;
 
         if (peutPetitRoque(roi.getCouleur())) {
-            roi.deplacer(new Position(5, yaxis));
-            tour.deplacer(new Position(4, yaxis));
+            roi.getDeplacement().ajouterDeplacementPossibles(new Position(6,yaxis));
+            roi.deplacer(new Position(6, yaxis));
+            tour.deplacer(new Position(5, yaxis));
         } else {
-            roi.deplacer(new Position(3, yaxis));
-            tour.deplacer(new Position(4, yaxis));
+            roi.getDeplacement().ajouterDeplacementPossibles(new Position(2,yaxis));
+            roi.deplacer(new Position(2, yaxis));
+            tour.deplacer(new Position(3, yaxis));
         }
     }
 

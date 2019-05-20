@@ -230,7 +230,6 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
             selectionnerPieceEchiquier(nouvellePosition);
         } else {
             if (m_echiquier.deplacerPiece(m_echiquier.getPieceSelectionner(), nouvellePosition)) {
-                m_echiquier.calculerTousDeplacements();
                 m_manager.terminerTour();
             }
 
