@@ -1,7 +1,7 @@
 package com.samdube.echec.deplacement;
 
 /**
- * Classe de test pour le com.samdube.echec.deplacement de la reine
+ * Classe de test pour le deplacement de la reine
  *
  * @author Samuel Dube
  * @author Samuel Colassin

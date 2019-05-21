@@ -127,8 +127,8 @@ public class Position implements Comparable<Position> {
      */
     public static String parsePositionVersTexte(Position p_position) {
         int y = p_position.getY() + 1;
-        String xx = ECHELLE_POSITIONX.get(p_position.getX()).toString();
-        return xx + y + "";
+        String positionX = ECHELLE_POSITIONX.get(p_position.getX()).toString();
+        return positionX + y + "";
     }
 
     /**

@@ -12,7 +12,7 @@ import java.util.Objects;
  *
  * @author Samuel Dube
  */
-public abstract class Piece{
+public abstract class Piece {
     private final char m_representation;
 
     private final int m_force;
@@ -26,8 +26,8 @@ public abstract class Piece{
     private final CouleurPiece m_couleur;
 
     /**
-     * Constructeur initiant une nouvelle com.samdube.echec.piece. Accessible
-     * seuleument par une classe qui implemente la classe abstraite
+     * Constructeur initiant une nouvelle piece. Accessible
+     * seulement par une classe qui implemente la classe abstraite
      *
      * @param p_position       Position de la com.samdube.echec.piece sur l'com.samdube.echec.echiquier
      * @param p_deplacement    Deplacement associer a la com.samdube.echec.piece
@@ -43,13 +43,14 @@ public abstract class Piece{
     }
 
     /**
-     * Constructeur de la piece avec tous des parametres
+     * Constructeur de la piece avec tous les paramètres, principalement utilisé
+     * pour la promotion
      *
-     * @param p_position Position de la piece
-     * @param p_couleur Couleur de la piece
-     * @param p_deplacement Deplacement de la piece
+     * @param p_position       Position de la piece
+     * @param p_couleur        Couleur de la piece
+     * @param p_deplacement    Deplacement de la piece
      * @param p_representation Representation de la piece
-     * @param p_force Force de la piece
+     * @param p_force          Force de la piece
      */
     Piece(Position p_position, CouleurPiece p_couleur, Deplacement p_deplacement, char p_representation, int p_force) {
         m_couleur = p_couleur;
@@ -71,10 +72,10 @@ public abstract class Piece{
     }
 
     /**
-     * Methode permettant de changer la position de la com.samdube.echec.piece
+     * Methode permettant de changer la position de la piece
      *
-     * @param p_position Position ou la com.samdube.echec.piece doit etre deplacer
-     * @return Vrai si la com.samdube.echec.piece a ete deplacer a la position
+     * @param p_position Position ou la piece doit etre deplacer
+     * @return Vrai si la piece a ete deplacer a la position
      */
     public boolean deplacer(Position p_position) {
         if (peutDeplacer(p_position)) {
@@ -100,7 +101,7 @@ public abstract class Piece{
      * Methode qui calcule et assigne tous les deplacements possibles a la piece
      *
      * @param p_positionsPiecesBlanches Positions des pieces blanches
-     * @param p_positionsPiecesNoires Position des pieces noires
+     * @param p_positionsPiecesNoires   Position des pieces noires
      */
     public void calculerDeplacementPossibles(Position[] p_positionsPiecesBlanches, Position[] p_positionsPiecesNoires) {
         if (m_couleur == CouleurPiece.BLANC) {
@@ -206,7 +207,7 @@ public abstract class Piece{
     }
 
     /**
-     * Permet de créer un copie en profondeur d'une pièce
+     * Permet de créer un copie d'une pièce
      *
      * @param p_piece La pièce à copier
      * @return La copie de la pièce

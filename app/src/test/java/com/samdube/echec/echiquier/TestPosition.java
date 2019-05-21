@@ -12,7 +12,6 @@ import java.util.ArrayList;
  * @author Samuel Colassin
  */
 public class TestPosition extends TestCase {
-
     /**
      * Methode qui teste la creation de nouvelle
      * position.
@@ -130,5 +129,12 @@ public class TestPosition extends TestCase {
         assertTrue(position3.compareTo(position2) > 0);
         assertTrue(position3.compareTo(position1) > 0);
         assertEquals(0, position1.compareTo(position4));
+    }
+
+    /**
+     * Permet de tester la creation de postion en version textuelle
+     */
+    public void testPostionEnTexte() {
+        assertEquals("A1", Position.parsePositionVersTexte(new Position(0, 0)));
     }
 }

@@ -7,6 +7,7 @@ import com.samdube.echec.echiquier.Position;
  * Classe permettant de gerer une com.samdube.echec.piece de type tour
  *
  * @author Samuel Dube
+ * @author Samuel Colassin
  */
 public class Tour extends Piece {
     /**
@@ -22,7 +23,7 @@ public class Tour extends Piece {
      * Constructeur de base pour une tour
      *
      * @param p_position Position de la tour sur lechiquier
-     * @param p_couleur Couleur de la tour
+     * @param p_couleur  Couleur de la tour
      */
     public Tour(Position p_position, CouleurPiece p_couleur) {
         super(p_position, p_couleur, new DeplacementTour(), 't', 2);

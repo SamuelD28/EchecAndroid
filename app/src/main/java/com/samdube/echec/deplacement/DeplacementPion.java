@@ -10,6 +10,7 @@ import static com.samdube.echec.piece.Piece.*;
  * Classe de déplacements possibles pour un pion
  *
  * @author Samuel Colassin
+ * @author Samuel Dubé
  */
 public class DeplacementPion extends Deplacement {
     private final CouleurPiece m_couleur;

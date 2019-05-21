@@ -122,16 +122,16 @@ public abstract class Deplacement {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object p_obj) {
+        if (this == p_obj) {
             return true;
         }
 
-        if (!(obj instanceof Deplacement)) {
+        if (!(p_obj instanceof Deplacement)) {
             return false;
         }
 
-        Deplacement o = (Deplacement) obj;
+        Deplacement o = (Deplacement) p_obj;
         return o.m_pasMaximum == m_pasMaximum &&
                 Arrays.equals(o.m_pas, m_pas);
     }

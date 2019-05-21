@@ -6,9 +6,10 @@ import com.samdube.echec.echiquier.Position;
 
 
 /**
- * Teste la creation dune com.samdube.echec.piece de type pion
+ * Teste la creation dune piece de type pion
  *
  * @author Samuel Dube
+ * @author Samuel Colassin
  */
 public class TestPion extends TestPiece {
     @Override

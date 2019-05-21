@@ -4,10 +4,11 @@ package com.samdube.echec.deplacement;
  * Classe de com.samdube.echec.deplacement possible pour un roi
  *
  * @author Samuel Colassin
+ * @author Samuel Dubé
  */
 public class DeplacementRoi extends Deplacement {
     /**
-     * Constructeur initiant un com.samdube.echec.deplacement pour le roi
+     * Constructeur initiant un deplacement pour le roi
      */
     public DeplacementRoi() {
         super(new Pas[]{

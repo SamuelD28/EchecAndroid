@@ -7,6 +7,7 @@ import com.samdube.echec.echiquier.Position;
  * Classe permettant de gerer un roi
  *
  * @author Samuel Dube
+ * @author Samuel Colassin
  */
 public class Roi extends Piece {
     private boolean m_estEchec;
@@ -26,7 +27,7 @@ public class Roi extends Piece {
      * Constructeur dun roi avec sa position et sa couleur
      *
      * @param p_position Position du roi
-     * @param p_couleur COuleur du roi
+     * @param p_couleur  COuleur du roi
      */
     Roi(Position p_position, CouleurPiece p_couleur) {
         super(p_position, p_couleur, new DeplacementRoi(), 'r', 1);

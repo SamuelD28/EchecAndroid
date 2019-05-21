@@ -8,14 +8,14 @@ import junit.framework.TestCase;
  * Teste la clsse manager
  *
  * @author Samuel Dube
- * @author  Samuel COlassin
+ * @author Samuel COlassin
  */
 public class TestManager extends TestCase {
 
     /**
      * Teste la creation dun manager
      */
-    public void testCreation(){
+    public void testCreation() {
         Manager manager = new Manager();
         manager.setNomsJoueurs("Samuel", "Bob");
 

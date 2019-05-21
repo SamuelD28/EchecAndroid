@@ -1,7 +1,7 @@
 package com.samdube.echec.deplacement;
 
 /**
- * Classe de test pour le com.samdube.echec.deplacement de la tour
+ * Classe de test pour le deplacement de la tour
  *
  * @author Samuel Dube
  * @author Samuel Colassin

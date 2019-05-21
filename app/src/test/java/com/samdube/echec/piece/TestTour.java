@@ -4,7 +4,7 @@ import com.samdube.echec.deplacement.DeplacementTour;
 import com.samdube.echec.echiquier.Position;
 
 /**
- * Teste la creation dune com.samdube.echec.piece de type tour
+ * Teste la creation dune piece de type tour
  *
  * @author Samuel Dube
  */
@@ -54,7 +54,7 @@ public class TestTour extends TestPiece {
      * Teste la construction dune tour en promotion
      */
     public void testConstructeurTourPromotion() {
-        Piece piece = new Tour(new Position(0,1), Piece.CouleurPiece.BLANC);
+        Piece piece = new Tour(new Position(0, 1), Piece.CouleurPiece.BLANC);
         assertEquals(Piece.CouleurPiece.BLANC, piece.getCouleur());
     }
 }

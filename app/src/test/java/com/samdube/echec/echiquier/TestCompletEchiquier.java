@@ -11,7 +11,6 @@ import junit.framework.TestSuite;
  */
 public class TestCompletEchiquier extends TestCase {
     /**
-     *
      * @return la suite avec les tests à effectuer
      */
     public static TestSuite suite() {

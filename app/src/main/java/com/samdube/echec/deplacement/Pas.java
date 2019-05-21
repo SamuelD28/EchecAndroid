@@ -7,6 +7,7 @@ import java.util.Objects;
  * pour le déplacement.
  *
  * @author Samuel Dubé
+ * @author Samuel Colassin
  */
 public class Pas {
     private int m_deplacementY;

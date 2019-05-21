@@ -7,6 +7,7 @@ import com.samdube.echec.echiquier.Position;
  * Classe permettant de gerer une reine
  *
  * @author Samuel Dube
+ * @author Samuel Colassin
  */
 public class Reine extends Piece {
     /**
@@ -22,7 +23,7 @@ public class Reine extends Piece {
      * Constructeur dune reine avec sa position et couleur
      *
      * @param p_position Position de la reine
-     * @param p_couleur Couleur de la reine
+     * @param p_couleur  Couleur de la reine
      */
     public Reine(Position p_position, CouleurPiece p_couleur) {
         super(p_position, p_couleur, new DeplacementReine(), 'q', 3);

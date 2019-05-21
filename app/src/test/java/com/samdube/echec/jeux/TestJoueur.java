@@ -8,14 +8,14 @@ import junit.framework.TestCase;
  * Teste la classe joueur
  *
  * @author Samuel DubE
- * @author  Samuel Colassin
+ * @author Samuel Colassin
  */
 public class TestJoueur extends TestCase {
 
     /**
      * Teste la creation dun joueur
      */
-    public void testCreation(){
+    public void testCreation() {
         Joueur joueur = new Joueur(Piece.CouleurPiece.BLANC);
         joueur.setNom("Samuel");
 

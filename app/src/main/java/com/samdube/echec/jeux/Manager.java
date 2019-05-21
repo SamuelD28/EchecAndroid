@@ -16,7 +16,7 @@ public class Manager {
     private int m_tour = 0;
 
     /**
-     *  Methode qui reinitialise la partie
+     * Methode qui reinitialise la partie
      */
     public void reinitialiserPartie() {
         m_tour = 0;
@@ -24,6 +24,7 @@ public class Manager {
 
     /**
      * Permet de revenir a un tour antérieur
+     *
      * @param p_nombre Nombre de tour a revenir
      */
     public void revenirTour(int p_nombre) {
@@ -80,7 +81,7 @@ public class Manager {
      * dechec
      *
      * @param nomBlanc Nom du joueur blanc
-     * @param nomNoir Nom du joueur noir
+     * @param nomNoir  Nom du joueur noir
      */
     public void setNomsJoueurs(String nomBlanc, String nomNoir) {
         m_joueurBlanc.setNom(nomBlanc);

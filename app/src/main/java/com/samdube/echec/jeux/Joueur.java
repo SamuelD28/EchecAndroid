@@ -3,9 +3,10 @@ package com.samdube.echec.jeux;
 import com.samdube.echec.piece.Piece;
 
 /**
- * Classe permettant de créer les joueurs du com.samdube.echec.jeux d'échec
+ * Classe permettant de créer les joueurs du jeux d'échec
  *
  * @author Samuel Colassin
+ * @author Samuel Dubé
  */
 class Joueur {
     private final Piece.CouleurPiece m_couleur;

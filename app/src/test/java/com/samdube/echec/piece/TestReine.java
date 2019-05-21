@@ -4,7 +4,7 @@ import com.samdube.echec.deplacement.DeplacementReine;
 import com.samdube.echec.echiquier.Position;
 
 /**
- * Teste la creation dune com.samdube.echec.piece de type reine
+ * Teste la creation dune piece de type reine
  *
  * @author Samuel Dube
  */
@@ -54,7 +54,7 @@ public class TestReine extends TestPiece {
      * Teste la construction dune reine en promotion
      */
     public void testConstructeurReinePromotion() {
-        Piece piece = new Reine(new Position(0,1), Piece.CouleurPiece.BLANC);
+        Piece piece = new Reine(new Position(0, 1), Piece.CouleurPiece.BLANC);
         assertEquals(Piece.CouleurPiece.BLANC, piece.getCouleur());
     }
 }

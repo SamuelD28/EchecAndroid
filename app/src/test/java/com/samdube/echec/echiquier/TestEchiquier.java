@@ -1,6 +1,7 @@
 package com.samdube.echec.echiquier;
 
 import junit.framework.TestCase;
+
 import com.samdube.echec.piece.*;
 
 import static com.samdube.echec.piece.Piece.CouleurPiece.BLANC;
@@ -36,21 +37,21 @@ public class TestEchiquier extends TestCase {
      * dans l'échiquier.
      */
     public void testGetPiece() {
-        Piece piece = m_echiquier.getPiece(new Position(0,1));
+        Piece piece = m_echiquier.getPiece(new Position(0, 1));
 
         assertTrue(piece instanceof Pion);
         assertEquals(BLANC, piece.getCouleur());
         assertEquals('p', piece.getRepresentation());
         assertEquals(1, piece.getForce());
 
-        piece = m_echiquier.getPiece(new Position(7,7));
+        piece = m_echiquier.getPiece(new Position(7, 7));
 
         assertTrue(piece instanceof Tour);
         assertEquals(NOIR, piece.getCouleur());
         assertEquals('t', piece.getRepresentation());
         assertEquals(2, piece.getForce());
 
-        piece = m_echiquier.getPiece(new Position(0,3));
+        piece = m_echiquier.getPiece(new Position(0, 3));
 
         assertNull(piece);
     }
@@ -62,7 +63,7 @@ public class TestEchiquier extends TestCase {
         Echiquier echiquier = new Echiquier();
 
         // Test case d'arrivé vide
-        Piece pionNoir = echiquier.getPiece(new Position(0,1));
+        Piece pionNoir = echiquier.getPiece(new Position(0, 1));
         Position positionPion = new Position(0, 2);
         echiquier.deplacerPiece(pionNoir, positionPion);
         assertEquals(pionNoir, echiquier.getPiece(positionPion));
@@ -115,8 +116,8 @@ public class TestEchiquier extends TestCase {
     /**
      * Teste la selection de piece pour lechiquier
      */
-    public void testSelectionnerPiece(){
-        Piece pion = new Pion(new Position(0,0));
+    public void testSelectionnerPiece() {
+        Piece pion = new Pion(new Position(0, 0));
 
         m_echiquier.setPieceSelectionner(pion);
         Piece selection = m_echiquier.getPieceSelectionner();
@@ -130,112 +131,112 @@ public class TestEchiquier extends TestCase {
     /**
      * Teste un scenario valide de petit roque
      */
-    public void testEffectuerPetitRoque(){
-        Piece roiNoir = new Roi(new Position(4,7));
-        Piece tourNoir = new Tour(new Position(7,7));
+    public void testEffectuerPetitRoque() {
+        Piece roiNoir = new Roi(new Position(4, 7));
+        Piece tourNoir = new Tour(new Position(7, 7));
 
-        Piece roiBlanc = new Roi(new Position(4,0));
-        Piece tourBlanche = new Tour(new Position(7,0));
+        Piece roiBlanc = new Roi(new Position(4, 0));
+        Piece tourBlanche = new Tour(new Position(7, 0));
 
         m_echiquier = new Echiquier(roiBlanc, tourBlanche, roiNoir, tourNoir);
 
-        assertTrue(m_echiquier.deplacerPiece(roiBlanc,tourBlanche.getPosition()));
-        assertTrue(new Position(6,0).equals(roiBlanc.getPosition()));
-        assertTrue(new Position(5,0).equals(tourBlanche.getPosition()));
+        assertTrue(m_echiquier.deplacerPiece(roiBlanc, tourBlanche.getPosition()));
+        assertTrue(new Position(6, 0).equals(roiBlanc.getPosition()));
+        assertTrue(new Position(5, 0).equals(tourBlanche.getPosition()));
 
-        assertTrue(m_echiquier.deplacerPiece(roiNoir,tourNoir.getPosition()));
-        assertTrue(new Position(6,7).equals(roiNoir.getPosition()));
-        assertTrue(new Position(5,7).equals(tourNoir.getPosition()));
+        assertTrue(m_echiquier.deplacerPiece(roiNoir, tourNoir.getPosition()));
+        assertTrue(new Position(6, 7).equals(roiNoir.getPosition()));
+        assertTrue(new Position(5, 7).equals(tourNoir.getPosition()));
     }
 
     /**
      * Teste un scenario invalide de petit roque
      */
-    public void testPeutPasEffectuerPetitRoque(){
-        Piece roiNoir = new Roi(new Position(4,7));
-        Piece tourNoir = new Tour(new Position(7,7));
+    public void testPeutPasEffectuerPetitRoque() {
+        Piece roiNoir = new Roi(new Position(4, 7));
+        Piece tourNoir = new Tour(new Position(7, 7));
 
-        Piece roiBlanc = new Roi(new Position(4,0));
-        Piece tourBlanche = new Tour(new Position(7,0));
+        Piece roiBlanc = new Roi(new Position(4, 0));
+        Piece tourBlanche = new Tour(new Position(7, 0));
 
-        Piece pionBlanc = new Pion(new Position(6,0));
-        Piece pionNoir = new Pion(new Position(6,7));
+        Piece pionBlanc = new Pion(new Position(6, 0));
+        Piece pionNoir = new Pion(new Position(6, 7));
 
-        m_echiquier = new Echiquier(roiBlanc, tourBlanche, roiNoir, tourNoir, pionBlanc,pionNoir);
+        m_echiquier = new Echiquier(roiBlanc, tourBlanche, roiNoir, tourNoir, pionBlanc, pionNoir);
 
-        assertFalse(m_echiquier.deplacerPiece(roiBlanc,tourBlanche.getPosition()));
-        assertTrue(new Position(4,0).equals(roiBlanc.getPosition()));
-        assertTrue(new Position(7,0).equals(tourBlanche.getPosition()));
+        assertFalse(m_echiquier.deplacerPiece(roiBlanc, tourBlanche.getPosition()));
+        assertTrue(new Position(4, 0).equals(roiBlanc.getPosition()));
+        assertTrue(new Position(7, 0).equals(tourBlanche.getPosition()));
 
-        assertFalse(m_echiquier.deplacerPiece(roiNoir,tourNoir.getPosition()));
-        assertTrue(new Position(4,7).equals(roiNoir.getPosition()));
-        assertTrue(new Position(7,7).equals(tourNoir.getPosition()));
+        assertFalse(m_echiquier.deplacerPiece(roiNoir, tourNoir.getPosition()));
+        assertTrue(new Position(4, 7).equals(roiNoir.getPosition()));
+        assertTrue(new Position(7, 7).equals(tourNoir.getPosition()));
     }
 
     /**
      * Teste un scenario valide de petit roque
      */
-    public void testEffectuerGrandRoque(){
-        Piece roiNoir = new Roi(new Position(4,7));
-        Piece tourNoir = new Tour(new Position(0,7));
+    public void testEffectuerGrandRoque() {
+        Piece roiNoir = new Roi(new Position(4, 7));
+        Piece tourNoir = new Tour(new Position(0, 7));
 
-        Piece roiBlanc = new Roi(new Position(4,0));
-        Piece tourBlanche = new Tour(new Position(0,0));
+        Piece roiBlanc = new Roi(new Position(4, 0));
+        Piece tourBlanche = new Tour(new Position(0, 0));
 
         m_echiquier = new Echiquier(roiBlanc, tourBlanche, roiNoir, tourNoir);
 
-        assertTrue(m_echiquier.deplacerPiece(roiBlanc,tourBlanche.getPosition()));
-        assertTrue(new Position(2,0).equals(roiBlanc.getPosition()));
-        assertTrue(new Position(3,0).equals(tourBlanche.getPosition()));
+        assertTrue(m_echiquier.deplacerPiece(roiBlanc, tourBlanche.getPosition()));
+        assertTrue(new Position(2, 0).equals(roiBlanc.getPosition()));
+        assertTrue(new Position(3, 0).equals(tourBlanche.getPosition()));
 
-        assertTrue(m_echiquier.deplacerPiece(tourNoir,roiNoir.getPosition()));
-        assertTrue(new Position(2,7).equals(roiNoir.getPosition()));
-        assertTrue(new Position(3,7).equals(tourNoir.getPosition()));
+        assertTrue(m_echiquier.deplacerPiece(tourNoir, roiNoir.getPosition()));
+        assertTrue(new Position(2, 7).equals(roiNoir.getPosition()));
+        assertTrue(new Position(3, 7).equals(tourNoir.getPosition()));
     }
 
     /**
      * Teste un scenario invalide de petit roque
      */
-    public void testPeutPasEffectuerGrandRoque(){
-        Piece roiNoir = new Roi(new Position(4,7));
-        Piece tourNoir = new Tour(new Position(0,7));
+    public void testPeutPasEffectuerGrandRoque() {
+        Piece roiNoir = new Roi(new Position(4, 7));
+        Piece tourNoir = new Tour(new Position(0, 7));
 
-        Piece roiBlanc = new Roi(new Position(4,0));
-        Piece tourBlanche = new Tour(new Position(0,0));
+        Piece roiBlanc = new Roi(new Position(4, 0));
+        Piece tourBlanche = new Tour(new Position(0, 0));
 
-        Piece pionBlanc = new Pion(new Position(2,0));
-        Piece pionNoir = new Pion(new Position(2,7));
+        Piece pionBlanc = new Pion(new Position(2, 0));
+        Piece pionNoir = new Pion(new Position(2, 7));
 
-        m_echiquier = new Echiquier(roiBlanc, tourBlanche, roiNoir, tourNoir, pionBlanc,pionNoir);
+        m_echiquier = new Echiquier(roiBlanc, tourBlanche, roiNoir, tourNoir, pionBlanc, pionNoir);
 
-        assertFalse(m_echiquier.deplacerPiece(roiBlanc,tourBlanche.getPosition()));
-        assertTrue(new Position(4,0).equals(roiBlanc.getPosition()));
-        assertTrue(new Position(0,0).equals(tourBlanche.getPosition()));
+        assertFalse(m_echiquier.deplacerPiece(roiBlanc, tourBlanche.getPosition()));
+        assertTrue(new Position(4, 0).equals(roiBlanc.getPosition()));
+        assertTrue(new Position(0, 0).equals(tourBlanche.getPosition()));
 
-        assertFalse(m_echiquier.deplacerPiece(roiNoir,tourNoir.getPosition()));
-        assertTrue(new Position(4,7).equals(roiNoir.getPosition()));
-        assertTrue(new Position(0,7).equals(tourNoir.getPosition()));
+        assertFalse(m_echiquier.deplacerPiece(roiNoir, tourNoir.getPosition()));
+        assertTrue(new Position(4, 7).equals(roiNoir.getPosition()));
+        assertTrue(new Position(0, 7).equals(tourNoir.getPosition()));
     }
 
     /**
      * Teste les deplacements pouvant sauver un roi en echec
      */
-    public void testDeplacementSauverRoi(){
-        Piece roiNoir = new Roi(new Position(4,7));
-        Piece roiBlanc = new Roi(new Position(0,0));
-        Piece reineNoir = new Reine(new Position(0,7));
-        Piece tourBlanche = new Tour(new Position(7,1));
+    public void testDeplacementSauverRoi() {
+        Piece roiNoir = new Roi(new Position(4, 7));
+        Piece roiBlanc = new Roi(new Position(0, 0));
+        Piece reineNoir = new Reine(new Position(0, 7));
+        Piece tourBlanche = new Tour(new Position(7, 1));
 
         m_echiquier = new Echiquier(roiBlanc, reineNoir, tourBlanche, roiNoir);
 
         assertTrue(m_echiquier.estEchec(BLANC));
 
-        assertFalse(m_echiquier.deplacerPiece(tourBlanche, new Position(6,1)));
-        assertFalse(m_echiquier.deplacerPiece(tourBlanche, new Position(3,1)));
-        assertFalse(m_echiquier.deplacerPiece(tourBlanche, new Position(1,1)));
+        assertFalse(m_echiquier.deplacerPiece(tourBlanche, new Position(6, 1)));
+        assertFalse(m_echiquier.deplacerPiece(tourBlanche, new Position(3, 1)));
+        assertFalse(m_echiquier.deplacerPiece(tourBlanche, new Position(1, 1)));
 
-        assertFalse(m_echiquier.deplacerPiece(tourBlanche, new Position(1,1)));
-        assertTrue(m_echiquier.deplacerPiece(tourBlanche, new Position(0,1)));
+        assertFalse(m_echiquier.deplacerPiece(tourBlanche, new Position(1, 1)));
+        assertTrue(m_echiquier.deplacerPiece(tourBlanche, new Position(0, 1)));
 
         assertFalse(m_echiquier.estEchec(BLANC));
     }
@@ -243,22 +244,22 @@ public class TestEchiquier extends TestCase {
     /**
      * Teste les deplacements dune piece qui mettrais en danger le roi
      */
-    public void testDeplacementDangerRoi(){
-        Piece roiNoir = new Roi(new Position(4,7));
-        Piece roiBlanc = new Roi(new Position(0,0));
-        Piece reineNoir = new Reine(new Position(0,7));
-        Piece tourBlanche = new Tour(new Position(0,1));
+    public void testDeplacementDangerRoi() {
+        Piece roiNoir = new Roi(new Position(4, 7));
+        Piece roiBlanc = new Roi(new Position(0, 0));
+        Piece reineNoir = new Reine(new Position(0, 7));
+        Piece tourBlanche = new Tour(new Position(0, 1));
 
         m_echiquier = new Echiquier(roiBlanc, reineNoir, tourBlanche, roiNoir);
 
         assertFalse(m_echiquier.estEchec(BLANC));
 
-        assertFalse(m_echiquier.deplacerPiece(tourBlanche, new Position(6,1)));
-        assertFalse(m_echiquier.deplacerPiece(tourBlanche, new Position(3,1)));
-        assertFalse(m_echiquier.deplacerPiece(tourBlanche, new Position(1,1)));
+        assertFalse(m_echiquier.deplacerPiece(tourBlanche, new Position(6, 1)));
+        assertFalse(m_echiquier.deplacerPiece(tourBlanche, new Position(3, 1)));
+        assertFalse(m_echiquier.deplacerPiece(tourBlanche, new Position(1, 1)));
 
-        assertFalse(m_echiquier.deplacerPiece(tourBlanche, new Position(1,3)));
-        assertTrue(m_echiquier.deplacerPiece(tourBlanche, new Position(0,3)));
+        assertFalse(m_echiquier.deplacerPiece(tourBlanche, new Position(1, 3)));
+        assertTrue(m_echiquier.deplacerPiece(tourBlanche, new Position(0, 3)));
 
         assertFalse(m_echiquier.estEchec(BLANC));
     }
@@ -266,33 +267,33 @@ public class TestEchiquier extends TestCase {
     /**
      * Teste la promotion dun pion sur lechiquier
      */
-    public void testPromotionPion(){
-        Piece roiBLanc = new Roi(new Position(0,0));
-        Piece roiNoir = new Roi(new Position(7,7));
+    public void testPromotionPion() {
+        Piece roiBLanc = new Roi(new Position(0, 0));
+        Piece roiNoir = new Roi(new Position(7, 7));
 
-        Piece pionUn = new Pion(new Position(0,6), BLANC);
-        Piece pionDeux = new Pion(new Position(1,6), BLANC);
-        Piece pionTrois = new Pion(new Position(2,6), BLANC);
-        Piece pionQuatre = new Pion(new Position(3,6), BLANC);
-        Piece pionCinq = new Pion(new Position(4,6), BLANC);
-        Piece pionSix = new Pion(new Position(5,6), BLANC);
+        Piece pionUn = new Pion(new Position(0, 6), BLANC);
+        Piece pionDeux = new Pion(new Position(1, 6), BLANC);
+        Piece pionTrois = new Pion(new Position(2, 6), BLANC);
+        Piece pionQuatre = new Pion(new Position(3, 6), BLANC);
+        Piece pionCinq = new Pion(new Position(4, 6), BLANC);
+        Piece pionSix = new Pion(new Position(5, 6), BLANC);
 
-        m_echiquier = new Echiquier(roiBLanc, roiNoir,pionUn, pionDeux, pionTrois, pionQuatre, pionCinq, pionSix);
+        m_echiquier = new Echiquier(roiBLanc, roiNoir, pionUn, pionDeux, pionTrois, pionQuatre, pionCinq, pionSix);
 
-        assertTrue(m_echiquier.deplacerPiece(pionUn, new Position(0,7)));
+        assertTrue(m_echiquier.deplacerPiece(pionUn, new Position(0, 7)));
         m_echiquier.promouvoirPion('r');
         assertTrue(m_echiquier.getPiece(pionUn.getPosition()).equals(new Reine(pionUn.getPosition(), pionUn.getCouleur())));
 
 
-        assertTrue(m_echiquier.deplacerPiece(pionDeux, new Position(1,7)));
+        assertTrue(m_echiquier.deplacerPiece(pionDeux, new Position(1, 7)));
         m_echiquier.promouvoirPion('f');
         assertTrue(m_echiquier.getPiece(pionDeux.getPosition()).equals(new Fou(pionDeux.getPosition(), pionDeux.getCouleur())));
 
-        assertTrue(m_echiquier.deplacerPiece(pionTrois, new Position(2,7)));
+        assertTrue(m_echiquier.deplacerPiece(pionTrois, new Position(2, 7)));
         m_echiquier.promouvoirPion('c');
         assertTrue(m_echiquier.getPiece(pionTrois.getPosition()).equals(new Cavalier(pionTrois.getPosition(), pionTrois.getCouleur())));
 
-        assertTrue(m_echiquier.deplacerPiece(pionQuatre, new Position(3,7)));
+        assertTrue(m_echiquier.deplacerPiece(pionQuatre, new Position(3, 7)));
         m_echiquier.promouvoirPion('t');
         assertTrue(m_echiquier.getPiece(pionQuatre.getPosition()).equals(new Tour(pionQuatre.getPosition(), pionQuatre.getCouleur())));
     }

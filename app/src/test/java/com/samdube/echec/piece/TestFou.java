@@ -4,7 +4,7 @@ import com.samdube.echec.deplacement.DeplacementFou;
 import com.samdube.echec.echiquier.Position;
 
 /**
- * Teste la creation d'une com.samdube.echec.piece fou
+ * Teste la creation d'une piece fou
  *
  * @author Samuel Dube
  */
@@ -54,7 +54,7 @@ public class TestFou extends TestPiece {
      * Teste la creation dun fou en promotion
      */
     public void testConstructeurFouPromotion() {
-        Piece piece = new Fou(new Position(0,1), Piece.CouleurPiece.BLANC);
+        Piece piece = new Fou(new Position(0, 1), Piece.CouleurPiece.BLANC);
         assertEquals(Piece.CouleurPiece.BLANC, piece.getCouleur());
     }
 }

@@ -4,10 +4,11 @@ package com.samdube.echec.deplacement;
  * Classe de déplacement possible par un fou
  *
  * @author Samuel Colassin
+ * @author Samuel Dubé
  */
 public class DeplacementFou extends Deplacement {
     /**
-     * Constructeur initiant un com.samdube.echec.deplacement pour un fou
+     * Constructeur initiant un deplacement pour un fou
      */
     public DeplacementFou() {
         super(new Pas[]{

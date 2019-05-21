@@ -7,9 +7,11 @@ import com.samdube.echec.echiquier.Position;
  * Classe permettant de gerer un pion
  *
  * @author Samuel Dube
+ * @author Samuel Colassin
  */
 public class Pion extends Piece {
     private boolean m_peutPromotion = false;
+
     /**
      * Constructeur initiant un nouveau pion
      *
@@ -23,7 +25,7 @@ public class Pion extends Piece {
      * Constructeur dun pion
      *
      * @param p_position Position du pion
-     * @param p_couleur Couleur du pion
+     * @param p_couleur  Couleur du pion
      */
     public Pion(Position p_position, CouleurPiece p_couleur) {
         super(p_position, p_couleur, new DeplacementPion(p_couleur), 'p', 1);
@@ -35,7 +37,7 @@ public class Pion extends Piece {
         if (peutDeplacer(p_position)) {
             m_position = p_position;
             if (this.getCouleur() == CouleurPiece.BLANC) {
-                if(p_position.getY() == 7) {
+                if (p_position.getY() == 7) {
                     m_peutPromotion = true;
                 }
             } else {

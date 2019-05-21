@@ -4,7 +4,7 @@ import com.samdube.echec.deplacement.DeplacementRoi;
 import com.samdube.echec.echiquier.Position;
 
 /**
- * Teste la creation dune com.samdube.echec.piece de type roi
+ * Teste la creation dune piece de type roi
  *
  * @author Samuel Dube
  */

@@ -10,7 +10,6 @@ import junit.framework.TestSuite;
  */
 public class TestCompletPiece extends TestCase {
     /**
-     *
      * @return la suite avec les tests à effectuer
      */
     public static TestSuite suite() {

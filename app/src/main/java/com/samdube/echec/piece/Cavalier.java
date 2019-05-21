@@ -13,7 +13,7 @@ public class Cavalier extends Piece {
     /**
      * Constructeur initiant un nouveau cavalier
      *
-     * @param p_position Position du cavalier sur l'com.samdube.echec.echiquier
+     * @param p_position Position du cavalier sur l'echiquier
      */
     public Cavalier(Position p_position) {
         super(p_position, new DeplacementCavalier(), 'c', 2);

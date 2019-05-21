@@ -17,6 +17,7 @@ import com.samdube.echec.piece.TestPion;
 import com.samdube.echec.piece.TestReine;
 import com.samdube.echec.piece.TestRoi;
 import com.samdube.echec.piece.TestTour;
+
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 

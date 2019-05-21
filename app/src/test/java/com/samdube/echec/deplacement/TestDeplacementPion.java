@@ -5,7 +5,7 @@ import com.samdube.echec.echiquier.Position;
 import com.samdube.echec.piece.Piece;
 
 /**
- * Classe de test pour le com.samdube.echec.deplacement du pion
+ * Classe de test pour le deplacement du pion
  *
  * @author Samuel Dube
  * @author Samuel Colassin

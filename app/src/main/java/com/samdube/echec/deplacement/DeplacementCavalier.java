@@ -4,10 +4,11 @@ package com.samdube.echec.deplacement;
  * Classe de déplacements possibles d'un cavalier
  *
  * @author Samuel Colassin
+ * @author Samuel Dubé
  */
 public class DeplacementCavalier extends Deplacement {
     /**
-     * Constructeur initiant un com.samdube.echec.deplacement pour un cavalier
+     * Constructeur initiant un deplacement pour un cavalier
      */
     public DeplacementCavalier() {
         super(new Pas[]{

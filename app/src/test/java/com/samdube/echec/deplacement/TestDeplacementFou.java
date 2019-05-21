@@ -1,7 +1,7 @@
 package com.samdube.echec.deplacement;
 
 /**
- * Classe de test pour le com.samdube.echec.deplacement du fou
+ * Classe de test pour le deplacement du fou
  *
  * @author Samuel Dube
  * @author Samuel Colassin

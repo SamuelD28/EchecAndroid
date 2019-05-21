@@ -4,10 +4,11 @@ package com.samdube.echec.deplacement;
  * Classe de déplacements possibles par une tour
  *
  * @author Samuel Colassin
+ * @author Samuel Dubé
  */
 public class DeplacementTour extends Deplacement {
     /**
-     * Constructeur initiant un com.samdube.echec.deplacement pour la tour
+     * Constructeur initiant un deplacement pour la tour
      */
     public DeplacementTour() {
         super(new Pas[]{

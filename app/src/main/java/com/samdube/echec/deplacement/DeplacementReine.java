@@ -4,10 +4,11 @@ package com.samdube.echec.deplacement;
  * Classe de déplacement possible pour une reine
  *
  * @author Samuel Colassin
+ * @author Samuel Dubé
  */
 public class DeplacementReine extends Deplacement {
     /**
-     * Constructeur initiant un com.samdube.echec.deplacement pour la reine
+     * Constructeur initiant un deplacement pour la reine
      */
     public DeplacementReine() {
         super(new Pas[]{
