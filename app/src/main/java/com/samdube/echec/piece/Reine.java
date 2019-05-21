@@ -18,6 +18,12 @@ public class Reine extends Piece {
         super(p_position, new DeplacementReine(), 'q', 3);
     }
 
+    /**
+     * Constructeur dune reine avec sa position et couleur
+     *
+     * @param p_position Position de la reine
+     * @param p_couleur Couleur de la reine
+     */
     public Reine(Position p_position, CouleurPiece p_couleur) {
         super(p_position, p_couleur, new DeplacementReine(), 'q', 3);
     }

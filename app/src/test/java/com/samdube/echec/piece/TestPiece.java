@@ -4,8 +4,6 @@ import com.samdube.echec.echiquier.Position;
 
 import junit.framework.TestCase;
 
-import com.samdube.echec.utils.IObserver;
-
 /**
  * Teste la classe pièce et ses méthodes
  *
@@ -92,27 +90,6 @@ public abstract class TestPiece extends TestCase {
         Piece reine = new Reine(new Position(0, 7));
         reine.calculerDeplacementPossibles(new Position[0], new Position[0]);
         assertEquals(21, reine.getDeplacementsPossibles().length);
-    }
-
-    /**
-     * Teste que les pieces sont observables
-     */
-    public void testObservable() {
-        Piece piece = getPieceActuel();
-        IObserver observateurA = () -> {
-            // mise a jour
-        };
-        IObserver observateurB = () -> {
-            // mise a jour
-        };
-
-        piece.Subscribe(observateurA);
-        piece.Subscribe(observateurB);
-
-        piece.Notify();
-
-        piece.Unsubscribe(observateurA);
-        piece.Unsubscribe(observateurB);
     }
 
     /**

@@ -1,7 +1,6 @@
 package com.samdube.echec.piece;
 
 import com.samdube.echec.deplacement.DeplacementPion;
-import com.samdube.echec.deplacement.DeplacementRoi;
 import com.samdube.echec.echiquier.Position;
 
 /**
@@ -20,7 +19,13 @@ public class Pion extends Piece {
         super(p_position, new DeplacementPion(getCouleurAvecPositionDepart(p_position)), 'p', 1);
     }
 
-    public Pion(Position p_position, CouleurPiece p_couleur) {
+    /**
+     * Constructeur dun pion
+     *
+     * @param p_position Position du pion
+     * @param p_couleur Couleur du pion
+     */
+    Pion(Position p_position, CouleurPiece p_couleur) {
         super(p_position, p_couleur, new DeplacementPion(p_couleur), 'p', 1);
     }
 
@@ -29,8 +34,6 @@ public class Pion extends Piece {
 
         if (peutDeplacer(p_position)) {
             m_position = p_position;
-            Notify();
-
             if (this.getCouleur() == CouleurPiece.BLANC) {
                 if(p_position.getY() == 7) {
                     m_peutPromotion = true;
@@ -47,6 +50,11 @@ public class Pion extends Piece {
         }
     }
 
+    /**
+     * Getter pour savoir si un pion peut etre promu
+     *
+     * @return Vrai si on peut le promouvoir
+     */
     public boolean getPeutPromotion() {
         return m_peutPromotion;
     }

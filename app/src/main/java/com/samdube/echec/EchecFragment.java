@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -23,8 +22,6 @@ import com.samdube.echec.echiquier.Echiquier;
 import com.samdube.echec.echiquier.Position;
 import com.samdube.echec.jeux.Manager;
 import com.samdube.echec.piece.Piece;
-
-import java.util.ArrayList;
 
 import static android.support.v4.content.res.ResourcesCompat.getColor;
 import static android.support.v4.content.res.ResourcesCompat.getDrawable;
@@ -78,7 +75,7 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
         m_echiquier = new Echiquier();
         if (m_manager == null) {
             afficherDialogueNomJoueur();
-            m_manager = new Manager(m_echiquier);
+            m_manager = new Manager();
         }
         compteur = 1;
         m_listeCoupLayout.removeAllViews();
@@ -152,6 +149,9 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
         return b;
     }
 
+    /**
+     * Methode permettant de mettre a jour le ui de lechiquier
+     */
     private void actualierEchiquier(){
         for(Position p : m_echiquier.getCases()){
             int buttonId = Integer.valueOf(String.valueOf(p.getX() + "" + p.getY()));
@@ -171,7 +171,7 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
      * @param p_piece  La piece qui ce trouve sur le bouton
      * @param p_bouton Le bouton à affecter l'image
      */
-    public void assignerImageBouton(Piece p_piece, ImageButton p_bouton) {
+    private void assignerImageBouton(Piece p_piece, ImageButton p_bouton) {
         if (p_piece.getCouleur() == BLANC) {
             switch (p_piece.getRepresentation()) {
                 case 'c':
@@ -251,7 +251,7 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
      * @param p_ancienne Ancienne position de la pièce déplacer
      * @param p_nouvelle Nouvelle position de la pièce déplacer
      */
-    public void ajouterCoupListe(Position p_ancienne, Position p_nouvelle) {
+    private void ajouterCoupListe(Position p_ancienne, Position p_nouvelle) {
         Button boutton = new Button (getContext());
         String deplacement = Position.parsePositionVersTexte(p_ancienne) + " - " + Position.parsePositionVersTexte(p_nouvelle);
         boutton.setText(deplacement);
@@ -322,7 +322,8 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
             changerCouleurCase(R.color.design_default_color_primary, m_echiquier.getPieceSelectionner().getPosition());
         }
 
-        m_joueurEnTourTextView.setText(m_manager.getNomJoueurEnTour() + " : " + m_manager.getCouleurJoueurEnTour());
+        String joueur = m_manager.getNomJoueurEnTour() + " : " + m_manager.getCouleurJoueurEnTour();
+        m_joueurEnTourTextView.setText(joueur);
     }
 
     /**
@@ -347,6 +348,9 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * Methode qui desactive toutes les cases de lechiquier
+     */
     private void desactiverCases() {
         for (Position position : m_echiquier.getCases()) {
             int buttonId = Integer.valueOf(String.valueOf(position.getX() + "" + position.getY()));
@@ -428,6 +432,11 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
         dialogue.show();
     }
 
+    /**
+     * Methode qui affiche le dialogue pour promouvoir un pion
+     *
+     * @param p_position Position du pion
+     */
     private void afficherDialoguePromotion(Position p_position) {
         AlertDialog dialogue = new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.titre_promotion_dialogue)
@@ -480,6 +489,12 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
         dialogue.show();
     }
 
+    /**
+     * Methode qui promut un pion
+     *
+     * @param p_position Position du pion
+     * @param p_representation Representation du pion
+     */
     private void promouvoirPion(Position p_position, char p_representation) {
         m_echiquier.promouvoirPion(p_representation);
         int buttonId = Integer.valueOf(String.valueOf(p_position.getX() + "" + p_position.getY()));
@@ -487,6 +502,13 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
         assignerImageBouton(m_echiquier.getPiece(p_position), button);
     }
 
+    /**
+     * Methode qui valide la saisie des noms
+     *
+     * @param p_nomBlanc Nom du joueur blanc
+     * @param p_nomNoir Nom du joueur noir
+     * @return Vrai si la saisie est bonne
+     */
     private boolean validerSaisieNom(String p_nomBlanc, String p_nomNoir) {
         return !p_nomBlanc.equals(p_nomNoir) && p_nomBlanc.length() > 2 && p_nomNoir.length() > 2 &&
                 p_nomBlanc.length() < 12 && p_nomNoir.length() < 12;

@@ -43,11 +43,11 @@ public class TestPas extends TestCase {
         Pas pasB = new Pas(1, 0);
         Pas pasC = new Pas(-1, 0);
 
-        assertTrue(pasA.equals(pasA));
-        assertTrue(pasB.equals(pasB));
+        assertEquals(pasA, pasA);
+        assertEquals(pasB, pasB);
 
-        assertTrue(pasA.equals(pasB));
-        assertTrue(pasB.equals(pasA));
+        assertEquals(pasA, pasB);
+        assertEquals(pasB, pasA);
 
         assertFalse(pasA.equals("null"));
         assertFalse(pasA.equals(pasC));

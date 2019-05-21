@@ -18,6 +18,12 @@ public class Fou extends Piece{
         super(p_position, new DeplacementFou(), 'f', 2);
     }
 
+    /**
+     * Constructeur dune piece avec position et couleur
+     *
+     * @param p_position Position de la piece
+     * @param p_couleur Couleur de la piece
+     */
     public Fou(Position p_position, CouleurPiece p_couleur) {
         super(p_position, p_couleur, new DeplacementFou(), 'f', 2);
     }

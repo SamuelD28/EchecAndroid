@@ -30,22 +30,22 @@ public class TestDeplacementPion extends TestDeplacement {
 
     public void testCollisionsPion() {
         Echiquier echiquier = new Echiquier();
-        echiquier.calculerCollisionsPieces();
+        echiquier.calculerDeplacements();
         assertTrue(echiquier.deplacerPiece(echiquier.getPiece(new Position(1, 1)), new Position(1, 3)));
-        echiquier.calculerCollisionsPieces();
+        echiquier.calculerDeplacements();
         assertTrue(echiquier.deplacerPiece(echiquier.getPiece(new Position(1, 3)), new Position(1, 4)));
-        echiquier.calculerCollisionsPieces();
+        echiquier.calculerDeplacements();
         assertTrue(echiquier.deplacerPiece(echiquier.getPiece(new Position(1, 4)), new Position(1, 5)));
-        echiquier.calculerCollisionsPieces();
+        echiquier.calculerDeplacements();
         assertFalse(echiquier.deplacerPiece(echiquier.getPiece(new Position(1, 5)), new Position(1, 6)));
 
-        echiquier.calculerCollisionsPieces();
+        echiquier.calculerDeplacements();
         assertTrue(echiquier.deplacerPiece(echiquier.getPiece(new Position(6, 6)), new Position(6, 4)));
-        echiquier.calculerCollisionsPieces();
+        echiquier.calculerDeplacements();
         assertTrue(echiquier.deplacerPiece(echiquier.getPiece(new Position(6, 4)), new Position(6, 3)));
-        echiquier.calculerCollisionsPieces();
+        echiquier.calculerDeplacements();
         assertTrue(echiquier.deplacerPiece(echiquier.getPiece(new Position(6, 3)), new Position(6, 2)));
-        echiquier.calculerCollisionsPieces();
+        echiquier.calculerDeplacements();
         assertFalse(echiquier.deplacerPiece(echiquier.getPiece(new Position(6, 2)), new Position(6, 1)));
     }
 }

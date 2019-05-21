@@ -2,10 +2,7 @@ package com.samdube.echec.piece;
 
 import com.samdube.echec.deplacement.Deplacement;
 import com.samdube.echec.echiquier.Position;
-import com.samdube.echec.utils.IObservable;
-import com.samdube.echec.utils.IObserver;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -15,9 +12,7 @@ import java.util.Objects;
  *
  * @author Samuel Dube
  */
-public abstract class Piece implements IObservable {
-    private final ArrayList<IObserver> m_observateurs;
-
+public abstract class Piece{
     private final char m_representation;
 
     private final int m_force;
@@ -28,7 +23,7 @@ public abstract class Piece implements IObservable {
 
     private final Deplacement m_deplacement;
 
-    private CouleurPiece m_couleur;
+    private final CouleurPiece m_couleur;
 
     /**
      * Constructeur initiant une nouvelle com.samdube.echec.piece. Accessible
@@ -41,23 +36,37 @@ public abstract class Piece implements IObservable {
      */
     Piece(Position p_position, Deplacement p_deplacement, char p_representation, int p_force) {
         m_couleur = getCouleurAvecPositionDepart(p_position);
-        m_observateurs = new ArrayList<>();
         m_representation = p_representation;
         m_force = p_force;
         m_position = p_position;
         m_deplacement = p_deplacement;
     }
 
+    /**
+     * Constructeur de la piece avec tous des parametres
+     *
+     * @param p_position Position de la piece
+     * @param p_couleur Couleur de la piece
+     * @param p_deplacement Deplacement de la piece
+     * @param p_representation Representation de la piece
+     * @param p_force Force de la piece
+     */
     Piece(Position p_position, CouleurPiece p_couleur, Deplacement p_deplacement, char p_representation, int p_force) {
         m_couleur = p_couleur;
-        m_observateurs = new ArrayList<>();
         m_representation = p_representation;
         m_force = p_force;
         m_position = p_position;
         m_deplacement = p_deplacement;
     }
 
-    public static CouleurPiece getCouleurAvecPositionDepart(Position p_position) {
+    /**
+     * Methode qui retourne la couleur de la piece
+     * en fonction de sa position de depart
+     *
+     * @param p_position Position de depart de la piece
+     * @return Couleur de la piece
+     */
+    static CouleurPiece getCouleurAvecPositionDepart(Position p_position) {
         return (p_position.getY() > 3) ? CouleurPiece.NOIR : CouleurPiece.BLANC;
     }
 
@@ -71,17 +80,28 @@ public abstract class Piece implements IObservable {
         if (peutDeplacer(p_position)) {
             m_position = p_position;
             m_jamaisJouer = false;
-            Notify();
             return true;
         } else {
             return false;
         }
     }
 
+    /**
+     * Methode qui indique si le deplacement desirer est realisable
+     *
+     * @param p_position Position ou deplacer la piece
+     * @return Vrai si la piece peut se deplaceer
+     */
     public boolean peutDeplacer(Position p_position) {
         return !m_position.equals(p_position) && Arrays.asList(m_deplacement.getDisponibles()).contains(p_position);
     }
 
+    /**
+     * Methode qui calcule et assigne tous les deplacements possibles a la piece
+     *
+     * @param p_positionsPiecesBlanches Positions des pieces blanches
+     * @param p_positionsPiecesNoires Position des pieces noires
+     */
     public void calculerDeplacementPossibles(Position[] p_positionsPiecesBlanches, Position[] p_positionsPiecesNoires) {
         if (m_couleur == CouleurPiece.BLANC) {
             m_deplacement.calculerDeplacementPossibles(m_position, p_positionsPiecesNoires, p_positionsPiecesBlanches);
@@ -90,10 +110,20 @@ public abstract class Piece implements IObservable {
         }
     }
 
+    /**
+     * Getter qui retourne tous les deplacements possibles de la piece
+     *
+     * @return Liste de tous les deplacemnt possibles
+     */
     public Position[] getDeplacementsPossibles() {
         return m_deplacement.getDisponibles();
     }
 
+    /**
+     * Getter qui retourne le deplacement de la piece
+     *
+     * @return Deplacement de la piece
+     */
     public Deplacement getDeplacement() {
         return m_deplacement;
     }
@@ -107,8 +137,13 @@ public abstract class Piece implements IObservable {
         return m_representation;
     }
 
+    /**
+     * Getter pour savoir si la piece na jamais jouer encore
+     *
+     * @return Vrai si la piece na jamais jouer
+     */
     public boolean jamaisJouer() {
-        return m_jamaisJouer;
+        return !m_jamaisJouer;
     }
 
     /**
@@ -150,24 +185,7 @@ public abstract class Piece implements IObservable {
         /**
          * Couleur noir
          */
-        NOIR;
-    }
-
-    @Override
-    public void Subscribe(IObserver p_observateur) {
-        m_observateurs.add(p_observateur);
-    }
-
-    @Override
-    public void Notify() {
-        for (IObserver obersvateur : m_observateurs) {
-            obersvateur.update();
-        }
-    }
-
-    @Override
-    public void Unsubscribe(IObserver p_observateur) {
-        m_observateurs.remove(p_observateur);
+        NOIR
     }
 
     @Override

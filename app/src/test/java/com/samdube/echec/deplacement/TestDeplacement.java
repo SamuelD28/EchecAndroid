@@ -3,13 +3,10 @@ package com.samdube.echec.deplacement;
 import com.samdube.echec.deplacement.Deplacement;
 import com.samdube.echec.echiquier.Echiquier;
 import com.samdube.echec.echiquier.Position;
-import com.samdube.echec.piece.Cavalier;
 import com.samdube.echec.piece.Piece;
 
 import junit.framework.TestCase;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -51,26 +48,18 @@ public abstract class TestDeplacement extends TestCase {
 
         Echiquier echiquier = new Echiquier();
 
-        echiquier.calculerCollisionsPieces();
+        echiquier.calculerDeplacements();
         assertTrue(echiquier.deplacerPiece(echiquier.getPiece(new Position(0, 1)), new Position(0, 2)));
-        echiquier.calculerCollisionsPieces();
+        echiquier.calculerDeplacements();
         assertFalse(echiquier.deplacerPiece(echiquier.getPiece(new Position(2, 0)), new Position(1, 1)));
 
         echiquier.deplacerPiece(echiquier.getPiece(new Position(6, 0)), new Position(7, 2));
-        echiquier.calculerCollisionsPieces();
+        echiquier.calculerDeplacements();
 
         echiquier.deplacerPiece(echiquier.getPiece(new Position(7, 2)), new Position(6, 4));
-        echiquier.calculerCollisionsPieces();
+        echiquier.calculerDeplacements();
 
         assertTrue(echiquier.deplacerPiece(echiquier.getPiece(new Position(6, 4)), new Position(7, 6)));
-
-//        Position[] possibilitesActuels = getDeplacement().getDisponibles();
-//        Position[] possibilitesAttendues = getPossibilitesAttendues();
-//
-//        Arrays.sort(possibilitesAttendues);
-//        Arrays.sort(possibilitesActuels);
-//
-//        assertTrue(Arrays.equals(possibilitesAttendues, possibilitesActuels));
     }
 
     /**
@@ -81,7 +70,7 @@ public abstract class TestDeplacement extends TestCase {
         Deplacement deplacementB = getDeplacement();
         Deplacement deplacementC = getDeplacementDifferent();
 
-        assertTrue(deplacementA.equals(deplacementB));
+        assertEquals(deplacementA, deplacementB);
         assertTrue(deplacementB.equals(deplacementA));
 
         assertTrue(deplacementA.equals(deplacementA));

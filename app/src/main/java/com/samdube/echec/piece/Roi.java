@@ -1,6 +1,5 @@
 package com.samdube.echec.piece;
 
-import com.samdube.echec.deplacement.DeplacementReine;
 import com.samdube.echec.deplacement.DeplacementRoi;
 import com.samdube.echec.echiquier.Position;
 
@@ -23,7 +22,13 @@ public class Roi extends Piece {
         super(p_position, new DeplacementRoi(), 'r', 1);
     }
 
-    public Roi(Position p_position, CouleurPiece p_couleur) {
+    /**
+     * Constructeur dun roi avec sa position et sa couleur
+     *
+     * @param p_position Position du roi
+     * @param p_couleur COuleur du roi
+     */
+    Roi(Position p_position, CouleurPiece p_couleur) {
         super(p_position, p_couleur, new DeplacementRoi(), 'r', 1);
     }
 

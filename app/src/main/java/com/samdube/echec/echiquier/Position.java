@@ -29,7 +29,7 @@ public class Position implements Comparable<Position> {
      * @param p_positions La liste de position parmi lequel trouver la plus proche
      * @return La position la plus proche du point d'origine
      */
-    public static Position ObtenirPositionLaPlusProche(Position p_origine, List<Position> p_positions) {
+    static Position ObtenirPositionLaPlusProche(Position p_origine, List<Position> p_positions) {
         int differencePlusProche = 10000;
         Position plusProche = null;
         for (Position position : p_positions) {

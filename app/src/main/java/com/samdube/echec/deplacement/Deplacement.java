@@ -1,8 +1,6 @@
 package com.samdube.echec.deplacement;
 
 import com.samdube.echec.echiquier.Position;
-import com.samdube.echec.piece.Piece;
-import com.samdube.echec.piece.Pion;
 
 import java.util.ArrayList;
 import java.util.Arrays;

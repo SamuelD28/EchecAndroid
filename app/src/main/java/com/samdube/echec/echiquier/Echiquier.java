@@ -33,7 +33,7 @@ public class Echiquier {
 
     private Piece m_pieceSelectionner = null;
 
-    private ArrayList<ArrayList<Piece>> m_listeDesChangements = new ArrayList<>();
+    private final ArrayList<ArrayList<Piece>> m_listeDesChangements = new ArrayList<>();
 
     /**
      * Piece qui est présentement en cours de changement de type de pièce
@@ -114,7 +114,7 @@ public class Echiquier {
      * Permet de calculer toutes les possibilités de collisions pour toutes les
      * pièces de l'échiquier
      */
-    private void calculerDeplacements() {
+    public void calculerDeplacements() {
         Position[] positionsPiecesBlanches = obtenirPositionsPieces(BLANC);
         Position[] positionsPiecesNoires = obtenirPositionsPieces(NOIR);
         for (Piece piece : m_pieces) {
@@ -124,22 +124,6 @@ public class Echiquier {
         ajusterDeplacementRoi(NOIR);
         ajusterDeplacementRoque(BLANC);
         ajusterDeplacementRoque(NOIR);
-    }
-
-    /**
-     * Permet de calculer toutes les possibilités de collisions pour toutes les
-     * pièces de l'échiquier
-     */
-    private void calculerDeplacements(CouleurPiece p_couleur) {
-        Position[] positionsPiecesBlanches = obtenirPositionsPieces(BLANC);
-        Position[] positionsPiecesNoires = obtenirPositionsPieces(NOIR);
-        for (Piece piece : m_pieces) {
-            if (piece.getCouleur() == p_couleur) {
-                piece.calculerDeplacementPossibles(positionsPiecesBlanches, positionsPiecesNoires);
-            }
-        }
-        ajusterDeplacementRoi(p_couleur);
-        ajusterDeplacementRoque(p_couleur);
     }
 
     /**
@@ -244,7 +228,7 @@ public class Echiquier {
         }
         Tour tour = (Tour) piece;
 
-        if (!getRoi(p_couleur).jamaisJouer() || !tour.jamaisJouer()) {
+        if (getRoi(p_couleur).jamaisJouer() || tour.jamaisJouer()) {
             return false;
         }
 
@@ -268,7 +252,7 @@ public class Echiquier {
         }
         Tour tour = (Tour) piece;
 
-        if (!getRoi(p_couleur).jamaisJouer() || !tour.jamaisJouer()) {
+        if (getRoi(p_couleur).jamaisJouer() || tour.jamaisJouer()) {
             return false;
         }
 
@@ -348,7 +332,14 @@ public class Echiquier {
         return pieceTrouve;
     }
 
-    public boolean deplacementMetEnPerilRoi(Piece p_pieceADeplacer, Position p_positionDeplacement) {
+    /**
+     * Methode qui verifie si un deplacement met en peril le roi
+     *
+     * @param p_pieceADeplacer Piece qui se deplace
+     * @param p_positionDeplacement Position ou deplacer la piece
+     * @return Vrai si le roi est en danger
+     */
+    private boolean deplacementMetEnPerilRoi(Piece p_pieceADeplacer, Position p_positionDeplacement) {
         Roi roi = getRoi(p_pieceADeplacer.getCouleur());
         Position positionOriginal = p_pieceADeplacer.getPosition();
 
@@ -369,7 +360,14 @@ public class Echiquier {
         }
     }
 
-    public boolean deplacementPeutSauverRoi(Piece p_pieceADeplacer, Position p_positionDeplacement) {
+    /**
+     * Methode qui determine si un deplacement peut sauver le roi
+     *
+     * @param p_pieceADeplacer Piece qui se deplace
+     * @param p_positionDeplacement Position du deplacement
+     * @return Vrai si le deplacement sauve le roi
+     */
+    private boolean deplacementPeutSauverRoi(Piece p_pieceADeplacer, Position p_positionDeplacement) {
         Roi roi = getRoi(p_pieceADeplacer.getCouleur());
         Position positionOriginal = p_pieceADeplacer.getPosition();
 
@@ -389,7 +387,6 @@ public class Echiquier {
             return false;
         }
     }
-
 
     /**
      * Permet de déplacer une pièce dans l'échiquier
@@ -450,8 +447,17 @@ public class Echiquier {
      */
     private boolean effectuerRoque(Piece piece, Piece piecePrise) {
         try {
-            Roi roi = (piece instanceof Roi) ? (Roi) piece : (Roi) piecePrise;
-            Tour tour = (piece instanceof Tour) ? (Tour) piece : (Tour) piecePrise;
+            Roi roi;
+            Tour tour;
+
+            if (piece instanceof Roi){
+                roi = (Roi) piece;
+                tour = (Tour) piecePrise;
+            }
+            else {
+                roi = (Roi) piecePrise;
+                tour = (Tour) piece;
+            }
 
             int yaxis = (roi.getCouleur() == BLANC) ? 0 : 7;
 
@@ -475,6 +481,7 @@ public class Echiquier {
 
     /**
      * Permet de revenir à un état précédant de l'échiquier
+     * @param p_index Index de letat precedent
      */
     public void revenirEtatPrecedent(int p_index) {
         if (p_index >= 0) {
@@ -511,6 +518,7 @@ public class Echiquier {
 
     /**
      * Permet de promouvoir un pion
+     * @param p_representation Representation pion
      */
     public void promouvoirPion(char p_representation) {
         Position p = m_pionPromu.getPosition();

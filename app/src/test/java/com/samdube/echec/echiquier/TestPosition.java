@@ -126,6 +126,6 @@ public class TestPosition extends TestCase {
         assertTrue(position1.compareTo(position2) < 0);
         assertTrue(position3.compareTo(position2) > 0);
         assertTrue(position3.compareTo(position1) > 0);
-        assertTrue(position1.compareTo(position4) == 0);
+        assertEquals(0, position1.compareTo(position4));
     }
 }

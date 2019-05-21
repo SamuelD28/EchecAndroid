@@ -12,7 +12,7 @@ import static com.samdube.echec.piece.Piece.*;
  * @author Samuel Colassin
  */
 public class DeplacementPion extends Deplacement {
-    private CouleurPiece m_couleur;
+    private final CouleurPiece m_couleur;
 
     /**
      * Constructeur initiant un deplacement pour un pion.

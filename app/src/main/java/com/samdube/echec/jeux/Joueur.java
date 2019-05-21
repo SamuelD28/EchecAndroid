@@ -17,7 +17,7 @@ class Joueur {
      *
      * @param p_couleur Couleur du joueur
      */
-    public Joueur(Piece.CouleurPiece p_couleur) {
+    Joueur(Piece.CouleurPiece p_couleur) {
         m_couleur = p_couleur;
     }
 
