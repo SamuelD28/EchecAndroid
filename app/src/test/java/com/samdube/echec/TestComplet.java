@@ -9,6 +9,8 @@ import com.samdube.echec.deplacement.TestDeplacementTour;
 import com.samdube.echec.deplacement.TestPas;
 import com.samdube.echec.echiquier.TestEchiquier;
 import com.samdube.echec.echiquier.TestPosition;
+import com.samdube.echec.jeux.TestJoueur;
+import com.samdube.echec.jeux.TestManager;
 import com.samdube.echec.piece.TestCavalier;
 import com.samdube.echec.piece.TestFou;
 import com.samdube.echec.piece.TestPion;
@@ -29,10 +31,10 @@ public class TestComplet extends TestCase {
         suite.addTestSuite(TestDeplacementFou.class);
         suite.addTestSuite(TestDeplacementCavalier.class);
         suite.addTestSuite(TestPas.class);
-
         suite.addTestSuite(TestPosition.class);
         suite.addTestSuite(TestEchiquier.class);
-
+        suite.addTestSuite(TestManager.class);
+        suite.addTestSuite(TestJoueur.class);
         suite.addTestSuite(TestPion.class);
         suite.addTestSuite(TestFou.class);
         suite.addTestSuite(TestRoi.class);

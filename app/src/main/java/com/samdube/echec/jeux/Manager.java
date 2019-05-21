@@ -33,6 +33,15 @@ public class Manager {
     }
 
     /**
+     * Methode qui retounre le nombre de tour
+     *
+     * @return Nombre de tour
+     */
+    public int getTour() {
+        return m_tour;
+    }
+
+    /**
      * Methode qui retourne la couleur
      * du joeur a qui cest le tour
      *
