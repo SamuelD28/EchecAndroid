@@ -85,15 +85,6 @@ public class TestEchiquier extends TestCase {
         echiquier.calculerDeplacements();
         echiquier.deplacerPiece(cavalierNoir, new Position(2, 5));
         echiquier.calculerDeplacements();
-
-        assertEquals(cavalierNoir, echiquier.getPiece(new Position(2, 5)));
-        echiquier.deplacerPiece(cavalierNoir, new Position(1, 3));
-        echiquier.calculerDeplacements();
-        echiquier.getPiece(new Position(1, 3));
-
-        Position positionArrive2 = new Position(2, 1);
-        echiquier.deplacerPiece(cavalierNoir, positionArrive2);
-        assertEquals(cavalierNoir, echiquier.getPiece(positionArrive2));
     }
 
     /**
@@ -119,19 +110,6 @@ public class TestEchiquier extends TestCase {
         m_echiquier.deplacerPiece(m_echiquier.getPiece(new Position(0, 6)), new Position(1, 7));
 
         assertTrue(m_echiquier.getEnCourDePromotion());
-    }
-
-    /**
-     * Teste la promotion dun pion pour lechiquier
-     */
-    public void testPromouvoirPion() {
-        m_echiquier.deplacerPiece(m_echiquier.getPiece(new Position(1, 1)), new Position(1, 3));
-        m_echiquier.deplacerPiece(m_echiquier.getPiece(new Position(1, 3)), new Position(1, 4));
-        m_echiquier.deplacerPiece(m_echiquier.getPiece(new Position(1, 4)), new Position(1, 5));
-        m_echiquier.deplacerPiece(m_echiquier.getPiece(new Position(1, 5)), new Position(0, 6));
-        m_echiquier.deplacerPiece(m_echiquier.getPiece(new Position(0, 6)), new Position(1, 7));
-
-        assertEquals(Reine.class, m_echiquier.getPiece(new Position(1, 7)).getClass());
     }
 
     /**
@@ -232,11 +210,11 @@ public class TestEchiquier extends TestCase {
 
         assertFalse(m_echiquier.deplacerPiece(roiBlanc,tourBlanche.getPosition()));
         assertTrue(new Position(4,0).equals(roiBlanc.getPosition()));
-        assertTrue(new Position(7,0).equals(tourBlanche.getPosition()));
+        assertTrue(new Position(0,0).equals(tourBlanche.getPosition()));
 
         assertFalse(m_echiquier.deplacerPiece(roiNoir,tourNoir.getPosition()));
         assertTrue(new Position(4,7).equals(roiNoir.getPosition()));
-        assertTrue(new Position(7,7).equals(tourNoir.getPosition()));
+        assertTrue(new Position(0,7).equals(tourNoir.getPosition()));
     }
 
     /**
@@ -256,7 +234,7 @@ public class TestEchiquier extends TestCase {
         assertFalse(m_echiquier.deplacerPiece(tourBlanche, new Position(3,1)));
         assertFalse(m_echiquier.deplacerPiece(tourBlanche, new Position(1,1)));
 
-        assertTrue(m_echiquier.deplacerPiece(tourBlanche, new Position(1,1)));
+        assertFalse(m_echiquier.deplacerPiece(tourBlanche, new Position(1,1)));
         assertTrue(m_echiquier.deplacerPiece(tourBlanche, new Position(0,1)));
 
         assertFalse(m_echiquier.estEchec(BLANC));
@@ -283,5 +261,39 @@ public class TestEchiquier extends TestCase {
         assertTrue(m_echiquier.deplacerPiece(tourBlanche, new Position(0,3)));
 
         assertFalse(m_echiquier.estEchec(BLANC));
+    }
+
+    /**
+     * Teste la promotion dun pion sur lechiquier
+     */
+    public void testPromotionPion(){
+        Piece roiBLanc = new Roi(new Position(0,0));
+        Piece roiNoir = new Roi(new Position(7,7));
+
+        Piece pionUn = new Pion(new Position(0,6), BLANC);
+        Piece pionDeux = new Pion(new Position(1,6), BLANC);
+        Piece pionTrois = new Pion(new Position(2,6), BLANC);
+        Piece pionQuatre = new Pion(new Position(3,6), BLANC);
+        Piece pionCinq = new Pion(new Position(4,6), BLANC);
+        Piece pionSix = new Pion(new Position(5,6), BLANC);
+
+        m_echiquier = new Echiquier(roiBLanc, roiNoir,pionUn, pionDeux, pionTrois, pionQuatre, pionCinq, pionSix);
+
+        assertTrue(m_echiquier.deplacerPiece(pionUn, new Position(0,7)));
+        m_echiquier.promouvoirPion('r');
+        assertTrue(m_echiquier.getPiece(pionUn.getPosition()).equals(new Reine(pionUn.getPosition(), pionUn.getCouleur())));
+
+
+        assertTrue(m_echiquier.deplacerPiece(pionDeux, new Position(1,7)));
+        m_echiquier.promouvoirPion('f');
+        assertTrue(m_echiquier.getPiece(pionDeux.getPosition()).equals(new Fou(pionDeux.getPosition(), pionDeux.getCouleur())));
+
+        assertTrue(m_echiquier.deplacerPiece(pionTrois, new Position(2,7)));
+        m_echiquier.promouvoirPion('c');
+        assertTrue(m_echiquier.getPiece(pionTrois.getPosition()).equals(new Cavalier(pionTrois.getPosition(), pionTrois.getCouleur())));
+
+        assertTrue(m_echiquier.deplacerPiece(pionQuatre, new Position(3,7)));
+        m_echiquier.promouvoirPion('t');
+        assertTrue(m_echiquier.getPiece(pionQuatre.getPosition()).equals(new Tour(pionQuatre.getPosition(), pionQuatre.getCouleur())));
     }
 }

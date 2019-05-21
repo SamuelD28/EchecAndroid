@@ -25,7 +25,7 @@ public class Pion extends Piece {
      * @param p_position Position du pion
      * @param p_couleur Couleur du pion
      */
-    Pion(Position p_position, CouleurPiece p_couleur) {
+    public Pion(Position p_position, CouleurPiece p_couleur) {
         super(p_position, p_couleur, new DeplacementPion(p_couleur), 'p', 1);
     }
 
