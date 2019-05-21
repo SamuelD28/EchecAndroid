@@ -50,6 +50,9 @@ public class TestReine extends TestPiece {
         };
     }
 
+    /**
+     * Teste la construction dune reine en promotion
+     */
     public void testConstructeurReinePromotion() {
         Piece piece = new Reine(new Position(0,1), Piece.CouleurPiece.BLANC);
         assertEquals(Piece.CouleurPiece.BLANC, piece.getCouleur());

@@ -50,6 +50,9 @@ public class TestTour extends TestPiece {
         };
     }
 
+    /**
+     * Teste la construction dune tour en promotion
+     */
     public void testConstructeurTourPromotion() {
         Piece piece = new Tour(new Position(0,1), Piece.CouleurPiece.BLANC);
         assertEquals(Piece.CouleurPiece.BLANC, piece.getCouleur());

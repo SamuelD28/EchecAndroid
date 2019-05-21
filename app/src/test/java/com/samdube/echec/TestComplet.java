@@ -17,11 +17,21 @@ import com.samdube.echec.piece.TestPion;
 import com.samdube.echec.piece.TestReine;
 import com.samdube.echec.piece.TestRoi;
 import com.samdube.echec.piece.TestTour;
-
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+/**
+ * Effectue tous les test du projet
+ *
+ * @author Samuel Dube
+ * @author Samuel Colassin
+ */
 public class TestComplet extends TestCase {
+    /**
+     * Ajoute tous les tests du projets
+     *
+     * @return Suite des tests du projet
+     */
     public static TestSuite suite() {
         TestSuite suite = new TestSuite();
         suite.addTestSuite(TestDeplacementTour.class);

@@ -51,6 +51,9 @@ public class TestPion extends TestPiece {
         };
     }
 
+    /**
+     * Teste latteinte en promotion
+     */
     public void testAtteindrePromotion() {
         // On fait atteindre le pion de l'autre côté (blanc)
         Echiquier echiquier = new Echiquier();

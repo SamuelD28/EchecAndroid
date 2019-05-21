@@ -117,6 +117,9 @@ public class TestPosition extends TestCase {
         assertEquals(plusProche, plusProcheCalcule);
     }
 
+    /**
+     * Teste le compare to
+     */
     public void testCompareTo() {
         Position position1 = new Position(0, 0);
         Position position2 = new Position(1, 1);

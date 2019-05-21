@@ -50,6 +50,9 @@ public class TestCavalier extends TestPiece {
         };
     }
 
+    /**
+     * Teste la creation dun cheval en promotion
+     */
     public void testConstructeurCavalierPromotion() {
         Piece piece = new Cavalier(new Position(0,1), Piece.CouleurPiece.BLANC);
         assertEquals(Piece.CouleurPiece.BLANC, piece.getCouleur());

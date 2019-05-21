@@ -21,13 +21,9 @@ public class TestDeplacementPion extends TestDeplacement {
         return new DeplacementTour();
     }
 
-    @Override
-    public Position[] getPossibilitesAttendues() {
-        return new Position[]{
-                new Position(4, 5)
-        };
-    }
-
+    /**
+     * Teste la collision dun pion
+     */
     public void testCollisionsPion() {
         Echiquier echiquier = new Echiquier();
         echiquier.calculerDeplacements();

@@ -50,6 +50,9 @@ public class TestFou extends TestPiece {
         };
     }
 
+    /**
+     * Teste la creation dun fou en promotion
+     */
     public void testConstructeurFouPromotion() {
         Piece piece = new Fou(new Position(0,1), Piece.CouleurPiece.BLANC);
         assertEquals(Piece.CouleurPiece.BLANC, piece.getCouleur());

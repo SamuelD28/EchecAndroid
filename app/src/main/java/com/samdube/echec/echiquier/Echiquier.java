@@ -55,6 +55,18 @@ public class Echiquier {
     }
 
     /**
+     * Constructeur utiliser pour plsu facilement tester
+     * des scenarios comme le roque
+     *
+     * @param pieces Pieces de depart
+     */
+    public Echiquier(Piece... pieces){
+        m_pieces = new ArrayList<>(Arrays.asList(pieces));
+        calculerDeplacements();
+        m_listeDesChangements.add(copierListeDesPieces());
+    }
+
+    /**
      * Methode qui initialise l'echiquier avec des m_cases vides
      * representer avec des X.
      */
@@ -343,18 +355,14 @@ public class Echiquier {
         Roi roi = getRoi(p_pieceADeplacer.getCouleur());
         Position positionOriginal = p_pieceADeplacer.getPosition();
 
-        if (p_pieceADeplacer.peutDeplacer(p_positionDeplacement)) {
-            p_pieceADeplacer.deplacer(p_positionDeplacement);
-            calculerDeplacements();
+        p_pieceADeplacer.deplacer(p_positionDeplacement);
+        calculerDeplacements();
 
-            if (roi.estEchec() || roi.estEchecEtMath()) {
-                p_pieceADeplacer.getDeplacement().ajouterDeplacementPossibles(positionOriginal);
-                p_pieceADeplacer.deplacer(positionOriginal);
-                calculerDeplacements();
-                return true;
-            } else {
-                return false;
-            }
+        if (roi.estEchec() || roi.estEchecEtMath()) {
+            p_pieceADeplacer.getDeplacement().ajouterDeplacementPossibles(positionOriginal);
+            p_pieceADeplacer.deplacer(positionOriginal);
+            calculerDeplacements();
+            return true;
         } else {
             return false;
         }
@@ -371,19 +379,15 @@ public class Echiquier {
         Roi roi = getRoi(p_pieceADeplacer.getCouleur());
         Position positionOriginal = p_pieceADeplacer.getPosition();
 
-        if (p_pieceADeplacer.peutDeplacer(p_positionDeplacement)) {
-            p_pieceADeplacer.deplacer(p_positionDeplacement);
-            calculerDeplacements();
+        p_pieceADeplacer.deplacer(p_positionDeplacement);
+        calculerDeplacements();
 
-            if (!roi.estEchec() && !roi.estEchecEtMath()) {
-                return true;
-            } else {
-                p_pieceADeplacer.getDeplacement().ajouterDeplacementPossibles(positionOriginal);
-                p_pieceADeplacer.deplacer(positionOriginal);
-                calculerDeplacements();
-                return false;
-            }
+        if (!roi.estEchec() && !roi.estEchecEtMath()) {
+            return true;
         } else {
+            p_pieceADeplacer.getDeplacement().ajouterDeplacementPossibles(positionOriginal);
+            p_pieceADeplacer.deplacer(positionOriginal);
+            calculerDeplacements();
             return false;
         }
     }
@@ -446,7 +450,6 @@ public class Echiquier {
      * @return Vrai si le roque a ete effectuer
      */
     private boolean effectuerRoque(Piece piece, Piece piecePrise) {
-        try {
             Roi roi;
             Tour tour;
 
@@ -474,9 +477,6 @@ public class Echiquier {
                 return true;
             }
             return false;
-        } catch (Exception e) {
-            return false;
-        }
     }
 
     /**
@@ -521,29 +521,30 @@ public class Echiquier {
      * @param p_representation Representation pion
      */
     public void promouvoirPion(char p_representation) {
-        Position p = m_pionPromu.getPosition();
-        CouleurPiece c = m_pionPromu.getCouleur();
-        m_pieces.remove(m_pionPromu);
+        if (m_pionPromu != null) {
+            Position p = m_pionPromu.getPosition();
+            CouleurPiece c = m_pionPromu.getCouleur();
+            m_pieces.remove(m_pionPromu);
 
-        switch (p_representation) {
-            case 'r':
-                m_pieces.add(new Reine(p, c));
-                break;
-            case 'f':
-                m_pieces.add(new Fou(p, c));
-                break;
-            case 'c':
-                m_pieces.add(new Cavalier(p, c));
-                break;
-            case 't':
-                m_pieces.add(new Tour(p, c));
-                break;
+            switch (p_representation) {
+                case 'r':
+                    m_pieces.add(new Reine(p, c));
+                    break;
+                case 'f':
+                    m_pieces.add(new Fou(p, c));
+                    break;
+                case 'c':
+                    m_pieces.add(new Cavalier(p, c));
+                    break;
+                case 't':
+                    m_pieces.add(new Tour(p, c));
+                    break;
+            }
+            m_listeDesChangements.add(copierListeDesPieces());
+
+            m_pionPromu = null;
+            m_enCoursDePromotion = false;
         }
-        //m_listeDesChangements.remove(m_listeDesChangements.get(m_listeDesChangements.size() - 1));
-        m_listeDesChangements.add(copierListeDesPieces());
-
-        m_pionPromu = null;
-        m_enCoursDePromotion = false;
     }
 
     /**

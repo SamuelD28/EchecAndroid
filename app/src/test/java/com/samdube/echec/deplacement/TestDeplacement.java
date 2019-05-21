@@ -1,6 +1,5 @@
 package com.samdube.echec.deplacement;
 
-import com.samdube.echec.deplacement.Deplacement;
 import com.samdube.echec.echiquier.Echiquier;
 import com.samdube.echec.echiquier.Position;
 import com.samdube.echec.piece.Piece;
@@ -34,14 +33,6 @@ public abstract class TestDeplacement extends TestCase {
     protected abstract Deplacement getDeplacementDifferent();
 
     /**
-     * Methode pour obtenir les possibilites attendues
-     * pour le com.samdube.echec.deplacement generer
-     *
-     * @return Les possibilites attendues
-     */
-    protected abstract Position[] getPossibilitesAttendues();
-
-    /**
      * Test de déplacement d'un cavalier
      */
     public void testCalculerPossibilites() {
@@ -71,10 +62,10 @@ public abstract class TestDeplacement extends TestCase {
         Deplacement deplacementC = getDeplacementDifferent();
 
         assertEquals(deplacementA, deplacementB);
-        assertTrue(deplacementB.equals(deplacementA));
+        assertEquals(deplacementB, deplacementA);
 
-        assertTrue(deplacementA.equals(deplacementA));
-        assertTrue(deplacementB.equals(deplacementB));
+        assertEquals(deplacementA, deplacementA);
+        assertEquals(deplacementB, deplacementB);
 
         assertFalse(deplacementA.equals(deplacementC));
         assertFalse(deplacementB.equals(deplacementC));
@@ -143,6 +134,9 @@ public abstract class TestDeplacement extends TestCase {
         assertFalse(Arrays.asList(deplacement.getDisponibles()).contains(new Position(6, 0)));
     }
 
+    /**
+     * Teste le nombre de pas pour deplacement
+     */
     public void testGetNombrePas() {
         Deplacement deplacement = new DeplacementPion(Piece.CouleurPiece.BLANC);
         assertEquals(1, deplacement.getNombrePas());
