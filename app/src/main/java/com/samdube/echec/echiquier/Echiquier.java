@@ -12,6 +12,8 @@ import com.samdube.echec.piece.Tour;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import static com.samdube.echec.piece.Piece.CouleurPiece.*;
 
@@ -60,7 +62,7 @@ public class Echiquier {
      *
      * @param pieces Pieces de depart
      */
-    public Echiquier(Piece... pieces){
+    Echiquier(Piece... pieces) {
         m_pieces = new ArrayList<>(Arrays.asList(pieces));
         calculerDeplacements();
         m_listeDesChangements.add(copierListeDesPieces());
@@ -347,7 +349,7 @@ public class Echiquier {
     /**
      * Methode qui verifie si un deplacement met en peril le roi
      *
-     * @param p_pieceADeplacer Piece qui se deplace
+     * @param p_pieceADeplacer      Piece qui se deplace
      * @param p_positionDeplacement Position ou deplacer la piece
      * @return Vrai si le roi est en danger
      */
@@ -371,7 +373,7 @@ public class Echiquier {
     /**
      * Methode qui determine si un deplacement peut sauver le roi
      *
-     * @param p_pieceADeplacer Piece qui se deplace
+     * @param p_pieceADeplacer      Piece qui se deplace
      * @param p_positionDeplacement Position du deplacement
      * @return Vrai si le deplacement sauve le roi
      */
@@ -410,20 +412,19 @@ public class Echiquier {
             return effectuerRoque(p_piece, piecePourPrise);
         } else if (estEchec(p_piece.getCouleur())) {
             return deplacementPeutSauverRoi(p_piece, p_nouvelle);
-        } else if(!deplacementMetEnPerilRoi(p_piece,p_nouvelle)){
+        } else if (!deplacementMetEnPerilRoi(p_piece, p_nouvelle)) {
             m_pieces.remove(piecePourPrise);
             p_piece.deplacer(p_nouvelle);
+            m_listeDesChangements.add(copierListeDesPieces());
 
             if (p_piece instanceof Pion && ((Pion) p_piece).getPeutPromotion()) {
                 m_pionPromu = p_piece;
                 m_enCoursDePromotion = true;
-            } else {
-                m_listeDesChangements.add(copierListeDesPieces());
             }
 
             calculerDeplacements();
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -450,57 +451,49 @@ public class Echiquier {
      * @return Vrai si le roque a ete effectuer
      */
     private boolean effectuerRoque(Piece piece, Piece piecePrise) {
-            Roi roi;
-            Tour tour;
+        Roi roi;
+        Tour tour;
 
-            if (piece instanceof Roi){
-                roi = (Roi) piece;
-                tour = (Tour) piecePrise;
-            }
-            else {
-                roi = (Roi) piecePrise;
-                tour = (Tour) piece;
-            }
+        if (piece instanceof Roi) {
+            roi = (Roi) piece;
+            tour = (Tour) piecePrise;
+        } else {
+            roi = (Roi) piecePrise;
+            tour = (Tour) piece;
+        }
 
-            int yaxis = (roi.getCouleur() == BLANC) ? 0 : 7;
+        int yaxis = (roi.getCouleur() == BLANC) ? 0 : 7;
 
-            if (peutPetitRoque(roi.getCouleur()) && tour.getPosition().equals(new Position(7, yaxis))) {
-                roi.getDeplacement().ajouterDeplacementPossibles(new Position(6, yaxis));
-                roi.deplacer(new Position(6, yaxis));
-                tour.deplacer(new Position(5, yaxis));
-                return true;
-            }
-            if (peutGrandRoque(roi.getCouleur()) && tour.getPosition().equals(new Position(0, yaxis))) {
-                roi.getDeplacement().ajouterDeplacementPossibles(new Position(2, yaxis));
-                roi.deplacer(new Position(2, yaxis));
-                tour.deplacer(new Position(3, yaxis));
-                return true;
-            }
-            return false;
+        if (peutPetitRoque(roi.getCouleur()) && tour.getPosition().equals(new Position(7, yaxis))) {
+            roi.getDeplacement().ajouterDeplacementPossibles(new Position(6, yaxis));
+            roi.deplacer(new Position(6, yaxis));
+            tour.deplacer(new Position(5, yaxis));
+            return true;
+        }
+        if (peutGrandRoque(roi.getCouleur()) && tour.getPosition().equals(new Position(0, yaxis))) {
+            roi.getDeplacement().ajouterDeplacementPossibles(new Position(2, yaxis));
+            roi.deplacer(new Position(2, yaxis));
+            tour.deplacer(new Position(3, yaxis));
+            return true;
+        }
+        return false;
     }
 
     /**
      * Permet de revenir à un état précédant de l'échiquier
-     * @param p_index Index de letat precedent
+     *
+     * @return Vrai si letat a ete remis au precedent
      */
-    public void revenirEtatPrecedent(int p_index) {
-        if (p_index >= 0) {
-
-            m_pieces = new ArrayList<>();
-            m_pieces.addAll(m_listeDesChangements.get(p_index));
-
-            //m_pieces.addAll(m_listeDesChangements.get(m_listeDesChangements.size() - 2));
-
-            if (m_listeDesChangements.size() > 1) {
-
-                for (int i = p_index + 1; i < m_listeDesChangements.size(); i++) {
-                    m_listeDesChangements.remove(m_listeDesChangements.get(i));
-                }
-
-                //m_listeDesChangements.remove(m_listeDesChangements.size() - 1);
-            }
+    public boolean revenirEtatPrecedent() {
+        if (m_listeDesChangements.size() > 1) {
+            int lastIndex = m_listeDesChangements.size() - 2;
+            m_pieces = m_listeDesChangements.get(lastIndex);
+            m_listeDesChangements.remove(lastIndex + 1);
+            calculerDeplacements();
+            return true;
+        } else {
+            return false;
         }
-        calculerDeplacements();
     }
 
     /**
@@ -518,6 +511,7 @@ public class Echiquier {
 
     /**
      * Permet de promouvoir un pion
+     *
      * @param p_representation Representation pion
      */
     public void promouvoirPion(char p_representation) {

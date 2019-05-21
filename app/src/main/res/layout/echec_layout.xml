@@ -55,6 +55,12 @@
                 android:background="@color/lightGray"
                 android:orientation="vertical"
                 android:id="@+id/coup_linearlayout">
+
+                <Button
+                    android:id="@+id/undoBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Revenir" />
             </LinearLayout>
         </ScrollView>
 
