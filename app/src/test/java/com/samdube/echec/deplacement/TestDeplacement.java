@@ -69,6 +69,8 @@ public abstract class TestDeplacement extends TestCase {
 
         assertFalse(deplacementA.equals(deplacementC));
         assertFalse(deplacementB.equals(deplacementC));
+        // Nous savons qu'il y une erreur lint, nous voulons tester la non égalité
+        // avec null et un autre objet
         assertFalse(deplacementA.equals(null));
         assertFalse(deplacementA.equals("ads"));
     }

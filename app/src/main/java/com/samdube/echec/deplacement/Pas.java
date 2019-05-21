@@ -9,7 +9,7 @@ import java.util.Objects;
  * @author Samuel Dubé
  * @author Samuel Colassin
  */
-public class Pas {
+class Pas {
     private int m_deplacementY;
 
     private int m_deplacementX;

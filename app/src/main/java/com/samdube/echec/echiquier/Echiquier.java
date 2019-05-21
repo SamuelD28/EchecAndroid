@@ -12,8 +12,6 @@ import com.samdube.echec.piece.Tour;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
 
 import static com.samdube.echec.piece.Piece.CouleurPiece.*;
 
@@ -481,18 +479,13 @@ public class Echiquier {
 
     /**
      * Permet de revenir à un état précédant de l'échiquier
-     *
-     * @return Vrai si letat a ete remis au precedent
      */
-    public boolean revenirEtatPrecedent() {
+    public void revenirEtatPrecedent() {
         if (m_listeDesChangements.size() > 1) {
             int lastIndex = m_listeDesChangements.size() - 2;
             m_pieces = m_listeDesChangements.get(lastIndex);
             m_listeDesChangements.remove(lastIndex + 1);
             calculerDeplacements();
-            return true;
-        } else {
-            return false;
         }
     }
 

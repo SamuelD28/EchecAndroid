@@ -148,7 +148,7 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
         TableRow.LayoutParams layout = new TableRow.LayoutParams(p_largeur, p_hauteur);
         b.setLayoutParams(layout);
         b.setTag(p_position);
-        b.setId(Integer.valueOf(String.valueOf(p_position.getX() + "" + p_position.getY())));
+        b.setId(Integer.valueOf(p_position.getX() + "" + p_position.getY()));
         b.setBackground(getDrawable(getResources(), R.drawable.case_border, null));
         b.setOnClickListener(this);
         return b;
@@ -159,7 +159,7 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
      */
     private void actualierEchiquier(){
         for(Position p : m_echiquier.getCases()){
-            int buttonId = Integer.valueOf(String.valueOf(p.getX() + "" + p.getY()));
+            int buttonId = Integer.valueOf(p.getX() + "" + p.getY());
             ImageButton button = m_chessboardTableLayout.findViewById(buttonId);
             Piece piece = m_echiquier.getPiece(p);
             if(piece!=null){
@@ -320,7 +320,7 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
      */
     private void changerCouleurCase(int p_colorID, Position... p_positionCases) {
         for (Position position : p_positionCases) {
-            int buttonId = Integer.valueOf(String.valueOf(position.getX() + "" + position.getY()));
+            int buttonId = Integer.valueOf(position.getX() + "" + position.getY());
             ImageButton button = m_chessboardTableLayout.findViewById(buttonId);
             button.setBackgroundColor(getColor(getResources(), p_colorID, null));
         }
@@ -331,7 +331,7 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
      */
     private void desactiverCases() {
         for (Position position : m_echiquier.getCases()) {
-            int buttonId = Integer.valueOf(String.valueOf(position.getX() + "" + position.getY()));
+            int buttonId = Integer.valueOf(position.getX() + "" + position.getY());
             ImageButton button = m_chessboardTableLayout.findViewById(buttonId);
             button.setEnabled(false);
         }
@@ -475,7 +475,7 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
      */
     private void promouvoirPion(Position p_position, char p_representation) {
         m_echiquier.promouvoirPion(p_representation);
-        int buttonId = Integer.valueOf(String.valueOf(p_position.getX() + "" + p_position.getY()));
+        int buttonId = Integer.valueOf(p_position.getX() + "" + p_position.getY());
         ImageButton button = m_chessboardTableLayout.findViewById(buttonId);
         assignerImageBouton(m_echiquier.getPiece(p_position), button);
     }

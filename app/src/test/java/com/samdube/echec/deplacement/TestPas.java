@@ -49,6 +49,8 @@ public class TestPas extends TestCase {
         assertEquals(pasA, pasB);
         assertEquals(pasB, pasA);
 
+        // Nous savons qu'il y une erreur lint, nous voulons tester la non égalité
+        // avec null et un autre objet
         assertFalse(pasA.equals("null"));
         assertFalse(pasA.equals(pasC));
         assertFalse(pasB.equals(pasC));

@@ -1,9 +1,7 @@
 <resources>
     <string name="app_name">Echec</string>
-    <string name="action_settings">Settings</string>
     <string name="button_reinitialiser">Réinitialiser</string>
     <string name="dialogue_nom_titre">Entrer les noms</string>
-    <string name="entete_tour">Tour à :</string>
     <string name="reine">Reine</string>
     <string name="fou">Fou</string>
     <string name="cavalier">Cavalier</string>
@@ -12,4 +10,6 @@
     <string name="joueur_blanc_dialogue">Joueur Blanc</string>
     <string name="joueur_noir_dialogue">Joueur Noir</string>
     <string name="validation_nom">Veuillez entrer deux noms différents entre 3 et 11 caractères</string>
+    <string name="boutton_revenir_text">Revenir</string>
+    <string name="text_tour">Tour : </string>
 </resources>

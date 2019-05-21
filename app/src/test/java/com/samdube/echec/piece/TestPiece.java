@@ -108,6 +108,8 @@ public abstract class TestPiece extends TestCase {
 
         assertFalse(pieceA.equals(pieceC));
         assertFalse(pieceB.equals(pieceC));
+        // Nous savons qu'il y une erreur lint, nous voulons tester la non égalité
+        // avec null et un autre objet
         assertFalse(pieceA.equals(null));
         assertFalse(pieceA.equals("ads"));
     }

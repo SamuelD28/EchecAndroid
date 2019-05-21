@@ -35,11 +35,13 @@ public class DeplacementPion extends Deplacement {
 
         if (p_pointOrigine.getY() == 6 && m_couleur == CouleurPiece.NOIR &&
                 !Arrays.asList(p_collisionsInclusives).contains(new Position(p_pointOrigine.getX(), p_pointOrigine.getY() - 1)) &&
-                !Arrays.asList(p_collisionsInclusives).contains(new Position(p_pointOrigine.getX(), p_pointOrigine.getY() - 2))) {
+                !Arrays.asList(p_collisionsInclusives).contains(new Position(p_pointOrigine.getX(), p_pointOrigine.getY() - 2)) &&
+                !Arrays.asList(p_collisionsExclusives).contains(new Position(p_pointOrigine.getX(), p_pointOrigine.getY() - 1))) {
             this.ajouterDeplacementPossibles(new Position(p_pointOrigine.getX(), p_pointOrigine.getY() - 2));
         } else if (p_pointOrigine.getY() == 1 && m_couleur == CouleurPiece.BLANC &&
                 !Arrays.asList(p_collisionsInclusives).contains(new Position(p_pointOrigine.getX(), p_pointOrigine.getY() + 1)) &&
-                !Arrays.asList(p_collisionsInclusives).contains(new Position(p_pointOrigine.getX(), p_pointOrigine.getY() + 2))) {
+                !Arrays.asList(p_collisionsInclusives).contains(new Position(p_pointOrigine.getX(), p_pointOrigine.getY() + 2)) &&
+                !Arrays.asList(p_collisionsExclusives).contains(new Position(p_pointOrigine.getX(), p_pointOrigine.getY() + 1))){
             this.ajouterDeplacementPossibles(new Position(p_pointOrigine.getX(), p_pointOrigine.getY() + 2));
         }
 

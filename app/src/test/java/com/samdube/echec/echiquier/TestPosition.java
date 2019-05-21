@@ -90,12 +90,12 @@ public class TestPosition extends TestCase {
 
         assertEquals(position1, position2);
 
-        assertTrue(position3 != position1);
-        assertTrue(position3 != position2);
+        assertNotSame(position3, position1);
+        assertNotSame(position3, position2);
 
         position1.assigner("C4");
         assertEquals(position1, position3);
-        assertTrue(position1 != position2);
+        assertNotSame(position1, position2);
     }
 
     /**
