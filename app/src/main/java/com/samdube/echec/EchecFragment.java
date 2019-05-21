@@ -46,8 +46,6 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
 
     private LinearLayout m_listeCoupLayout;
 
-    private int compteur = 1;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater p_inflater, @Nullable ViewGroup p_container, @Nullable Bundle p_savedInstanceState) {
@@ -55,6 +53,8 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
         m_chessboardTableLayout = view.findViewById(R.id.main_board_id);
         m_joueurEnTourTextView = view.findViewById(R.id.tourJoueur_textView);
         m_listeCoupLayout = view.findViewById(R.id.coup_linearlayout);
+
+        Init();
 
         Button buttonReinitialiser = view.findViewById(R.id.button_reinitialiser);
         buttonReinitialiser.setOnClickListener(new View.OnClickListener() {
@@ -64,7 +64,14 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        Init();
+        Button buttonRevenir = view.findViewById(R.id.undoBtn);
+        buttonRevenir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                m_echiquier.revenirEtatPrecedent();
+                actualiserEtatUI();
+            }
+        });
         return view;
     }
 
@@ -77,8 +84,6 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
             afficherDialogueNomJoueur();
             m_manager = new Manager();
         }
-        compteur = 1;
-        m_listeCoupLayout.removeAllViews();
         m_manager.reinitialiserPartie();
         dessinerEchiquier();
         actualiserEtatUI();
@@ -222,53 +227,26 @@ public class EchecFragment extends Fragment implements View.OnClickListener {
         ImageButton imageBouton = (ImageButton) v;
         Position nouvellePosition = (Position) imageBouton.getTag();
 
-
         if (m_echiquier.getPieceSelectionner() == null) {
             selectionnerPieceEchiquier(nouvellePosition);
         } else {
-            Position anciennePosition = new Position(m_echiquier.getPieceSelectionner().getPosition().getX(),
-                    m_echiquier.getPieceSelectionner().getPosition().getY());
-
+            Position anciencePosition = m_echiquier.getPieceSelectionner().getPosition();
             if (m_echiquier.deplacerPiece(m_echiquier.getPieceSelectionner(), nouvellePosition)) {
                 m_manager.terminerTour();
+                TextView historique = new TextView(getContext());
+                String coup = Position.parsePositionVersTexte(anciencePosition) + "-" +
+                        Position.parsePositionVersTexte(m_echiquier.getPieceSelectionner().getPosition());
+                historique.setText(coup);
+                m_listeCoupLayout.addView(historique);
             }
 
             deselectionnerPieceEchiquier();
-
             if (m_echiquier.getEnCourDePromotion()) {
                 afficherDialoguePromotion(nouvellePosition);
             }
-
-            ajouterCoupListe(anciennePosition, nouvellePosition );
         }
 
         actualiserEtatUI();
-    }
-
-    /**
-     * Permet d'ajouter un bouton pour revenir au coup afficher
-     *
-     * @param p_ancienne Ancienne position de la pièce déplacer
-     * @param p_nouvelle Nouvelle position de la pièce déplacer
-     */
-    private void ajouterCoupListe(Position p_ancienne, Position p_nouvelle) {
-        Button boutton = new Button (getContext());
-        String deplacement = Position.parsePositionVersTexte(p_ancienne) + " - " + Position.parsePositionVersTexte(p_nouvelle);
-        boutton.setText(deplacement);
-        boutton.setTag(compteur); // 1
-        compteur++; // 2
-        boutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int i = Integer.parseInt(boutton.getTag().toString()); // 1
-                m_echiquier.revenirEtatPrecedent(i - 1);
-                m_manager.revenirTour(i);
-                actualiserEtatUI();
-                compteur -= (i - 1);
-                m_listeCoupLayout.removeViews(i - 1, m_listeCoupLayout.getChildCount() - i + 1);
-            }
-        });
-        m_listeCoupLayout.addView(boutton);
     }
 
     /**
